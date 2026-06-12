@@ -3,73 +3,88 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1.0">
-<title>Retail Media — IoT Status Dashboard</title>
+<title>Retail Media — IoT Status</title>
 <style>
 *{margin:0;padding:0;box-sizing:border-box}
-body{font-family:-apple-system,BlinkMacSystemFont,'Inter','Segoe UI',Roboto,sans-serif;background:#0a0a0f;color:#e2e8f0;padding:0 0 40px}
-.header{background:linear-gradient(135deg,#0f172a,#1e293b);padding:32px 28px 24px;border-bottom:1px solid #1e293b}
-.header h1{font-size:28px;font-weight:800;background:linear-gradient(90deg,#60a5fa,#a78bfa,#f472b6);-webkit-background-clip:text;-webkit-text-fill-color:transparent;letter-spacing:-.5px}
-.header .sub{color:#64748b;font-size:13px;margin-top:6px;display:flex;gap:20px;align-items:center;flex-wrap:wrap}
-.header .sub .live{display:inline-flex;align-items:center;gap:6px;background:#052e16;color:#4ade80;padding:2px 10px;border-radius:20px;font-size:11px;font-weight:600}
-.header .sub .live::before{content:'';width:6px;height:6px;background:#4ade80;border-radius:50%;animation:pulse 2s infinite}
-@keyframes pulse{0%,100%{opacity:1}50%{opacity:.3}}
+body{font-family:-apple-system,BlinkMacSystemFont,'Inter','Segoe UI',Roboto,sans-serif;background:#08080e;color:#e2e8f0;padding:0 0 50px;min-height:100vh}
+.header{background:linear-gradient(135deg,#0f172a,#1e293b);padding:28px 24px 20px;border-bottom:1px solid #1e293b}
+.header h1{font-size:32px;font-weight:800;background:linear-gradient(90deg,#60a5fa,#a78bfa,#f472b6);-webkit-background-clip:text;-webkit-text-fill-color:transparent;letter-spacing:-.5px}
+.header .sub{color:#64748b;font-size:13px;margin-top:8px;display:flex;gap:20px;align-items:center;flex-wrap:wrap}
+.header .sub .live{display:inline-flex;align-items:center;gap:6px;background:#052e16;color:#4ade80;padding:2px 12px;border-radius:20px;font-size:11px;font-weight:700}
+.header .sub .live::before{content:'';width:7px;height:7px;background:#4ade80;border-radius:50%;animation:pulse 2s infinite}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.2}}
 
-.stats-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:12px;padding:24px 28px;background:#0f1117;border-bottom:1px solid #1e293b}
-.stat-card{background:linear-gradient(135deg,#1a1d29,#1e293b);border-radius:12px;padding:16px 18px;border:1px solid #2d3748}
-.stat-card .label{font-size:11px;text-transform:uppercase;color:#64748b;letter-spacing:.5px;font-weight:600}
-.stat-card .value{font-size:32px;font-weight:800;margin-top:4px;color:#e2e8f0}
-.stat-card .sub-value{font-size:12px;color:#64748b;margin-top:2px}
-.stat-card.green .value{color:#4ade80}
-.stat-card.blue .value{color:#60a5fa}
-.stat-card.purple .value{color:#a78bfa}
-.stat-card.yellow .value{color:#facc15}
-.stat-card.red .value{color:#f87171}
-.stat-card.pink .value{color:#f472b6}
+.big-metrics{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:14px;padding:28px 24px 16px}
+.bc{background:linear-gradient(135deg,#1a1d29,#1e293b);border-radius:16px;padding:20px;border:1px solid #2d3748;text-align:center;position:relative;overflow:hidden}
+.bc::before{content:'';position:absolute;top:0;left:0;right:0;height:3px}
+.bc.blue::before{background:linear-gradient(90deg,#60a5fa,#3b82f6)}
+.bc.green::before{background:linear-gradient(90deg,#4ade80,#22c55e)}
+.bc.orange::before{background:linear-gradient(90deg,#facc15,#f59e0b)}
+.bc.red::before{background:linear-gradient(90deg,#f87171,#ef4444)}
+.bc.purple::before{background:linear-gradient(90deg,#a78bfa,#8b5cf6)}
+.bc .bl{font-size:11px;text-transform:uppercase;color:#64748b;letter-spacing:1px;font-weight:600}
+.bc .bv{font-size:56px;font-weight:900;margin-top:4px;line-height:1;letter-spacing:-2px}
+.bc .bs{font-size:12px;color:#64748b;margin-top:6px}
+.bc.blue .bv{color:#60a5fa}
+.bc.green .bv{color:#4ade80}
+.bc.orange .bv{color:#facc15}
+.bc.red .bv{color:#f87171}
+.bc.purple .bv{color:#a78bfa}
 
-.venue-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(340px,1fr));gap:16px;padding:20px 28px}
-.venue-card{background:linear-gradient(135deg,#1a1d29,#1e293b);border-radius:14px;overflow:hidden;border:1px solid #2d3748;transition:border-color .2s,transform .2s}
-.venue-card:hover{border-color:#60a5fa;transform:translateY(-2px)}
-.venue-card .vheader{padding:18px 20px 14px;border-bottom:1px solid #1e293b;display:flex;justify-content:space-between;align-items:center}
-.venue-card .vheader .vname{font-size:16px;font-weight:700;color:#e2e8f0}
-.venue-card .vheader .vcount{background:#334155;padding:2px 12px;border-radius:20px;font-size:11px;color:#94a3b8;font-weight:600}
-.venue-card .vbody{padding:18px 20px 20px}
-.venue-card .vbody .vmeta{display:flex;gap:6px;margin-bottom:14px;flex-wrap:wrap}
-.vtag{font-size:11px;padding:3px 10px;border-radius:6px;font-weight:500}
-.vtag.g{background:#052e16;color:#4ade80;border:1px solid #166534}
-.vtag.b{background:#0f172a;color:#60a5fa;border:1px solid #1e3a5f}
-.vtag.y{background:#3d2e00;color:#facc15;border:1px solid #5c4a00}
+.venue-section{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:16px;padding:16px 24px}
+.vc{background:linear-gradient(135deg,#1a1d29,#1e293b);border-radius:16px;overflow:hidden;border:1px solid #2d3748;transition:border-color .2s}
+.vc:hover{border-color:#60a5fa}
+.vc .vh{padding:18px 20px 14px;border-bottom:1px solid #1e293b;display:flex;justify-content:space-between;align-items:center}
+.vc .vh .vn{font-size:18px;font-weight:700}
+.vc .vh .vn .loc{color:#94a3b8;font-size:11px;font-weight:400;display:block;margin-top:2px}
+.vc .vh .vtag{background:#334155;padding:4px 14px;border-radius:20px;font-size:12px;color:#94a3b8;font-weight:700}
+.vc .vb{padding:18px 20px 22px}
 
-.kmeter{display:flex;gap:0;height:32px;border-radius:8px;overflow:hidden;margin:14px 0 8px}
-.kmeter .seg{display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;color:#fff;transition:flex .3s}
-.kmeter .seg.g{background:linear-gradient(180deg,#4ade80,#22c55e)}
-.kmeter .seg.y{background:linear-gradient(180deg,#facc15,#eab308)}
-.kmeter .seg.r{background:linear-gradient(180deg,#f87171,#ef4444)}
-.kmeter .seg.p{background:linear-gradient(180deg,#94a3b8,#64748b)}
+.vg{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;margin-bottom:14px}
+.vs{text-align:center;padding:12px 6px;border-radius:10px;background:#0f1117;border:1px solid #1e293b}
+.vs .vl{font-size:9px;text-transform:uppercase;color:#64748b;letter-spacing:1px}
+.vs .vv{font-size:32px;font-weight:900;margin-top:2px;line-height:1}
+.vs .vv.gr{color:#4ade80}
+.vs .vv.ye{color:#facc15}
+.vs .vv.re{color:#f87171}
 
-.vstats{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;margin-top:16px}
-.vs{text-align:center;padding:10px 8px;border-radius:8px;background:#0f1117;border:1px solid #1e293b}
-.vs .vl{font-size:10px;text-transform:uppercase;color:#64748b;letter-spacing:.5px}
-.vs .vv{font-size:22px;font-weight:800;margin-top:2px}
-.vs .vv.g{color:#4ade80}
-.vs .vv.y{color:#facc15}
-.vs .vv.r{color:#f87171}
+.kmeter{display:grid;grid-template-columns:1fr;gap:4px;margin-top:4px}
+.km{display:flex;align-items:center;gap:8px}
+.km .kml{font-size:10px;color:#64748b;width:60px;text-align:right}
+.km .kmb{flex:1;height:20px;background:#0f1117;border-radius:4px;overflow:hidden}
+.km .kmb .kf{height:100%;border-radius:4px;transition:width .5s}
+.km .kmb .kf.g{background:linear-gradient(90deg,#4ade80,#22c55e)}
+.km .kmb .kf.y{background:linear-gradient(90deg,#facc15,#eab308)}
+.km .kmb .kf.r{background:linear-gradient(90deg,#f87171,#ef4444)}
+.km .kml2{font-size:11px;font-weight:700;width:30px}
 
-.alert-section{padding:0 28px 20px}
-.alert-card{background:linear-gradient(135deg,#1a1d29,#1e293b);border-radius:12px;padding:18px 20px;border:1px solid #2d3748;margin-bottom:10px}
-.alert-card h3{font-size:14px;font-weight:600;color:#facc15;margin-bottom:6px;display:flex;align-items:center;gap:8px}
-.alert-card .dev{display:flex;justify-content:space-between;padding:6px 0;border-bottom:1px solid #1e293b;font-size:12px}
-.alert-card .dev:last-child{border-bottom:none}
-.alert-card .dev .mac{font-family:'SF Mono',Consolas,monospace;color:#94a3b8}
-.alert-card .dev .issues span{display:inline-block;margin-left:8px}
-.alert-card .dev .issues .er{color:#f87171}
-.alert-card .dev .issues .wr{color:#facc15}
+.alert-section{padding:4px 24px 0}
+.ac{background:linear-gradient(135deg,#1a1d29,#1e293b);border-radius:14px;overflow:hidden;border:1px solid #2d3748}
+.ac .ah{background:linear-gradient(90deg,#3d1c00,#5c2a00);padding:14px 20px;border-bottom:1px solid #7f1d1d;display:flex;justify-content:space-between;align-items:center}
+.ac .ah h3{font-size:14px;color:#fca5a5;font-weight:700;display:flex;align-items:center;gap:8px}
+.ac .ah .acount{background:#7f1d1d;color:#fca5a5;padding:2px 12px;border-radius:20px;font-size:12px;font-weight:700}
+.ac table{width:100%;border-collapse:collapse;font-size:13px}
+.ac th{padding:10px 20px;background:#1e293b;color:#94a3b8;font-size:10px;text-transform:uppercase;letter-spacing:.5px;text-align:left;border-bottom:1px solid #1e293b}
+.ac td{padding:10px 20px;border-bottom:1px solid #1e293b}
+.ac tr:last-child td{border-bottom:none}
+.ac tr:hover{background:#1a1d29}
+.ac .mac{font-family:'SF Mono',Consolas,monospace;color:#94a3b8;font-size:12px}
+.ac .loc-name{color:#e2e8f0}
+.ac .er{color:#f87171;font-weight:600}
+.ac .wr{color:#facc15;font-weight:600}
+.ac .b{color:#60a5fa;font-weight:600}
+.ac .state-on{color:#4ade80}
+.ac .state-warn{color:#facc15}
+.ac .state-err{color:#f87171}
 
-.footer{text-align:center;padding:20px;color:#334155;font-size:11px}
+.footer{text-align:center;padding:24px;color:#334155;font-size:11px}
+
 @media(max-width:600px){
-  .stats-grid{grid-template-columns:1fr 1fr;padding:16px;gap:8px}
-  .venue-grid{grid-template-columns:1fr;padding:12px}
-  .stat-card .value{font-size:26px}
-  .header h1{font-size:22px}
+  .big-metrics{gap:10px;padding:20px 12px 10px}
+  .bc .bv{font-size:42px}
+  .venue-section{padding:10px 12px}
+  .vs .vv{font-size:26px}
+  .header h1{font-size:26px}
 }
 </style>
 </head>
@@ -78,71 +93,101 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Inter','Segoe UI',Roboto,sans
 <div class="header">
   <h1>Retail Media · IoT Status</h1>
   <div class="sub">
-    <span>12/06/2026 — 17:05:18 GMT</span>
-    <span class="live">Live from Admin Console</span>
+    <span>12/06/2026 — 17:08:52 GMT</span>
+    <span class="live">Live</span>
   </div>
 </div>
 
-<div class="stats-grid">
-  <div class="stat-card blue"><div class="label">Total IoTs</div><div class="value">97</div><div class="sub-value">Across 3 venues</div></div>
-  <div class="stat-card green"><div class="label">TRACKING</div><div class="value">96</div><div class="sub-value">All operating normally</div></div>
-  <div class="stat-card yellow"><div class="label">With Warnings</div><div class="value">2</div><div class="sub-value">IOT_4 · IOT_7</div></div>
-  <div class="stat-card red"><div class="label">With Errors</div><div class="value">1</div><div class="sub-value">IOT_18 · 575 errors</div></div>
-  <div class="stat-card purple"><div class="label">Umm Suqeim</div><div class="value">27</div><div class="sub-value">27 &times; J30</div></div>
-  <div class="stat-card pink"><div class="label">Al Warqa</div><div class="value">33</div><div class="sub-value">33 &times; J30</div></div>
-  <div class="stat-card yellow"><div class="label" style="color:#facc15"}>Lulu Al Wahda</div><div class="value">37</div><div class="sub-value">37 &times; J30</div></div>
+<div class="big-metrics">
+  <div class="bc blue"><div class="bl">Total</div><div class="bv">97</div><div class="bs">IoTs deployed</div></div>
+  <div class="bc green"><div class="bl">Tracking</div><div class="bv">96</div><div class="bs">All good</div></div>
+  <div class="bc orange"><div class="bl">Warnings</div><div class="bv">2</div><div class="bs">IOT_4 · IOT_7</div></div>
+  <div class="bc red"><div class="bl">Errors</div><div class="bv">1</div><div class="bs">IOT_18</div></div>
+  <div class="bc purple"><div class="bl">Uptime</div><div class="bv">~13h</div><div class="bs">Avg uptime</div></div>
 </div>
 
-<div class="venue-grid">
-  <div class="venue-card">
-    <div class="vheader"><div class="vname">Umm Suqeim</div><div class="vcount">27 IoTs</div></div>
-    <div class="vbody">
-      <div class="vmeta"><span class="vtag b">J30</span><span class="vtag g">TRACKING</span><span class="vtag y">2 with warnings</span></div>
-      <div class="kmeter"><div class="seg g" style="flex:25">25 OK</div><div class="seg y" style="flex:2">2 warn</div></div>
-      <div class="vstats">
-        <div class="vs"><div class="vl">Tracking</div><div class="vv g">27</div></div>
-        <div class="vs"><div class="vl">Warnings</div><div class="vv y">2</div></div>
-        <div class="vs"><div class="vl">Errors</div><div class="vv g">0</div></div>
+<div class="big-metrics" style="padding-top:0;grid-template-columns:repeat(auto-fit,minmax(140px,1fr))">
+  <div class="bc green"><div class="bl">Umm Suqeim</div><div class="bv" style="font-size:44px">27</div><div class="bs">0 err · 2 warn</div></div>
+  <div class="bc red"><div class="bl">Al Warqa</div><div class="bv" style="font-size:44px">33</div><div class="bs">1 err · 0 warn</div></div>
+  <div class="bc purple"><div class="bl">Lulu Al Wahda</div><div class="bv" style="font-size:44px">37</div><div class="bs">Pending setup</div></div>
+</div>
+
+<div class="venue-section">
+  <div class="vc">
+    <div class="vh"><div class="vn">Umm Suqeim <span class="loc">In-Store Union Coop</span></div><div class="vtag">27</div></div>
+    <div class="vb">
+      <div class="vg">
+        <div class="vs"><div class="vl">Tracking</div><div class="vv gr">27</div></div>
+        <div class="vs"><div class="vl">Warnings</div><div class="vv ye">2</div></div>
+        <div class="vs"><div class="vl">Errors</div><div class="vv gr">0</div></div>
+      </div>
+      <div class="kmeter">
+        <div class="km"><span class="kml">OK</span><div class="kmb"><div class="kf g" style="width:93%"></div></div><span class="kml2">25</span></div>
+        <div class="km"><span class="kml">Warn</span><div class="kmb"><div class="kf y" style="width:7%"></div></div><span class="kml2">2</span></div>
       </div>
     </div>
   </div>
 
-  <div class="venue-card">
-    <div class="vheader"><div class="vname">Al Warqa</div><div class="vcount">33 IoTs</div></div>
-    <div class="vbody">
-      <div class="vmeta"><span class="vtag b">J30</span><span class="vtag g">TRACKING</span><span class="vtag" style="background:#3d1c00;color:#f87171;border:1px solid #7f1d1d">1 with errors</span></div>
-      <div class="kmeter"><div class="seg g" style="flex:32">32 OK</div><div class="seg r" style="flex:1">1 err</div></div>
-      <div class="vstats">
-        <div class="vs"><div class="vl">Tracking</div><div class="vv g">33</div></div>
-        <div class="vs"><div class="vl">Warnings</div><div class="vv g">0</div></div>
-        <div class="vs"><div class="vl">Errors</div><div class="vv r">1</div></div>
+  <div class="vc">
+    <div class="vh"><div class="vn">Al Warqa <span class="loc">Union Coop</span></div><div class="vtag">33</div></div>
+    <div class="vb">
+      <div class="vg">
+        <div class="vs"><div class="vl">Tracking</div><div class="vv gr">33</div></div>
+        <div class="vs"><div class="vl">Warnings</div><div class="vv gr">0</div></div>
+        <div class="vs"><div class="vl">Errors</div><div class="vv re">1</div></div>
+      </div>
+      <div class="kmeter">
+        <div class="km"><span class="kml">OK</span><div class="kmb"><div class="kf g" style="width:97%"></div></div><span class="kml2">32</span></div>
+        <div class="km"><span class="kml">Error</span><div class="kmb"><div class="kf r" style="width:3%"></div></div><span class="kml2">1</span></div>
       </div>
     </div>
   </div>
 
-  <div class="venue-card">
-    <div class="vheader"><div class="vname">Lulu Al Wahda</div><div class="vcount">37 IoTs</div></div>
-    <div class="vbody">
-      <div class="vmeta"><span class="vtag b">J30</span><span class="vtag g">TRACKING</span><span class="vtag" style="background:#1e293b;color:#94a3b8;border:1px solid #334155">Pending capture</span></div>
-      <div class="kmeter"><div class="seg p" style="flex:1">37 · Awaiting setup</div></div>
-      <div class="vstats">
-        <div class="vs"><div class="vl">Tracking</div><div class="vv g">37</div></div>
-        <div class="vs"><div class="vl">Warnings</div><div class="vv g">0</div></div>
-        <div class="vs"><div class="vl">Errors</div><div class="vv g">0</div></div>
+  <div class="vc">
+    <div class="vh"><div class="vn">Lulu Al Wahda <span class="loc">Pending capture setup</span></div><div class="vtag">37</div></div>
+    <div class="vb">
+      <div class="vg">
+        <div class="vs"><div class="vl">Tracking</div><div class="vv gr">37</div></div>
+        <div class="vs"><div class="vl">Warnings</div><div class="vv gr">0</div></div>
+        <div class="vs"><div class="vl">Errors</div><div class="vv gr">0</div></div>
+      </div>
+      <div class="kmeter">
+        <div class="km"><span class="kml">OK</span><div class="kmb"><div class="kf g" style="width:100%"></div></div><span class="kml2">37</span></div>
       </div>
     </div>
   </div>
 </div>
 
 <div class="alert-section">
-  <div class="alert-card">
-    <h3>Devices needing attention (2)</h3>
-    <div class="dev"><span class="mac">a1:00:5e:ed:02:bb</span><span class="mac">Union Coop AL WARQA · IOT_18</span><span class="issues"><span class="er">575 errors</span><span class="wr">383 warnings</span></span></div>
-    <div class="dev"><span class="mac">a1:00:5e:ed:02:b7</span><span class="mac">Umm Suqeim · IOT_4</span><span class="issues"><span class="er">52 errors</span><span class="wr">30 warnings</span></span></div>
-    <div class="dev"><span class="mac">a1:00:5e:ed:02:b5</span><span class="mac">Umm Suqeim · IOT_7</span><span class="issues"><span class="er">43 errors</span><span class="wr">25 warnings</span></span></div>
+  <div class="ac">
+    <div class="ah"><h3>Devices needing attention</h3><span class="acount">3</span></div>
+    <table>
+      <tr><th>Device</th><th>Venue</th><th>State</th><th>Errors</th><th>Warnings</th></tr>
+      <tr>
+        <td><span class="mac">a1:00:5e:ed:02:bb</span></td>
+        <td class="loc-name">Al Warqa · IOT_18</td>
+        <td><span class="b">TRACKING</span></td>
+        <td class="er">575</td>
+        <td class="wr">383</td>
+      </tr>
+      <tr>
+        <td><span class="mac">a1:00:5e:ed:02:b7</span></td>
+        <td class="loc-name">Umm Suqeim · IOT_4</td>
+        <td><span class="b">TRACKING</span></td>
+        <td class="er">52</td>
+        <td class="wr">30</td>
+      </tr>
+      <tr>
+        <td><span class="mac">a1:00:5e:ed:02:b5</span></td>
+        <td class="loc-name">Umm Suqeim · IOT_7</td>
+        <td><span class="b">TRACKING</span></td>
+        <td class="er">43</td>
+        <td class="wr">25</td>
+      </tr>
+    </table>
   </div>
 </div>
 
-<div class="footer">AiOO Tech Dubai · Retail Media IoT Monitoring · Data from IoT Admin Console</div>
+<div class="footer">AiOO Tech Dubai · IoT Admin Console</div>
 </body>
 </html>

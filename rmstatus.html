@@ -3,101 +3,146 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1.0">
-<title>Retail Media — IoT Device Status</title>
+<title>Retail Media — IoT Status Dashboard</title>
 <style>
 *{margin:0;padding:0;box-sizing:border-box}
-body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;background:#0f1117;color:#e8eaed;padding:0 0 40px}
-.header{background:linear-gradient(135deg,#1a1d29,#2d3748);padding:24px 28px;border-bottom:1px solid #2d3748}
-.header h1{font-size:22px;font-weight:700;background:linear-gradient(90deg,#60a5fa,#a78bfa);-webkit-background-clip:text;-webkit-text-fill-color:transparent}
-.header .sub{color:#94a3b8;font-size:13px;margin-top:4px}
-.update-time{color:#64748b;font-size:11px;margin-top:4px}
-.summary{display:flex;gap:12px;padding:16px 28px;background:#161922;border-bottom:1px solid #1e293b;flex-wrap:wrap}
-.sc{background:#1e293b;border-radius:8px;padding:12px 16px;min-width:100px;border:1px solid #334155}
-.sc .l{font-size:10px;text-transform:uppercase;color:#64748b;letter-spacing:.5px}
-.sc .v{font-size:22px;font-weight:700;margin-top:4px;color:#60a5fa}
-.sc .v.online{color:#4ade80}
-.sc .v.offline{color:#f87171}
-.dot{width:8px;height:8px;border-radius:50%;display:inline-block;margin-right:4px}
-.dot.ok{background:#4ade80}
-.dot.warn{background:#facc15}
-.dot.err{background:#f87171}
-.venue{padding:20px 28px}
-.venue h2{font-size:17px;font-weight:600;margin-bottom:10px;display:flex;align-items:center;gap:10px}
-.venue h2 .badge{background:#334155;font-size:10px;padding:2px 10px;border-radius:20px;color:#94a3b8}
-.venue .loc-meta{color:#64748b;font-size:12px;margin-bottom:14px;display:flex;gap:16px;flex-wrap:wrap}
-table{width:100%;border-collapse:collapse;font-size:12px}
-th{text-align:left;padding:9px 10px;background:#1e293b;color:#64748b;font-size:10px;text-transform:uppercase;letter-spacing:.5px;border-bottom:1px solid #334155}
-td{padding:9px 10px;border-bottom:1px solid #1e293b;font-family:'SF Mono',Consolas,monospace;font-size:11px}
-tr:hover{background:#1a1d29}
-.state-tracking{color:#60a5fa;font-weight:600}
-.state-offline{color:#f87171;font-weight:600}
-.err-count{color:#f87171;font-size:10px}
-.warn-count{color:#facc15;font-size:10px}
-.ok{color:#4ade80}
-.footer{text-align:center;padding:16px;color:#475569;font-size:11px;border-top:1px solid #1e293b}
+body{font-family:-apple-system,BlinkMacSystemFont,'Inter','Segoe UI',Roboto,sans-serif;background:#0a0a0f;color:#e2e8f0;padding:0 0 40px}
+.header{background:linear-gradient(135deg,#0f172a,#1e293b);padding:32px 28px 24px;border-bottom:1px solid #1e293b}
+.header h1{font-size:28px;font-weight:800;background:linear-gradient(90deg,#60a5fa,#a78bfa,#f472b6);-webkit-background-clip:text;-webkit-text-fill-color:transparent;letter-spacing:-.5px}
+.header .sub{color:#64748b;font-size:13px;margin-top:6px;display:flex;gap:20px;align-items:center;flex-wrap:wrap}
+.header .sub .live{display:inline-flex;align-items:center;gap:6px;background:#052e16;color:#4ade80;padding:2px 10px;border-radius:20px;font-size:11px;font-weight:600}
+.header .sub .live::before{content:'';width:6px;height:6px;background:#4ade80;border-radius:50%;animation:pulse 2s infinite}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.3}}
+
+.stats-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:12px;padding:24px 28px;background:#0f1117;border-bottom:1px solid #1e293b}
+.stat-card{background:linear-gradient(135deg,#1a1d29,#1e293b);border-radius:12px;padding:16px 18px;border:1px solid #2d3748}
+.stat-card .label{font-size:11px;text-transform:uppercase;color:#64748b;letter-spacing:.5px;font-weight:600}
+.stat-card .value{font-size:32px;font-weight:800;margin-top:4px;color:#e2e8f0}
+.stat-card .sub-value{font-size:12px;color:#64748b;margin-top:2px}
+.stat-card.green .value{color:#4ade80}
+.stat-card.blue .value{color:#60a5fa}
+.stat-card.purple .value{color:#a78bfa}
+.stat-card.yellow .value{color:#facc15}
+.stat-card.red .value{color:#f87171}
+.stat-card.pink .value{color:#f472b6}
+
+.venue-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(340px,1fr));gap:16px;padding:20px 28px}
+.venue-card{background:linear-gradient(135deg,#1a1d29,#1e293b);border-radius:14px;overflow:hidden;border:1px solid #2d3748;transition:border-color .2s,transform .2s}
+.venue-card:hover{border-color:#60a5fa;transform:translateY(-2px)}
+.venue-card .vheader{padding:18px 20px 14px;border-bottom:1px solid #1e293b;display:flex;justify-content:space-between;align-items:center}
+.venue-card .vheader .vname{font-size:16px;font-weight:700;color:#e2e8f0}
+.venue-card .vheader .vcount{background:#334155;padding:2px 12px;border-radius:20px;font-size:11px;color:#94a3b8;font-weight:600}
+.venue-card .vbody{padding:18px 20px 20px}
+.venue-card .vbody .vmeta{display:flex;gap:6px;margin-bottom:14px;flex-wrap:wrap}
+.vtag{font-size:11px;padding:3px 10px;border-radius:6px;font-weight:500}
+.vtag.g{background:#052e16;color:#4ade80;border:1px solid #166534}
+.vtag.b{background:#0f172a;color:#60a5fa;border:1px solid #1e3a5f}
+.vtag.y{background:#3d2e00;color:#facc15;border:1px solid #5c4a00}
+
+.kmeter{display:flex;gap:0;height:32px;border-radius:8px;overflow:hidden;margin:14px 0 8px}
+.kmeter .seg{display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;color:#fff;transition:flex .3s}
+.kmeter .seg.g{background:linear-gradient(180deg,#4ade80,#22c55e)}
+.kmeter .seg.y{background:linear-gradient(180deg,#facc15,#eab308)}
+.kmeter .seg.r{background:linear-gradient(180deg,#f87171,#ef4444)}
+.kmeter .seg.p{background:linear-gradient(180deg,#94a3b8,#64748b)}
+
+.vstats{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;margin-top:16px}
+.vs{text-align:center;padding:10px 8px;border-radius:8px;background:#0f1117;border:1px solid #1e293b}
+.vs .vl{font-size:10px;text-transform:uppercase;color:#64748b;letter-spacing:.5px}
+.vs .vv{font-size:22px;font-weight:800;margin-top:2px}
+.vs .vv.g{color:#4ade80}
+.vs .vv.y{color:#facc15}
+.vs .vv.r{color:#f87171}
+
+.alert-section{padding:0 28px 20px}
+.alert-card{background:linear-gradient(135deg,#1a1d29,#1e293b);border-radius:12px;padding:18px 20px;border:1px solid #2d3748;margin-bottom:10px}
+.alert-card h3{font-size:14px;font-weight:600;color:#facc15;margin-bottom:6px;display:flex;align-items:center;gap:8px}
+.alert-card .dev{display:flex;justify-content:space-between;padding:6px 0;border-bottom:1px solid #1e293b;font-size:12px}
+.alert-card .dev:last-child{border-bottom:none}
+.alert-card .dev .mac{font-family:'SF Mono',Consolas,monospace;color:#94a3b8}
+.alert-card .dev .issues span{display:inline-block;margin-left:8px}
+.alert-card .dev .issues .er{color:#f87171}
+.alert-card .dev .issues .wr{color:#facc15}
+
+.footer{text-align:center;padding:20px;color:#334155;font-size:11px}
+@media(max-width:600px){
+  .stats-grid{grid-template-columns:1fr 1fr;padding:16px;gap:8px}
+  .venue-grid{grid-template-columns:1fr;padding:12px}
+  .stat-card .value{font-size:26px}
+  .header h1{font-size:22px}
+}
 </style>
 </head>
 <body>
+
 <div class="header">
-  <h1>Retail Media — IoT Device Status</h1>
-  <div class="sub">Union Coop Umm Suqeim · Union Coop Al Warqa · Lulu Al Wahda</div>
-  <div class="update-time">Updated: 12/06/2026 17:00:12 GMT</div>
-</div>
-<div class="summary">
-  <div class="sc"><div class="l">Total Devices</div><div class="v">97</div></div>
-  <div class="sc"><div class="l">Online (TRACKING)</div><div class="v online">97</div></div>
-  <div class="sc"><div class="l">Offline</div><div class="v offline">0</div></div>
-  <div class="sc"><div class="l">Umm Suqeim</div><div class="v" style="color:#4ade80">27</div></div>
-  <div class="sc"><div class="l">Al Warqa</div><div class="v" style="color:#a78bfa">33</div></div>
-  <div class="sc"><div class="l">Lulu Al Wahda</div><div class="v" style="color:#facc15">37</div></div>
-</div>
-<div class="venue">
-  <h2>In-Store — Union Coop UMM SUQEIM <span class="badge">27 devices · J30</span></h2>
-  <div class="loc-meta">
-    <span><span class="dot ok"></span>All TRACKING</span>
-    <span>Last seen: ~13h ago</span>
-    <span>Platform: j30</span>
+  <h1>Retail Media · IoT Status</h1>
+  <div class="sub">
+    <span>12/06/2026 — 17:05:18 GMT</span>
+    <span class="live">Live from Admin Console</span>
   </div>
-  <table>
-    <tr><th>MAC</th><th>Device</th><th>State</th><th>Camera</th><th>Uptime</th><th>Issues</th></tr>
-    <tr><td>a1:00:5e:ed:02:b4</td><td>LCD Hanging Screen 2B</td><td><span class="state-tracking">TRACKING</span></td><td>usb</td><td>12h 57m</td><td><span class="ok">OK</span></td></tr>
-    <tr><td>a1:00:5e:ed:02:b5</td><td>IOT_7</td><td><span class="state-tracking">TRACKING</span></td><td>multiple_rtsp</td><td>12h 57m</td><td><span class="err-count">43 err</span> <span class="warn-count">25 warn</span></td></tr>
-    <tr><td>a1:00:5e:ed:02:b7</td><td>IOT_4</td><td><span class="state-tracking">TRACKING</span></td><td>multiple_rtsp</td><td>12h 57m</td><td><span class="err-count">52 err</span> <span class="warn-count">30 warn</span></td></tr>
-    <tr><td>a1:00:5e:ed:02:b8</td><td>LCD Hanging Screen 3A</td><td><span class="state-tracking">TRACKING</span></td><td>usb</td><td>12h 57m</td><td><span class="ok">OK</span></td></tr>
-    <tr><td>a1:00:5e:ed:02:b9</td><td>LCD Hanging Screen 4A</td><td><span class="state-tracking">TRACKING</span></td><td>usb</td><td>12h 53m</td><td><span class="ok">OK</span></td></tr>
-    <tr><td>a1:00:5e:ed:02:ba</td><td>LCD Hanging Screen 4B</td><td><span class="state-tracking">TRACKING</span></td><td>usb</td><td>12h 57m</td><td><span class="ok">OK</span></td></tr>
-    <tr><td colspan="6" style="text-align:center;color:#475569;padding:12px">+ 21 more — all TRACKING, j30 platform</td></tr>
-  </table>
 </div>
-<div class="venue">
-  <h2>Union Coop AL WARQA <span class="badge">33 devices · J30</span></h2>
-  <div class="loc-meta">
-    <span><span class="dot ok"></span>All TRACKING</span>
-    <span>Last seen: ~13h ago</span>
-    <span>Platform: j30</span>
+
+<div class="stats-grid">
+  <div class="stat-card blue"><div class="label">Total IoTs</div><div class="value">97</div><div class="sub-value">Across 3 venues</div></div>
+  <div class="stat-card green"><div class="label">TRACKING</div><div class="value">96</div><div class="sub-value">All operating normally</div></div>
+  <div class="stat-card yellow"><div class="label">With Warnings</div><div class="value">2</div><div class="sub-value">IOT_4 · IOT_7</div></div>
+  <div class="stat-card red"><div class="label">With Errors</div><div class="value">1</div><div class="sub-value">IOT_18 · 575 errors</div></div>
+  <div class="stat-card purple"><div class="label">Umm Suqeim</div><div class="value">27</div><div class="sub-value">27 &times; J30</div></div>
+  <div class="stat-card pink"><div class="label">Al Warqa</div><div class="value">33</div><div class="sub-value">33 &times; J30</div></div>
+  <div class="stat-card yellow"><div class="label" style="color:#facc15"}>Lulu Al Wahda</div><div class="value">37</div><div class="sub-value">37 &times; J30</div></div>
+</div>
+
+<div class="venue-grid">
+  <div class="venue-card">
+    <div class="vheader"><div class="vname">Umm Suqeim</div><div class="vcount">27 IoTs</div></div>
+    <div class="vbody">
+      <div class="vmeta"><span class="vtag b">J30</span><span class="vtag g">TRACKING</span><span class="vtag y">2 with warnings</span></div>
+      <div class="kmeter"><div class="seg g" style="flex:25">25 OK</div><div class="seg y" style="flex:2">2 warn</div></div>
+      <div class="vstats">
+        <div class="vs"><div class="vl">Tracking</div><div class="vv g">27</div></div>
+        <div class="vs"><div class="vl">Warnings</div><div class="vv y">2</div></div>
+        <div class="vs"><div class="vl">Errors</div><div class="vv g">0</div></div>
+      </div>
+    </div>
   </div>
-  <table>
-    <tr><th>MAC</th><th>Device</th><th>State</th><th>Camera</th><th>Uptime</th><th>Issues</th></tr>
-    <tr><td>a1:00:5e:ed:02:bb</td><td>IOT_18</td><td><span class="state-tracking">TRACKING</span></td><td>multiple_rtsp</td><td>12h 53m</td><td><span class="err-count">575 err</span> <span class="warn-count">383 warn</span></td></tr>
-    <tr><td>a1:00:5e:ed:02:bc</td><td>LCD Hanging Screen 2B</td><td><span class="state-tracking">TRACKING</span></td><td>usb</td><td>12h 57m</td><td><span class="ok">OK</span></td></tr>
-    <tr><td>a1:00:5e:ed:02:be</td><td>LCD Hanging Screen 3A</td><td><span class="state-tracking">TRACKING</span></td><td>usb</td><td>12h 53m</td><td><span class="ok">OK</span></td></tr>
-    <tr><td colspan="6" style="text-align:center;color:#475569;padding:12px">+ 30 more — all TRACKING, j30 platform</td></tr>
-  </table>
-</div>
-<div class="venue">
-  <h2>LULU AL WAHDA <span class="badge">37 devices · J30</span></h2>
-  <div class="loc-meta">
-    <span><span class="dot ok"></span>All TRACKING</span>
-    <span>Platform: j30</span>
+
+  <div class="venue-card">
+    <div class="vheader"><div class="vname">Al Warqa</div><div class="vcount">33 IoTs</div></div>
+    <div class="vbody">
+      <div class="vmeta"><span class="vtag b">J30</span><span class="vtag g">TRACKING</span><span class="vtag" style="background:#3d1c00;color:#f87171;border:1px solid #7f1d1d">1 with errors</span></div>
+      <div class="kmeter"><div class="seg g" style="flex:32">32 OK</div><div class="seg r" style="flex:1">1 err</div></div>
+      <div class="vstats">
+        <div class="vs"><div class="vl">Tracking</div><div class="vv g">33</div></div>
+        <div class="vs"><div class="vl">Warnings</div><div class="vv g">0</div></div>
+        <div class="vs"><div class="vl">Errors</div><div class="vv r">1</div></div>
+      </div>
+    </div>
   </div>
-  <table>
-    <tr><th>MAC</th><th>Device</th><th>State</th><th>Camera</th><th>Uptime</th><th>Issues</th></tr>
-    <tr><td colspan="6" style="text-align:center;color:#475569;padding:14px">
-      Full device list available after capture cron setup<br>
-      <span style="font-size:10px;color:#334155">37 devices deployed · all TRACKING</span>
-    </td></tr>
-  </table>
+
+  <div class="venue-card">
+    <div class="vheader"><div class="vname">Lulu Al Wahda</div><div class="vcount">37 IoTs</div></div>
+    <div class="vbody">
+      <div class="vmeta"><span class="vtag b">J30</span><span class="vtag g">TRACKING</span><span class="vtag" style="background:#1e293b;color:#94a3b8;border:1px solid #334155">Pending capture</span></div>
+      <div class="kmeter"><div class="seg p" style="flex:1">37 · Awaiting setup</div></div>
+      <div class="vstats">
+        <div class="vs"><div class="vl">Tracking</div><div class="vv g">37</div></div>
+        <div class="vs"><div class="vl">Warnings</div><div class="vv g">0</div></div>
+        <div class="vs"><div class="vl">Errors</div><div class="vv g">0</div></div>
+      </div>
+    </div>
+  </div>
 </div>
-<div class="footer">AiOO Tech Dubai · Retail Media IoT Monitoring</div>
+
+<div class="alert-section">
+  <div class="alert-card">
+    <h3>Devices needing attention (2)</h3>
+    <div class="dev"><span class="mac">a1:00:5e:ed:02:bb</span><span class="mac">Union Coop AL WARQA · IOT_18</span><span class="issues"><span class="er">575 errors</span><span class="wr">383 warnings</span></span></div>
+    <div class="dev"><span class="mac">a1:00:5e:ed:02:b7</span><span class="mac">Umm Suqeim · IOT_4</span><span class="issues"><span class="er">52 errors</span><span class="wr">30 warnings</span></span></div>
+    <div class="dev"><span class="mac">a1:00:5e:ed:02:b5</span><span class="mac">Umm Suqeim · IOT_7</span><span class="issues"><span class="er">43 errors</span><span class="wr">25 warnings</span></span></div>
+  </div>
+</div>
+
+<div class="footer">AiOO Tech Dubai · Retail Media IoT Monitoring · Data from IoT Admin Console</div>
 </body>
 </html>

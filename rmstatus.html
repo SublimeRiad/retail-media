@@ -6,84 +6,90 @@
 <title>Retail Media — IoT Status</title>
 <style>
 *{margin:0;padding:0;box-sizing:border-box}
-body{font-family:-apple-system,BlinkMacSystemFont,'Inter','Segoe UI',Roboto,sans-serif;background:#08080e;color:#e2e8f0;padding:0 0 50px;min-height:100vh}
-.header{background:linear-gradient(135deg,#0f172a,#1e293b);padding:28px 24px 20px;border-bottom:1px solid #1e293b}
-.header h1{font-size:32px;font-weight:800;background:linear-gradient(90deg,#60a5fa,#a78bfa,#f472b6);-webkit-background-clip:text;-webkit-text-fill-color:transparent;letter-spacing:-.5px}
-.header .sub{color:#64748b;font-size:13px;margin-top:8px;display:flex;gap:20px;align-items:center;flex-wrap:wrap}
-.header .sub .live{display:inline-flex;align-items:center;gap:6px;background:#052e16;color:#4ade80;padding:2px 12px;border-radius:20px;font-size:11px;font-weight:700}
+body{font-family:Inter,-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;background:#08080e;color:#f1f5f9;padding:0 0 40px}
+
+.header{background:linear-gradient(135deg,#0a0a1a 0%,#0f172a 50%,#1a1a2e 100%);padding:32px 24px 24px;border-bottom:1px solid #1e293b;position:relative;overflow:hidden}
+.header::before{content:'';position:absolute;top:-50%;right:-20%;width:400px;height:400px;background:radial-gradient(circle,rgba(96,165,250,.06) 0%,transparent 70%);border-radius:50%}
+.header::after{content:'';position:absolute;bottom:-30%;left:30%;width:300px;height:300px;background:radial-gradient(circle,rgba(167,139,250,.04) 0%,transparent 70%);border-radius:50%}
+.header h1{font-size:32px;font-weight:800;background:linear-gradient(135deg,#60a5fa,#a78bfa,#f472b6);-webkit-background-clip:text;-webkit-text-fill-color:transparent;letter-spacing:-.5px;position:relative;z-index:1}
+.header .sub{color:#64748b;font-size:13px;margin-top:8px;display:flex;gap:20px;align-items:center;flex-wrap:wrap;position:relative;z-index:1}
+.header .sub .live{display:inline-flex;align-items:center;gap:6px;background:#052e16;color:#4ade80;padding:2px 14px;border-radius:20px;font-size:11px;font-weight:700}
 .header .sub .live::before{content:'';width:7px;height:7px;background:#4ade80;border-radius:50%;animation:pulse 2s infinite}
 @keyframes pulse{0%,100%{opacity:1}50%{opacity:.2}}
 
-.big-metrics{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:14px;padding:28px 24px 16px}
-.bc{background:linear-gradient(135deg,#1a1d29,#1e293b);border-radius:16px;padding:20px;border:1px solid #2d3748;text-align:center;position:relative;overflow:hidden}
-.bc::before{content:'';position:absolute;top:0;left:0;right:0;height:3px}
-.bc.blue::before{background:linear-gradient(90deg,#60a5fa,#3b82f6)}
-.bc.green::before{background:linear-gradient(90deg,#4ade80,#22c55e)}
-.bc.orange::before{background:linear-gradient(90deg,#facc15,#f59e0b)}
-.bc.red::before{background:linear-gradient(90deg,#f87171,#ef4444)}
-.bc.purple::before{background:linear-gradient(90deg,#a78bfa,#8b5cf6)}
-.bc .bl{font-size:11px;text-transform:uppercase;color:#64748b;letter-spacing:1px;font-weight:600}
-.bc .bv{font-size:56px;font-weight:900;margin-top:4px;line-height:1;letter-spacing:-2px}
-.bc .bs{font-size:12px;color:#64748b;margin-top:6px}
-.bc.blue .bv{color:#60a5fa}
-.bc.green .bv{color:#4ade80}
-.bc.orange .bv{color:#facc15}
-.bc.red .bv{color:#f87171}
-.bc.purple .bv{color:#a78bfa}
+.metrics{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:12px;padding:28px 24px 8px}
+.mc{background:linear-gradient(135deg,#1a1d29,#222533);border-radius:16px;padding:20px;border:1px solid #2d3748;text-align:center;position:relative;overflow:hidden;transition:transform .2s,border-color .2s}
+.mc:hover{transform:translateY(-3px);border-color:#475569}
+.mc .icon{font-size:24px;margin-bottom:6px}
+.mc .ml{font-size:10px;text-transform:uppercase;color:#64748b;letter-spacing:1px;font-weight:600}
+.mc .mv{font-size:52px;font-weight:900;margin-top:2px;line-height:1;letter-spacing:-2px}
+.mc .ms{font-size:11px;color:#64748b;margin-top:6px;font-weight:500}
+.mc.blue .mv{color:#60a5fa}.mc.green .mv{color:#4ade80}.mc.orange .mv{color:#facc15}.mc.red .mv{color:#f87171}.mc.purple .mv{color:#a78bfa}.mc.pink .mv{color:#f472b6}
 
-.venue-section{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:16px;padding:16px 24px}
-.vc{background:linear-gradient(135deg,#1a1d29,#1e293b);border-radius:16px;overflow:hidden;border:1px solid #2d3748;transition:border-color .2s}
-.vc:hover{border-color:#60a5fa}
-.vc .vh{padding:18px 20px 14px;border-bottom:1px solid #1e293b;display:flex;justify-content:space-between;align-items:center}
-.vc .vh .vn{font-size:18px;font-weight:700}
-.vc .vh .vn .loc{color:#94a3b8;font-size:11px;font-weight:400;display:block;margin-top:2px}
-.vc .vh .vtag{background:#334155;padding:4px 14px;border-radius:20px;font-size:12px;color:#94a3b8;font-weight:700}
-.vc .vb{padding:18px 20px 22px}
+.venues{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:16px;padding:16px 24px}
+.vc{border-radius:16px;overflow:hidden;transition:transform .25s,border-color .2s}
+.vc:hover{transform:translateY(-4px)}
+.vc.green{background:linear-gradient(135deg,#0a2e1a 0%,#0a1f12 100%);border:1px solid #166534;box-shadow:0 4px 24px rgba(34,197,94,.08)}
+.vc.green .vh{border-bottom:1px solid #1a3a22}
+.vc.green .vtag{background:#166534;color:#4ade80}
+.vc.green .kmb{background:#0a2e1a}
+.vc.yellow{background:linear-gradient(135deg,#2a2000 0%,#1a1500 100%);border:1px solid #5c4a00;box-shadow:0 4px 24px rgba(234,179,8,.08)}
+.vc.yellow .vh{border-bottom:1px solid #3d2e00}
+.vc.yellow .vtag{background:#5c4a00;color:#facc15}
+.vc.yellow .kmb{background:#2a2000}
+.vc.red{background:linear-gradient(135deg,#2a0a0a 0%,#1a0808 100%);border:1px solid #7f1d1d;box-shadow:0 4px 24px rgba(239,68,68,.08)}
+.vc.red .vh{border-bottom:1px solid #3d1414}
+.vc.red .vtag{background:#7f1d1d;color:#f87171}
+.vc.red .kmb{background:#2a0a0a}
+.vc.blue{background:linear-gradient(135deg,#0a1a2e 0%,#0a121f 100%);border:1px solid #1e3a5f;box-shadow:0 4px 24px rgba(59,130,246,.08)}
+.vc.blue .vh{border-bottom:1px solid #14223a}
+.vc.blue .vtag{background:#1e3a5f;color:#60a5fa}
+.vc.blue .kmb{background:#0a1a2e}
 
+.vh{padding:18px 20px 14px;display:flex;justify-content:space-between;align-items:center}
+.vh .vn{font-size:18px;font-weight:700}
+.vh .vn .loc{color:#94a3b8;font-size:10px;font-weight:400;display:block;margin-top:2px;opacity:.7}
+.vh .vtag{padding:3px 14px;border-radius:20px;font-size:13px;font-weight:700}
+.vb{padding:16px 20px 22px}
 .vg{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;margin-bottom:14px}
-.vs{text-align:center;padding:12px 6px;border-radius:10px;background:#0f1117;border:1px solid #1e293b}
-.vs .vl{font-size:9px;text-transform:uppercase;color:#64748b;letter-spacing:1px}
-.vs .vv{font-size:32px;font-weight:900;margin-top:2px;line-height:1}
-.vs .vv.gr{color:#4ade80}
-.vs .vv.ye{color:#facc15}
-.vs .vv.re{color:#f87171}
+.vs{text-align:center;padding:12px 4px;border-radius:10px;background:rgba(15,17,23,.5);border:1px solid rgba(45,55,72,.5)}
+.vs .vl{font-size:9px;text-transform:uppercase;color:#64748b;letter-spacing:1px;font-weight:600}
+.vs .vv{font-size:30px;font-weight:900;margin-top:2px;line-height:1}
+.vs .vv.gr{color:#4ade80}.vs .vv.ye{color:#facc15}.vs .vv.re{color:#f87171}
 
-.kmeter{display:grid;grid-template-columns:1fr;gap:4px;margin-top:4px}
-.km{display:flex;align-items:center;gap:8px}
-.km .kml{font-size:10px;color:#64748b;width:60px;text-align:right}
-.km .kmb{flex:1;height:20px;background:#0f1117;border-radius:4px;overflow:hidden}
-.km .kmb .kf{height:100%;border-radius:4px;transition:width .5s}
-.km .kmb .kf.g{background:linear-gradient(90deg,#4ade80,#22c55e)}
-.km .kmb .kf.y{background:linear-gradient(90deg,#facc15,#eab308)}
-.km .kmb .kf.r{background:linear-gradient(90deg,#f87171,#ef4444)}
-.km .kml2{font-size:11px;font-weight:700;width:30px}
+.km{display:flex;align-items:center;gap:8px;margin-top:4px}
+.km .kml{font-size:10px;color:#64748b;width:50px;text-align:right;font-weight:600}
+.km .kmb{flex:1;height:18px;border-radius:6px;overflow:hidden}
+.km .kmb .kf{height:100%;border-radius:6px;min-width:4px}
+.km .kmb .kf.g{background:linear-gradient(90deg,#22c55e,#4ade80)}
+.km .kmb .kf.y{background:linear-gradient(90deg,#eab308,#facc15)}
+.km .kmb .kf.r{background:linear-gradient(90deg,#ef4444,#f87171)}
+.km .kml2{font-size:12px;font-weight:800;width:30px;color:#94a3b8}
 
-.alert-section{padding:4px 24px 0}
-.ac{background:linear-gradient(135deg,#1a1d29,#1e293b);border-radius:14px;overflow:hidden;border:1px solid #2d3748}
-.ac .ah{background:linear-gradient(90deg,#3d1c00,#5c2a00);padding:14px 20px;border-bottom:1px solid #7f1d1d;display:flex;justify-content:space-between;align-items:center}
-.ac .ah h3{font-size:14px;color:#fca5a5;font-weight:700;display:flex;align-items:center;gap:8px}
-.ac .ah .acount{background:#7f1d1d;color:#fca5a5;padding:2px 12px;border-radius:20px;font-size:12px;font-weight:700}
-.ac table{width:100%;border-collapse:collapse;font-size:13px}
-.ac th{padding:10px 20px;background:#1e293b;color:#94a3b8;font-size:10px;text-transform:uppercase;letter-spacing:.5px;text-align:left;border-bottom:1px solid #1e293b}
-.ac td{padding:10px 20px;border-bottom:1px solid #1e293b}
-.ac tr:last-child td{border-bottom:none}
-.ac tr:hover{background:#1a1d29}
-.ac .mac{font-family:'SF Mono',Consolas,monospace;color:#94a3b8;font-size:12px}
-.ac .loc-name{color:#e2e8f0}
-.ac .er{color:#f87171;font-weight:600}
-.ac .wr{color:#facc15;font-weight:600}
-.ac .b{color:#60a5fa;font-weight:600}
-.ac .state-on{color:#4ade80}
-.ac .state-warn{color:#facc15}
-.ac .state-err{color:#f87171}
+.alerts{padding:8px 24px 0}
+.ac{background:linear-gradient(135deg,#1a1d29,#222533);border-radius:14px;overflow:hidden;border:1px solid #2d3748}
+.ah{background:linear-gradient(90deg,#2a1000,#3d1c00);padding:16px 20px;display:flex;justify-content:space-between;align-items:center;border-bottom:1px solid #5c2a00}
+.ah h3{font-size:14px;color:#fca5a5;font-weight:700;display:flex;align-items:center;gap:8px}
+.ah .acount{background:#5c2a00;color:#fca5a5;padding:2px 14px;border-radius:20px;font-size:13px;font-weight:800}
 
-.footer{text-align:center;padding:24px;color:#334155;font-size:11px}
+.at{width:100%;border-collapse:collapse}
+.at th{padding:12px 20px;background:rgba(30,41,59,.5);color:#94a3b8;font-size:10px;text-transform:uppercase;letter-spacing:.5px;text-align:left;font-weight:600}
+.at td{padding:12px 20px;border-bottom:1px solid rgba(30,41,59,.5);font-size:13px}
+.at tr:last-child td{border-bottom:none}
+.at tr{transition:background .15s}
+.at tr:hover{background:rgba(30,41,59,.4)}
+.at .mac{font-family:'SF Mono',Consolas,monospace;color:#94a3b8;font-size:12px}
+.at .er{color:#f87171;font-weight:700}
+.at .wr{color:#facc15;font-weight:700}
+.at .state-t{color:#60a5fa;font-weight:600}
+
+.footer{text-align:center;padding:28px;color:#1e293b;font-size:11px;letter-spacing:.5px}
 
 @media(max-width:600px){
-  .big-metrics{gap:10px;padding:20px 12px 10px}
-  .bc .bv{font-size:42px}
-  .venue-section{padding:10px 12px}
-  .vs .vv{font-size:26px}
+  .metrics{gap:10px;padding:20px 12px 4px}
+  .mc .mv{font-size:38px}
+  .venues{padding:10px 12px}
+  .vs .vv{font-size:24px}
   .header h1{font-size:26px}
 }
 </style>
@@ -93,96 +99,117 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Inter','Segoe UI',Roboto,sans
 <div class="header">
   <h1>Retail Media · IoT Status</h1>
   <div class="sub">
-    <span>12/06/2026 — 17:08:52 GMT</span>
+    <span>12/06/2026 — 17:23:48 GMT</span>
     <span class="live">Live</span>
   </div>
 </div>
 
-<div class="big-metrics">
-  <div class="bc blue"><div class="bl">Total</div><div class="bv">97</div><div class="bs">IoTs deployed</div></div>
-  <div class="bc green"><div class="bl">Tracking</div><div class="bv">96</div><div class="bs">All good</div></div>
-  <div class="bc orange"><div class="bl">Warnings</div><div class="bv">2</div><div class="bs">IOT_4 · IOT_7</div></div>
-  <div class="bc red"><div class="bl">Errors</div><div class="bv">1</div><div class="bs">IOT_18</div></div>
-  <div class="bc purple"><div class="bl">Uptime</div><div class="bv">~13h</div><div class="bs">Avg uptime</div></div>
+<div class="metrics">
+  <div class="mc blue"><div class="icon">📡</div><div class="ml">Total Devices</div><div class="mv">97</div><div class="ms">3 venues</div></div>
+  <div class="mc green"><div class="icon">✅</div><div class="ml">Tracking OK</div><div class="mv">96</div><div class="ms">Normal operation</div></div>
+  <div class="mc orange"><div class="icon">⚡</div><div class="ml">Warnings</div><div class="mv">2</div><div class="ms">IOT_4 · IOT_7</div></div>
+  <div class="mc red"><div class="icon">🔴</div><div class="ml">Errors</div><div class="mv">1</div><div class="ms">IOT_18</div></div>
+  <div class="mc purple"><div class="icon">⏱️</div><div class="ml">Avg Uptime</div><div class="mv">~13h</div><div class="ms">All connected</div></div>
+  <div class="mc pink"><div class="icon">📊</div><div class="ml">Platform</div><div class="mv">J30</div><div class="ms">All devices</div></div>
 </div>
 
-<div class="big-metrics" style="padding-top:0;grid-template-columns:repeat(auto-fit,minmax(140px,1fr))">
-  <div class="bc green"><div class="bl">Umm Suqeim</div><div class="bv" style="font-size:44px">27</div><div class="bs">0 err · 2 warn</div></div>
-  <div class="bc red"><div class="bl">Al Warqa</div><div class="bv" style="font-size:44px">33</div><div class="bs">1 err · 0 warn</div></div>
-  <div class="bc purple"><div class="bl">Lulu Al Wahda</div><div class="bv" style="font-size:44px">37</div><div class="bs">Pending setup</div></div>
-</div>
-
-<div class="venue-section">
-  <div class="vc">
-    <div class="vh"><div class="vn">Umm Suqeim <span class="loc">In-Store Union Coop</span></div><div class="vtag">27</div></div>
+<div class="venues">
+  <div class="vc yellow">
+    <div class="vh">
+      <div class="vn">📍 Umm Suqeim <span class="loc">In-Store · Union Coop</span></div>
+      <div class="vtag">27</div>
+    </div>
     <div class="vb">
       <div class="vg">
         <div class="vs"><div class="vl">Tracking</div><div class="vv gr">27</div></div>
         <div class="vs"><div class="vl">Warnings</div><div class="vv ye">2</div></div>
         <div class="vs"><div class="vl">Errors</div><div class="vv gr">0</div></div>
       </div>
-      <div class="kmeter">
-        <div class="km"><span class="kml">OK</span><div class="kmb"><div class="kf g" style="width:93%"></div></div><span class="kml2">25</span></div>
-        <div class="km"><span class="kml">Warn</span><div class="kmb"><div class="kf y" style="width:7%"></div></div><span class="kml2">2</span></div>
+      <div class="km">
+        <span class="kml">OK</span>
+        <div class="kmb"><div class="kf g" style="width:93%"></div></div>
+        <span class="kml2">25</span>
+      </div>
+      <div class="km">
+        <span class="kml">Warn</span>
+        <div class="kmb"><div class="kf y" style="width:7%"></div></div>
+        <span class="kml2">2</span>
       </div>
     </div>
   </div>
 
-  <div class="vc">
-    <div class="vh"><div class="vn">Al Warqa <span class="loc">Union Coop</span></div><div class="vtag">33</div></div>
+  <div class="vc red">
+    <div class="vh">
+      <div class="vn">📍 Al Warqa <span class="loc">Union Coop</span></div>
+      <div class="vtag">33</div>
+    </div>
     <div class="vb">
       <div class="vg">
         <div class="vs"><div class="vl">Tracking</div><div class="vv gr">33</div></div>
         <div class="vs"><div class="vl">Warnings</div><div class="vv gr">0</div></div>
         <div class="vs"><div class="vl">Errors</div><div class="vv re">1</div></div>
       </div>
-      <div class="kmeter">
-        <div class="km"><span class="kml">OK</span><div class="kmb"><div class="kf g" style="width:97%"></div></div><span class="kml2">32</span></div>
-        <div class="km"><span class="kml">Error</span><div class="kmb"><div class="kf r" style="width:3%"></div></div><span class="kml2">1</span></div>
+      <div class="km">
+        <span class="kml">OK</span>
+        <div class="kmb"><div class="kf g" style="width:97%"></div></div>
+        <span class="kml2">32</span>
+      </div>
+      <div class="km">
+        <span class="kml">Error</span>
+        <div class="kmb"><div class="kf r" style="width:3%"></div></div>
+        <span class="kml2">1</span>
       </div>
     </div>
   </div>
 
-  <div class="vc">
-    <div class="vh"><div class="vn">Lulu Al Wahda <span class="loc">Pending capture setup</span></div><div class="vtag">37</div></div>
+  <div class="vc blue">
+    <div class="vh">
+      <div class="vn">📍 Lulu Al Wahda <span class="loc">Pending capture setup</span></div>
+      <div class="vtag">37</div>
+    </div>
     <div class="vb">
       <div class="vg">
         <div class="vs"><div class="vl">Tracking</div><div class="vv gr">37</div></div>
         <div class="vs"><div class="vl">Warnings</div><div class="vv gr">0</div></div>
         <div class="vs"><div class="vl">Errors</div><div class="vv gr">0</div></div>
       </div>
-      <div class="kmeter">
-        <div class="km"><span class="kml">OK</span><div class="kmb"><div class="kf g" style="width:100%"></div></div><span class="kml2">37</span></div>
+      <div class="km">
+        <span class="kml">OK</span>
+        <div class="kmb"><div class="kf g" style="width:100%"></div></div>
+        <span class="kml2">37</span>
       </div>
     </div>
   </div>
 </div>
 
-<div class="alert-section">
+<div class="alerts">
   <div class="ac">
-    <div class="ah"><h3>Devices needing attention</h3><span class="acount">3</span></div>
-    <table>
+    <div class="ah">
+      <h3>⚠️ Devices needing attention</h3>
+      <span class="acount">3</span>
+    </div>
+    <table class="at">
       <tr><th>Device</th><th>Venue</th><th>State</th><th>Errors</th><th>Warnings</th></tr>
       <tr>
         <td><span class="mac">a1:00:5e:ed:02:bb</span></td>
-        <td class="loc-name">Al Warqa · IOT_18</td>
-        <td><span class="b">TRACKING</span></td>
-        <td class="er">575</td>
-        <td class="wr">383</td>
+        <td>🇦🇪 Al Warqa · IOT_18</td>
+        <td><span class="state-t">TRACKING</span></td>
+        <td><span class="er">575</span></td>
+        <td><span class="wr">383</span></td>
       </tr>
       <tr>
         <td><span class="mac">a1:00:5e:ed:02:b7</span></td>
-        <td class="loc-name">Umm Suqeim · IOT_4</td>
-        <td><span class="b">TRACKING</span></td>
-        <td class="er">52</td>
-        <td class="wr">30</td>
+        <td>🇦🇪 Umm Suqeim · IOT_4</td>
+        <td><span class="state-t">TRACKING</span></td>
+        <td><span class="er">52</span></td>
+        <td><span class="wr">30</span></td>
       </tr>
       <tr>
         <td><span class="mac">a1:00:5e:ed:02:b5</span></td>
-        <td class="loc-name">Umm Suqeim · IOT_7</td>
-        <td><span class="b">TRACKING</span></td>
-        <td class="er">43</td>
-        <td class="wr">25</td>
+        <td>🇦🇪 Umm Suqeim · IOT_7</td>
+        <td><span class="state-t">TRACKING</span></td>
+        <td><span class="er">43</span></td>
+        <td><span class="wr">25</span></td>
       </tr>
     </table>
   </div>

@@ -11,7 +11,10 @@ body{font-family:Inter,-apple-system,BlinkMacSystemFont,sans-serif;background:#0
 .hdr{padding:18px 20px 10px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:6px}
 .hdr h1{font-size:16px;font-weight:700;color:#e2e8f0}
 .hdr h1 span{color:#52525b;font-weight:400}
-.hdr .ts{font-size:10px;color:#52525b;font-family:'SF Mono',Consolas,monospace}
+.hdr .ts{font-size:10px;color:#52525b;font-family:.SF Mono.,Consolas,monospace}
+.live{display:inline-flex;align-items:center;gap:6px;background:#052e16;color:#4ade80;padding:0 10px;border-radius:20px;font-size:9px;font-weight:700;height:20px}
+.live::before{content:"";width:6px;height:6px;background:#4ade80;border-radius:50%;animation:pulse 2s infinite}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.2}}
 
 .mr{display:flex;gap:4px;padding:0 20px 10px;flex-wrap:wrap}
 .mi{padding:8px 14px;background:#18181b;border-radius:8px;border:1px solid #27272a;font-size:11px;display:flex;align-items:center;gap:8px}
@@ -86,7 +89,7 @@ body{font-family:Inter,-apple-system,BlinkMacSystemFont,sans-serif;background:#0
 
 <div class="hdr">
   <h1><svg viewBox="0 0 28 28" xmlns="http://www.w3.org/2000/svg" style="height:24px;vertical-align:middle;margin-right:6px"><rect width="28" height="28" rx="4" fill="#18181b"/><text x="14" y="21" font-family="Arial,sans-serif" font-size="24" font-weight="800" fill="#06b6d4" text-anchor="middle">a</text></svg>RM <span>· Retail Media IoT</span></h1>
-  <div class="ts">12/06/2026 17:59:42</div>
+  <div style="display:flex;align-items:center;gap:8px"><div class="ts">12/06/2026 17:59:42</div><div class="live">Live</div></div>
 </div>
 
 <div class="mr">

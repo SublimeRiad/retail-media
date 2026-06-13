@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>IoT Admin Console — Dashboard</title>
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:Inter,-apple-system,BlinkMacSystemFont,sans-serif;background:#f1f5f9;color:#1e293b;min-height:100vh}
+
+/* Header */
+.hdr{background:#0f172a;padding:0 20px;height:48px;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid #1e293b}
+.hdr .left{display:flex;align-items:center;gap:12px}
+.hdr .menu{color:#64748b;cursor:pointer;font-size:20px;line-height:1}
+.hdr h1{font-size:14px;font-weight:600;color:#e2e8f0}
+.hdr h1 a{color:#e2e8f0;text-decoration:none}
+.hdr .logo{display:flex;align-items:center;gap:6px;color:#94a3b8;font-size:12px;font-weight:600}
+.hdr .logo img{height:20px;border-radius:3px}
+
+.sub{padding:10px 20px;background:#fff;border-bottom:1px solid #e2e8f0;display:flex;align-items:center;justify-content:space-between}
+.sub h2{font-size:16px;font-weight:700}
+.sub .refresh{display:flex;align-items:center;gap:6px;color:#64748b;font-size:12px;cursor:pointer;padding:4px 10px;border-radius:4px;border:1px solid #e2e8f0}
+.sub .refresh:hover{background:#f8fafc}
+
+/* Grid */
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:16px;padding:16px 20px}
+.card{background:#fff;border-radius:8px;border:1px solid #e2e8f0;overflow:hidden}
+.card.full{grid-column:1/-1}
+.card h3{padding:12px 14px 8px;font-size:13px;font-weight:600;color:#475569;display:flex;align-items:center;justify-content:space-between}
+.card h3 .link{font-size:11px;font-weight:400;color:#3b82f6;cursor:pointer}
+.card h3 .link:hover{text-decoration:underline}
+
+/* Table */
+table{width:100%;border-collapse:collapse;font-size:12px}
+th{padding:8px 14px;background:#f8fafc;color:#64748b;font-size:10px;text-transform:uppercase;letter-spacing:.5px;text-align:left;font-weight:600;border-bottom:1px solid #e2e8f0}
+td{padding:8px 14px;border-bottom:1px solid #f1f5f9;font-size:12px}
+tr:last-child td{border-bottom:none}
+tr:hover{background:#f8fafc}
+.mac{font-family:'SF Mono',Consolas,monospace;color:#3b82f6;font-size:11px;text-decoration:none}
+.mac:hover{text-decoration:underline}
+.st{font-size:11px;padding:2px 8px;border-radius:4px;font-weight:600;display:inline-block}
+.st.tracking{background:#dcfce7;color:#16a34a}
+.st.ready{background:#dbeafe;color:#2563eb}
+.st.offline{background:#fef2f2;color:#dc2626}
+.st.idle{background:#fef9c3;color:#ca8a04}
+.err{color:#dc2626;font-weight:600}
+.warn{color:#ca8a04;font-weight:600}
+.no{color:#94a3b8}
+.age{color:#64748b;font-size:11px}
+.logs{color:#3b82f6;font-size:11px;cursor:pointer}
+.logs:hover{text-decoration:underline}
+
+/* Device by location */
+.vrow{display:grid;grid-template-columns:2fr 1fr 1fr 1fr 1fr;padding:8px 14px;border-bottom:1px solid #f1f5f9;font-size:12px;align-items:center}
+.vrow:hover{background:#f8fafc}
+.vrow.header{background:#f8fafc;color:#64748b;font-size:10px;text-transform:uppercase;letter-spacing:.5px;font-weight:600;padding:8px 14px;border-bottom:1px solid #e2e8f0}
+.vname{font-weight:500}
+.vcnt{text-align:center;font-weight:600;cursor:pointer;color:#3b82f6}
+.vcnt.zero{color:#94a3b8;cursor:default}
+
+.pagination{padding:10px 14px;display:flex;align-items:center;justify-content:space-between;border-top:1px solid #e2e8f0;color:#64748b;font-size:11px}
+.pagination .pbtn{display:flex;gap:4px}
+.pagination .pbtn button{background:#fff;border:1px solid #e2e8f0;border-radius:4px;padding:4px 8px;cursor:pointer;color:#475569;font-size:11px}
+.pagination .pbtn button:disabled{opacity:.4;cursor:default}
+.pagination .pbtn button:hover:not(:disabled){background:#f8fafc}
+
+.ft{text-align:center;padding:20px;color:#94a3b8;font-size:11px}
+
+@media(max-width:768px){
+  .grid{grid-template-columns:1fr;padding:12px}
+}
+</style>
+</head>
+<body>
+
+<div class="hdr">
+  <div class="left">
+    <span class="menu">☰</span>
+    <h1><a href="#">IOT Admin Console</a></h1>
+  </div>
+  <div class="logo"><img src="aioo-logo.jpg" alt="AiOO">AiOO Tech Dubai</div>
+</div>
+
+<div class="sub">
+  <h2>Dashboard</h2>
+  <div class="refresh">↻ Refresh</div>
+</div>
+
+<div class="grid">
+
+  <!-- Last 4 hours errors and warnings -->
+  <div class="card full">
+    <h3>Last 4 hours errors and warnings</h3>
+    <table>
+      <tr><th>Device</th><th>State</th><th>Total errors</th><th>Warnings</th></tr>
+      <tr><td><a class="mac" href="#">a1:00:5e:ed:02:bb</a></td><td><span class="st tracking">TRACKING</span></td><td><span class="err">373</span></td><td><span class="warn">240</span></td></tr>
+      <tr><td><a class="mac" href="#">a1:00:5e:ed:01:f4</a></td><td><span class="st ready">READY</span></td><td><span class="err">114</span></td><td><span class="no">0</span></td></tr>
+      <tr><td><a class="mac" href="#">a1:00:5e:ed:02:98</a></td><td><span class="st ready">READY</span></td><td><span class="err">111</span></td><td><span class="no">0</span></td></tr>
+      <tr><td><a class="mac" href="#">a1:00:5e:ed:02:26</a></td><td><span class="st ready">READY</span></td><td><span class="err">81</span></td><td><span class="no">0</span></td></tr>
+      <tr><td><a class="mac" href="#">a1:00:5e:ed:00:74</a></td><td><span class="st ready">READY</span></td><td><span class="err">74</span></td><td><span class="warn">30</span></td></tr>
+      <tr><td><a class="mac" href="#">a1:00:5e:ed:02:b0</a></td><td><span class="st tracking">TRACKING</span></td><td><span class="err">67</span></td><td><span class="warn">34</span></td></tr>
+      <tr><td><a class="mac" href="#">a1:00:5e:ed:02:0d</a></td><td><span class="st tracking">TRACKING</span></td><td><span class="err">52</span></td><td><span class="warn">29</span></td></tr>
+      <tr><td><a class="mac" href="#">a1:00:5e:ed:02:a4</a></td><td><span class="st ready">READY</span></td><td><span class="err">51</span></td><td><span class="warn">17</span></td></tr>
+      <tr><td><a class="mac" href="#">a1:00:5e:ed:02:10</a></td><td><span class="st tracking">TRACKING</span></td><td><span class="err">49</span></td><td><span class="warn">23</span></td></tr>
+      <tr><td><a class="mac" href="#">48:b0:2d:ea:5a:db</a></td><td><span class="st offline">Offline</span></td><td><span class="err">47</span></td><td><span class="no">0</span></td></tr>
+      <tr><td><a class="mac" href="#">a1:00:5e:ed:01:c2</a></td><td><span class="st ready">READY</span></td><td><span class="err">44</span></td><td><span class="warn">21</span></td></tr>
+      <tr><td><a class="mac" href="#">a1:00:5e:ed:02:86</a></td><td><span class="st ready">READY</span></td><td><span class="err">41</span></td><td><span class="warn">22</span></td></tr>
+    </table>
+    <div class="pagination">
+      <span>Items per page: 12</span>
+      <span>1 – 12 of 548</span>
+      <div class="pbtn">
+        <button disabled>‹</button>
+        <button disabled>‹‹</button>
+        <button>›</button>
+        <button>››</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Devices that may need attention -->
+  <div class="card full">
+    <h3>Devices that may need attention <span class="link">See in devices list →</span></h3>
+    <table>
+      <tr><th>Device</th><th>State</th><th>Last seen</th><th>Cmds</th><th>Links</th></tr>
+      <tr><td><a class="mac" href="#">a1:00:5e:ed:00:37</a></td><td><span class="st offline">Offline</span></td><td><span class="age">2d 23h 36m ago.</span></td><td><span class="err">1</span></td><td><span class="logs">Logs</span></td></tr>
+      <tr><td><a class="mac" href="#">48:b0:2d:eb:16:ff</a></td><td><span class="st offline">Offline</span></td><td><span class="age">1d 13h 41m ago.</span></td><td class="no">0</td><td><span class="logs">Logs</span></td></tr>
+      <tr><td><a class="mac" href="#">48:b0:2d:eb:17:d9</a></td><td><span class="st offline">Offline</span></td><td><span class="age">1d 13h 41m ago.</span></td><td class="no">0</td><td><span class="logs">Logs</span></td></tr>
+      <tr><td><a class="mac" href="#">48:b0:2d:ea:5a:db</a></td><td><span class="st offline">Offline</span></td><td><span class="age">1h 55m ago.</span></td><td class="no">0</td><td><span class="logs">Logs</span></td></tr>
+      <tr><td><a class="mac" href="#">48:b0:2d:eb:17:11</a></td><td><span class="st offline">Offline</span></td><td><span class="age">2h 48m ago.</span></td><td class="no">0</td><td><span class="logs">Logs</span></td></tr>
+      <tr><td><a class="mac" href="#">3c:6d:66:03:b0:8d</a></td><td><span class="st offline">Offline</span></td><td><span class="age">2h 48m ago.</span></td><td class="no">0</td><td><span class="logs">Logs</span></td></tr>
+      <tr><td><a class="mac" href="#">48:b0:2d:eb:36:45</a></td><td><span class="st offline">Offline</span></td><td><span class="age">2h 48m ago.</span></td><td class="no">0</td><td><span class="logs">Logs</span></td></tr>
+      <tr><td><a class="mac" href="#">48:b0:2d:eb:16:3d</a></td><td><span class="st offline">Offline</span></td><td><span class="age">2h 48m ago.</span></td><td class="no">0</td><td><span class="logs">Logs</span></td></tr>
+      <tr><td><a class="mac" href="#">48:b0:2d:eb:16:fa</a></td><td><span class="st offline">Offline</span></td><td><span class="age">3h 39m ago.</span></td><td class="no">0</td><td><span class="logs">Logs</span></td></tr>
+      <tr><td><a class="mac" href="#">48:b0:2d:ea:56:d2</a></td><td><span class="st offline">Offline</span></td><td><span class="age">4h 37m ago.</span></td><td class="no">0</td><td><span class="logs">Logs</span></td></tr>
+      <tr><td><a class="mac" href="#">48:b0:2d:eb:16:ef</a></td><td><span class="st offline">Offline</span></td><td><span class="age">10h 38m ago.</span></td><td class="no">0</td><td><span class="logs">Logs</span></td></tr>
+      <tr><td><a class="mac" href="#">48:b0:2d:eb:36:74</a></td><td><span class="st offline">Offline</span></td><td><span class="age">16h 33m ago.</span></td><td class="no">0</td><td><span class="logs">Logs</span></td></tr>
+    </table>
+    <div class="pagination">
+      <span>Items per page: 12</span>
+      <span>1 – 12 of 14</span>
+      <div class="pbtn">
+        <button disabled>‹</button>
+        <button disabled>‹‹</button>
+        <button>›</button>
+        <button>››</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Device by location -->
+  <div class="card full">
+    <h3>Device by location</h3>
+    <div class="vrow header">
+      <span>Venue</span><span>J3011</span><span>JNX30</span><span>JNX42</span><span>Total Nb. of IOTs</span>
+    </div>
+    <div class="vrow"><span class="vname">Hypermedia</span><span class="vcnt">5</span><span class="vcnt zero">0</span><span class="vcnt zero">0</span><span class="vcnt">6</span></div>
+    <div class="vrow"><span class="vname">MODON</span><span class="vcnt zero">0</span><span class="vcnt zero">0</span><span class="vcnt zero">0</span><span class="vcnt">1</span></div>
+    <div class="vrow"><span class="vname">Test Bench</span><span class="vcnt">2</span><span class="vcnt zero">0</span><span class="vcnt zero">0</span><span class="vcnt">2</span></div>
+    <div class="vrow"><span class="vname">Outdoor - EXPOCITY</span><span class="vcnt">25</span><span class="vcnt zero">0</span><span class="vcnt zero">0</span><span class="vcnt">25</span></div>
+    <div class="vrow"><span class="vname" style="font-weight:700">In-Store - Union Coop UMM SUQEIM</span><span class="vcnt" style="font-weight:700;color:#16a34a">27</span><span class="vcnt zero">0</span><span class="vcnt zero">0</span><span class="vcnt" style="font-weight:700">27</span></div>
+    <div class="vrow"><span class="vname">Metro - Jebel Ali</span><span class="vcnt">2</span><span class="vcnt zero">0</span><span class="vcnt zero">0</span><span class="vcnt">2</span></div>
+    <div class="vrow"><span class="vname">Metro - Centrepoint</span><span class="vcnt zero">0</span><span class="vcnt zero">0</span><span class="vcnt">4</span><span class="vcnt">4</span></div>
+    <div class="vrow"><span class="vname">Metro - Airport Terminal 3</span><span class="vcnt zero">0</span><span class="vcnt zero">0</span><span class="vcnt">3</span><span class="vcnt">3</span></div>
+    <div class="vrow"><span class="vname">Metro - Equiti</span><span class="vcnt">2</span><span class="vcnt zero">0</span><span class="vcnt zero">0</span><span class="vcnt">2</span></div>
+    <div class="vrow"><span class="vname">Metro - OnPassive</span><span class="vcnt">2</span><span class="vcnt zero">0</span><span class="vcnt zero">0</span><span class="vcnt">2</span></div>
+    <div class="vrow"><span class="vname">Metro - Mall of the Emirates</span><span class="vcnt">4</span><span class="vcnt">1</span><span class="vcnt zero">0</span><span class="vcnt">5</span></div>
+    <div class="vrow"><span class="vname">Metro - Burjuman</span><span class="vcnt">5</span><span class="vcnt zero">0</span><span class="vcnt zero">0</span><span class="vcnt">5</span></div>
+    <div class="pagination">
+      <span>Items per page: 12</span>
+      <span>1 – 12 of 81</span>
+      <div class="pbtn">
+        <button disabled>‹</button>
+        <button disabled>‹‹</button>
+        <button>›</button>
+        <button>››</button>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<div class="ft">IOT Admin Console (v4.1) · AiOO Tech Dubai © · Updated 13/06/2026 00:32:54</div>
+</body>
+</html>

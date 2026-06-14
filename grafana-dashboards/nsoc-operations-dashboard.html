@@ -45,6 +45,7 @@ body{background:#0b1120;color:#e2e8f0;font-family:'Inter',-apple-system,sans-ser
 .mp .ph h3{font-size:clamp(9px,0.7vw,11px);font-weight:600;color:#94a3b8;text-transform:uppercase;letter-spacing:.4px}
 .mp .mc{flex:1;min-height:0;width:100%}
 .mp .leaflet-container{background:#0b1120}
+.leaflet-tooltip.tt-dark{background:#111827;color:#e2e8f0;border:1px solid #1f2b3e;border-radius:6px;padding:4px 8px;font-size:11px;font-family:Inter,sans-serif;box-shadow:0 2px 8px rgba(0,0,0,.4)}
 /* Bar gauge */
 .bg{padding:4px 12px 8px}
 .gr{display:flex;align-items:center;gap:6px;padding:3px 0;font-size:clamp(8px,0.65vw,10px);border-bottom:1px solid rgba(255,255,255,.03)}
@@ -258,7 +259,7 @@ async function loadMapData(){
       const lat=Number(data[1][i]), lng=Number(data[2][i]);
       if(!lat||!lng)return;
       const on=Number(data[3][i])===1;
-      L.circleMarker([lat,lng],{radius:5,fillColor:on?'#22c55e':'#ef4444',color:'#fff',weight:1,opacity:0.8,fillOpacity:0.6}).addTo(lat>25?window.dMap:window.aMap).bindTooltip(data[0][i],{direction:'top'});
+      L.circleMarker([lat,lng],{radius:6,fillColor:on?'#22c55e':'#ef4444',color:on?'#22c55e':'#ff6666',weight:2,opacity:1,fillOpacity:0.7}).addTo(lat>25?window.dMap:window.aMap).bindTooltip("<b>"+data[0][i]+"</b><br>"+(on?'✅ Online':'❌ Offline'),{direction:'top',className:'tt-dark'});
     });
   } catch(e){} // fallback empty maps
 }

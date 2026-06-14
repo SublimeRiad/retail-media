@@ -157,13 +157,57 @@ const FALLBACK = {
   ]
 };
 
-// ===== API URLs (NUC local server) =====
-const API = {
-  stats: 'http://192.168.30.74:3003/api/black-screen-stats',
-  venues: 'http://192.168.30.74:3003/api/black-screen-venues',
-  types: 'http://192.168.30.74:3003/api/black-screen-types',
-  pcs: 'http://192.168.30.74:3003/api/black-screen-pcs'
-};
+// ===== GRAFANA API (direct, requires service account token) =====
+const GRAFANA = 'https://nsoc.aiootech.com/grafana';
+const TOKEN = 'glsa_C…229e';
+const DS = 'afgjq2q0g0000c';
+
+async function grafanaQuery(sql) {
+  const r = await fetch(GRAFANA+'/api/ds/query', {
+    method:'POST',
+    headers:{'Authorization':'Bearer '+TOKEN,'Content-Type':'application/json'},
+    body:JSON.stringify({queries:[{refId:'A',datasource:{uid:DS,type:'mysql'},rawSql:sql,format:'table',rawQuery:true,editorMode:'code'}]})
+  });
+  const d = await r.json();
+  const v = d?.results?.A?.frames?.[0]?.data?.values;
+  if (!v) throw new Error('No data');
+  return v;
+}
+
+async function fetchBlackStats() {
+  const [black] = await grafanaQuery("SELECT COUNT(DISTINCT fields.items_id) as total FROM glpi_plugin_fields_computerlivescreens fields WHERE fields.itemtype='Computer' AND JSON_VALID(fields.livescreenfield) AND CAST(JSON_EXTRACT(fields.livescreenfield, '$.metrics.black_ratio') AS DECIMAL(4,2)) >= 0.95");
+  return {blackTotal: black[0]||0};
+}
+
+async function fetchMonitored() {
+  const [r] = await grafanaQuery("SELECT COUNT(*) as cnt FROM glpi_plugin_fields_computerlivescreens WHERE livescreenfield IS NOT NULL AND livescreenfield <> ''");
+  return {monitored: r[0]||0};
+}
+
+async function fetchVenues() {
+  const [black] = await grafanaQuery("SELECT COUNT(DISTINCT loc.completename) as venues FROM glpi_plugin_fields_computerlivescreens fields JOIN glpi_computers comp ON fields.items_id = comp.id LEFT JOIN glpi_locations loc ON comp.locations_id = loc.id WHERE fields.itemtype='Computer' AND JSON_VALID(fields.livescreenfield) AND CAST(JSON_EXTRACT(fields.livescreenfield, '$.metrics.black_ratio') AS DECIMAL(4,2)) >= 0.95 AND loc.completename IS NOT NULL");
+  return {venues: black[0]||0};
+}
+
+async function fetchTypes() {
+  const [r] = await grafanaQuery("SELECT COUNT(DISTINCT tags.name) as types FROM glpi_plugin_fields_computerlivescreens fields JOIN glpi_computers comp ON fields.items_id = comp.id LEFT JOIN glpi_plugin_tag_tagitems tag_items ON (comp.id = tag_items.items_id AND tag_items.itemtype='Computer') LEFT JOIN glpi_plugin_tag_tags tags ON tag_items.plugin_tag_tags_id = tags.id WHERE fields.itemtype='Computer' AND JSON_VALID(fields.livescreenfield) AND CAST(JSON_EXTRACT(fields.livescreenfield, '$.metrics.black_ratio') AS DECIMAL(4,2)) >= 0.95 AND tags.name IS NOT NULL");
+  return {venueTypes: r[0]||0};
+}
+
+async function fetchVenuesList() {
+  const data = await grafanaQuery("SELECT loc.completename AS venue, COUNT(DISTINCT fields.items_id) AS black_count FROM glpi_plugin_fields_computerlivescreens fields JOIN glpi_computers comp ON fields.items_id = comp.id LEFT JOIN glpi_locations loc ON comp.locations_id = loc.id WHERE fields.itemtype='Computer' AND JSON_VALID(fields.livescreenfield) AND CAST(JSON_EXTRACT(fields.livescreenfield, '$.metrics.black_ratio') AS DECIMAL(4,2)) >= 0.95 GROUP BY loc.completename ORDER BY black_count DESC LIMIT 15");
+  return data[0].map((v,i) => ({venue: v, count: data[1][i]}));
+}
+
+async function fetchTypesList() {
+  const data = await grafanaQuery("SELECT COALESCE(tags.name, 'Unknown') AS type, COUNT(DISTINCT fields.items_id) AS count FROM glpi_plugin_fields_computerlivescreens fields JOIN glpi_computers comp ON fields.items_id = comp.id LEFT JOIN glpi_plugin_tag_tagitems tag_items ON (comp.id = tag_items.items_id AND tag_items.itemtype='Computer') LEFT JOIN glpi_plugin_tag_tags tags ON tag_items.plugin_tag_tags_id = tags.id WHERE fields.itemtype='Computer' AND JSON_VALID(fields.livescreenfield) AND CAST(JSON_EXTRACT(fields.livescreenfield, '$.metrics.black_ratio') AS DECIMAL(4,2)) >= 0.95 GROUP BY tags.name ORDER BY count DESC");
+  return data[0].map((v,i) => ({type: v||'Unknown', count: data[1][i]}));
+}
+
+async function fetchPCs() {
+  const data = await grafanaQuery("SELECT comp.name AS pc, COALESCE(loc.completename, '-') AS venue, COALESCE(tags.name, '-') AS type, CAST(JSON_EXTRACT(fields.livescreenfield, '$.metrics.black_ratio') AS DECIMAL(4,2)) AS ratio, COALESCE(agents.tag, '-') AS playerid FROM glpi_plugin_fields_computerlivescreens fields JOIN glpi_computers comp ON fields.items_id = comp.id LEFT JOIN glpi_locations loc ON comp.locations_id = loc.id LEFT JOIN glpi_agents agents ON (comp.id = agents.items_id AND agents.itemtype='Computer') LEFT JOIN glpi_plugin_tag_tagitems tag_items ON (comp.id = tag_items.items_id AND tag_items.itemtype='Computer') LEFT JOIN glpi_plugin_tag_tags tags ON tag_items.plugin_tag_tags_id = tags.id WHERE fields.itemtype='Computer' AND JSON_VALID(fields.livescreenfield) AND CAST(JSON_EXTRACT(fields.livescreenfield, '$.metrics.black_ratio') AS DECIMAL(4,2)) >= 0.95 ORDER BY ratio DESC, fields.date_mod DESC");
+  return data[0].map((v,i) => ({pc:v, venue:data[1][i], type:data[2][i], ratio:data[3][i], playerid:data[4][i]}));
+}
 
 // ===== STATE =====
 let isLive = false;
@@ -232,18 +276,26 @@ function loadData(data) {
 async function tryFetch() {
   const badge = document.getElementById('modeBadge');
   try {
-    const [stats, venues, types, pcsData] = await Promise.all([
-      fetch(API.stats, {mode:'cors'}).then(r=>r.ok?r.json():Promise.reject()),
-      fetch(API.venues, {mode:'cors'}).then(r=>r.ok?r.json():Promise.reject()),
-      fetch(API.types, {mode:'cors'}).then(r=>r.ok?r.json():Promise.reject()),
-      fetch(API.pcs, {mode:'cors'}).then(r=>r.ok?r.json():Promise.reject())
+    const [sStats, sMonitored, sVenues, sTypes, venuesList, typesList, pcsData] = await Promise.all([
+      fetchBlackStats(),
+      fetchMonitored(),
+      fetchVenues(),
+      fetchTypes(),
+      fetchVenuesList(),
+      fetchTypesList(),
+      fetchPCs()
     ]);
-    loadData({stats, venues, types, pcs: pcsData});
+    loadData({
+      stats: {blackTotal: sStats.blackTotal, monitored: sMonitored.monitored, venues: sVenues.venues, venueTypes: sTypes.venueTypes},
+      venues: venuesList,
+      types: typesList,
+      pcs: pcsData
+    });
     badge.textContent = 'LIVE';
     badge.className = 'mode mode-live';
     isLive = true;
   } catch(e) {
-    console.log('Live API unavailable, using static data');
+    console.log('Grafana API unavailable, using static data:', e.message);
     loadData(FALLBACK);
     badge.textContent = 'STATIC';
     badge.className = 'mode mode-fallback';

@@ -103,7 +103,7 @@ body{background:var(--bg);color:var(--t1);font-family:'Inter',-apple-system,sans
       <tbody id="pcBody"></tbody>
     </table>
   </div>
-  <div class="pag"><span class="info" id="tableInfo"></span><div><button onclick="prevPage()">← Prev</button><button onclick="nextPage()" style="margin-left:6px">Next →</button></div></div>
+  <div class="pag"><span class="info" id="tableInfo"></span><div><button onclick="prevPage()">← Prev</button><button id="nextPageBtn" onclick="nextPage()" style="margin-left:6px">Next →</button></div></div>
 </div>
 
 <!-- MAPS -->
@@ -219,6 +219,12 @@ new Chart(document.getElementById('typeChart'), {
     }
   }
 });
+
+// ===== AUTO-SCROLL TABLE =====
+setInterval(function(){
+  var nextBtn = document.getElementById('nextPageBtn');
+  if(nextBtn) nextBtn.click();
+}, 4500);
 
 // ===== MAPS =====
 function initMap(id,center,markers){

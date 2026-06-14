@@ -308,6 +308,7 @@ async function tryFetch() {
     badge.textContent = 'LIVE';
     badge.className = 'mode mode-live';
     isLive = true;
+    loadBlackMapData();
   } catch(e) {
     console.log('Live data unavailable, using static data:', e.message);
     loadData(FALLBACK);
@@ -320,28 +321,19 @@ async function tryFetch() {
 
 // ===== MAPS =====
 function initMaps(){
-  const dubaiMarkers = [
-    [25.197,55.274],[25.204,55.271],[25.211,55.288],[25.235,55.300],[25.190,55.260],
-    [25.226,55.308],[25.170,55.240],[25.215,55.280],[25.200,55.265],[25.188,55.250],
-    [25.220,55.290],[25.240,55.310],[25.230,55.295],[25.250,55.320],[25.175,55.255]
-  ];
-  const abuMarkers = [
-    [24.453,54.377],[24.460,54.370],[24.470,54.385],[24.440,54.360],[24.480,54.390],
-    [24.445,54.365],[24.455,54.375],[24.465,54.382],[24.475,54.395],[24.450,54.372]
-  ];
-  
-  function initMap(id,center,markers){
-    const m = L.map(id,{
-      center,zoom:12,
-      layers:[L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png',{subdomains:'abcd',maxZoom:19})],
-      zoomControl:false,attributionControl:false
+  window.dubaiMap = L.map('dubaiMap',{center:[25.2,55.3],zoom:10,layers:[L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png',{subdomains:'abcd',maxZoom:19})],zoomControl:false,attributionControl:false});
+  window.abuMap = L.map('abuDhabiMap',{center:[24.45,54.35],zoom:10,layers:[L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png',{subdomains:'abcd',maxZoom:19})],zoomControl:false,attributionControl:false});
+}
+
+async function loadBlackMapData(){
+  try {
+    const data = await fetchGrafana("SELECT comp.name, gl.latitude, gl.longitude FROM glpi_plugin_fields_computerlivescreens fields JOIN glpi_computers comp ON fields.items_id=comp.id LEFT JOIN glpi_locations gl ON comp.locations_id=gl.id WHERE fields.itemtype='Computer' AND JSON_VALID(fields.livescreenfield) AND CAST(JSON_EXTRACT(fields.livescreenfield, '$.metrics.black_ratio') AS DECIMAL(4,2))>=0.95 AND gl.latitude IS NOT NULL AND gl.longitude IS NOT NULL");
+    data[0].forEach((_,i)=>{
+      const lat=Number(data[1][i]), lng=Number(data[2][i]);
+      if(!lat||!lng)return;
+      L.circleMarker([lat,lng],{radius:8,fillColor:'#ef4444',color:'#fff',weight:1.5,opacity:0.8,fillOpacity:0.5}).addTo(lat>25?window.dubaiMap:window.abuMap).bindTooltip(data[0][i],{direction:'top'});
     });
-    markers.forEach(p=>{
-      L.circleMarker(p,{radius:6,fillColor:'#ef4444',color:'#fff',weight:1.5,opacity:0.8,fillOpacity:0.5}).addTo(m);
-    });
-  }
-  initMap('dubaiMap',[25.18,55.28], dubaiMarkers);
-  initMap('abuDhabiMap',[24.46,54.38], abuMarkers);
+  } catch(e){} // fallback empty
 }
 
 tryFetch();

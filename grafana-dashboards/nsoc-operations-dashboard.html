@@ -238,6 +238,7 @@ async function tryFetch() {
       cons: cons
     });
     isLive = true;
+    loadMapData();
   } catch(e) {
     console.log('API unavailable, using static data:', e.message);
     loadData(FB);
@@ -252,7 +253,7 @@ function initMaps(){
 
 async function loadMapData(){
   try {
-    const data = await gq("SELECT gc.name, gl.latitude, gl.longitude, CASE WHEN gc.states_id=1 THEN 1 WHEN gc.states_id=7 THEN 0 END AS st FROM glpi_computers gc INNER JOIN glpi_agents ga ON gc.id=ga.items_id AND ga.itemtype='Computer' INNER JOIN glpi_locations gl ON gc.locations_id=gl.id WHERE gl.latitude IS NOT NULL AND gl.longitude IS NOT NULL AND gc.is_deleted=0 AND gc.states_id IN (1,7)");
+    const data = await gq("SELECT gc.name, gl.latitude, gl.longitude, CASE WHEN gc.states_id=1 THEN 1 WHEN gc.states_id=7 THEN 0 END AS st FROM glpi_computers gc INNER JOIN glpi_locations gl ON gc.locations_id=gl.id WHERE gl.latitude IS NOT NULL AND gl.longitude IS NOT NULL AND gl.latitude!=0 AND gl.longitude!=0 AND gc.is_deleted=0 AND gc.states_id IN (1,7)");
     data[0].forEach((_,i)=>{
       const lat=Number(data[1][i]), lng=Number(data[2][i]);
       if(!lat||!lng)return;

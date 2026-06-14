@@ -39,7 +39,7 @@ body{background:#0b1120;color:#e2e8f0;font-family:'Inter',-apple-system,sans-ser
 .pa .pb{flex:1;overflow:hidden;position:relative;padding:2px}
 .cw{position:relative;height:100%;width:100%;min-height:0}
 /* Maps */
-.mr{display:flex;gap:clamp(4px,0.6vw,10px);flex-shrink:0;height:clamp(180px,22vh,260px)}
+.mr{display:flex;gap:clamp(4px,0.6vw,10px);flex-shrink:0;height:clamp(320px,40vh,480px)}
 .mp{flex:1;display:flex;flex-direction:column;background:#111827;border-radius:8px;border:1px solid #1f2b3e;overflow:hidden}
 .mp .ph{padding:clamp(3px,0.4vh,6px) clamp(8px,1vw,14px);border-bottom:1px solid #1f2b3e;flex-shrink:0}
 .mp .ph h3{font-size:clamp(9px,0.7vw,11px);font-weight:600;color:#94a3b8;text-transform:uppercase;letter-spacing:.4px}
@@ -63,7 +63,7 @@ body{background:#0b1120;color:#e2e8f0;font-family:'Inter',-apple-system,sans-ser
   <div class="hd">
     <div class="l">N</div>
     <h1>NSOC Operations</h1>
-    <div class="sub">Network &amp; Systems Operations Center</div>
+    <div class="sub">NSOC Media Player Dashboard</div>
     <div class="ts" id="updateTime">—</div>
   </div>
 
@@ -246,8 +246,8 @@ async function tryFetch() {
 }
 
 function initMaps(){
-  const dm = [[25.197,55.274],[25.204,55.271],[25.211,55.288],[25.235,55.300],[25.190,55.260],[25.226,55.308],[25.170,55.240],[25.215,55.280],[25.200,55.265],[25.188,55.250],[25.220,55.290],[25.240,55.310],[25.230,55.295],[25.250,55.320],[25.175,55.255],[25.195,55.270],[25.208,55.276],[25.222,55.302]];
-  const am = [[24.453,54.377],[24.460,54.370],[24.470,54.385],[24.440,54.360],[24.480,54.390],[24.445,54.365],[24.455,54.375],[24.465,54.382],[24.475,54.395],[24.435,54.355],[24.450,54.372],[24.462,54.388],[24.443,54.362],[24.468,54.378]];
+  const dm = [[25.197,55.274],[25.204,55.271],[25.235,55.300],[25.190,55.260],[25.226,55.308],[25.215,55.280],[25.200,55.265],[25.220,55.290],[25.240,55.310],[25.230,55.295],[25.250,55.320],[25.170,55.240],[25.188,55.258],[25.080,55.137],[25.112,55.213],[25.145,55.232],[25.158,55.189],[25.039,55.125],[25.265,55.309],[25.196,55.249],[25.022,55.072]];
+  const am = [[24.497,54.380],[24.475,54.358],[24.488,54.362],[24.460,54.370],[24.453,54.377],[24.440,54.360],[24.480,54.390],[24.445,54.365],[24.455,54.375],[24.465,54.382],[24.475,54.395],[24.435,54.355],[24.450,54.372],[24.462,54.388],[24.443,54.362],[24.468,54.378],[24.484,54.345],[24.420,54.380]];
   const dMap = L.map('dMap',{center:[25.1,55.292],zoom:11,layers:[L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png',{subdomains:'abcd',maxZoom:19})],zoomControl:false,attributionControl:false});
   dm.forEach(p=>L.circleMarker(p,{radius:6,fillColor:'#22c55e',color:'#fff',weight:1.2,opacity:0.7,fillOpacity:0.5}).addTo(dMap));
   const aMap = L.map('aMap',{center:[24.4539,54.3773],zoom:11,layers:[L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png',{subdomains:'abcd',maxZoom:19})],zoomControl:false,attributionControl:false});

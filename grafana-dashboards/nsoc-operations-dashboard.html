@@ -228,7 +228,7 @@ async function tryFetch() {
         return {labels: d[0].map(v=>v), on: d[1].map(v=>Number(v)), off: d[2].map(v=>Number(v))};
       })(),
       (async()=>{
-        const d = await gq("SELECT CONCAT(f.phonenumberfield,' | ',IFNULL(l.name,'N/A')) AS m, (CAST(REPLACE(f.datausedfield,' Gb','') AS DECIMAL(10,2))/NULLIF(CAST(REPLACE(f.totaldatafield,' Gb','') AS DECIMAL(10,2)),0)) AS v FROM glpi_plugin_fields_computerdatas f JOIN glpi_computers c ON f.items_id=c.id LEFT JOIN glpi_locations l ON c.locations_id=l.id WHERE CAST(REPLACE(f.percentfield,' %','') AS DECIMAL(5,2))>60 AND f.phonenumberfield<>'Not Found' ORDER BY v DESC LIMIT 12");
+        const d = await gq("SELECT CONCAT(f.phonenumberfield,' | \"',IFNULL(l.name,'N/A'),'\" | ID: ',IFNULL(a.tag,'N/A'),' | (',f.datausedfield,' / ',f.totaldatafield,')') AS m, (CAST(REPLACE(f.datausedfield,' Gb','') AS DECIMAL(10,2))/NULLIF(CAST(REPLACE(f.totaldatafield,' Gb','') AS DECIMAL(10,2)),0)) AS v FROM glpi_plugin_fields_computerdatas f JOIN glpi_computers c ON f.items_id=c.id LEFT JOIN glpi_locations l ON c.locations_id=l.id LEFT JOIN glpi_agents a ON (a.items_id=c.id AND a.itemtype='Computer') WHERE CAST(REPLACE(f.percentfield,' %','') AS DECIMAL(5,2))>60 AND f.phonenumberfield<>'Not Found' AND STR_TO_DATE(f.executiontimefield,'%d/%m/%Y %H:%i')>=DATE_SUB(CURDATE(), INTERVAL 3 DAY) ORDER BY v DESC LIMIT 12");
         return d[0].map((v,i) => ({label: v, value: Number(d[1][i])}));
       })()
     ]);

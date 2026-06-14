@@ -246,12 +246,20 @@ async function tryFetch() {
 }
 
 function initMaps(){
-  const dm = [[25.197,55.274],[25.204,55.271],[25.235,55.300],[25.190,55.260],[25.226,55.308],[25.215,55.280],[25.200,55.265],[25.220,55.290],[25.240,55.310],[25.230,55.295],[25.250,55.320],[25.170,55.240],[25.188,55.258],[25.080,55.137],[25.112,55.213],[25.145,55.232],[25.158,55.189],[25.039,55.125],[25.265,55.309],[25.196,55.249],[25.022,55.072]];
-  const am = [[24.497,54.380],[24.475,54.358],[24.488,54.362],[24.460,54.370],[24.453,54.377],[24.440,54.360],[24.480,54.390],[24.445,54.365],[24.455,54.375],[24.465,54.382],[24.475,54.395],[24.435,54.355],[24.450,54.372],[24.462,54.388],[24.443,54.362],[24.468,54.378],[24.484,54.345],[24.420,54.380]];
-  const dMap = L.map('dMap',{center:[25.1,55.292],zoom:11,layers:[L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png',{subdomains:'abcd',maxZoom:19})],zoomControl:false,attributionControl:false});
-  dm.forEach(p=>L.circleMarker(p,{radius:6,fillColor:'#22c55e',color:'#fff',weight:1.2,opacity:0.7,fillOpacity:0.5}).addTo(dMap));
-  const aMap = L.map('aMap',{center:[24.4539,54.3773],zoom:11,layers:[L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png',{subdomains:'abcd',maxZoom:19})],zoomControl:false,attributionControl:false});
-  am.forEach(p=>L.circleMarker(p,{radius:6,fillColor:'#22c55e',color:'#fff',weight:1.2,opacity:0.7,fillOpacity:0.5}).addTo(aMap));
+  window.dMap = L.map('dMap',{center:[25.2,55.3],zoom:10,layers:[L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png',{subdomains:'abcd',maxZoom:19})],zoomControl:false,attributionControl:false});
+  window.aMap = L.map('aMap',{center:[24.45,54.35],zoom:10,layers:[L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png',{subdomains:'abcd',maxZoom:19})],zoomControl:false,attributionControl:false});
+}
+
+async function loadMapData(){
+  try {
+    const data = await gq("SELECT gc.name, gl.latitude, gl.longitude, CASE WHEN gc.states_id=1 THEN 1 WHEN gc.states_id=7 THEN 0 END AS st FROM glpi_computers gc INNER JOIN glpi_agents ga ON gc.id=ga.items_id AND ga.itemtype='Computer' INNER JOIN glpi_locations gl ON gc.locations_id=gl.id WHERE gl.latitude IS NOT NULL AND gl.longitude IS NOT NULL AND gc.is_deleted=0 AND gc.states_id IN (1,7)");
+    data[0].forEach((_,i)=>{
+      const lat=Number(data[1][i]), lng=Number(data[2][i]);
+      if(!lat||!lng)return;
+      const on=Number(data[3][i])===1;
+      L.circleMarker([lat,lng],{radius:5,fillColor:on?'#22c55e':'#ef4444',color:'#fff',weight:1,opacity:0.8,fillOpacity:0.6}).addTo(lat>25?window.dMap:window.aMap).bindTooltip(data[0][i],{direction:'top'});
+    });
+  } catch(e){} // fallback empty maps
 }
 
 initMaps();

@@ -1,0 +1,295 @@
+{
+  "annotations": { "list": [] },
+  "editable": true,
+  "graphTooltip": 0,
+  "links": [],
+  "panels": [
+    {
+      "gridPos": { "h": 2, "w": 24, "x": 0, "y": 0 },
+      "id": 100,
+      "options": {
+        "code": { "language": "plaintext", "showLineNumbers": false, "showMiniMap": false },
+        "content": "<div style=\"display:flex;align-items:center;gap:16px;padding:4px 0\"><div style=\"width:4px;height:28px;background:#ef4444;border-radius:2px\"></div><div><span style=\"font-size:1.5rem;font-weight:700;color:#ef4444;letter-spacing:-0.5px\">NSOC BLACK SCREEN</span><span style=\"color:#64748b;font-size:0.85rem;padding-left:12px;border-left:1px solid #1f2b3e;margin-left:12px\">Screens with black ratio ≥ 95%</span></div></div>",
+        "mode": "html"
+      },
+      "pluginVersion": "12.4.1",
+      "type": "text"
+    },
+    {
+      "datasource": { "type": "mysql", "uid": "afgjq2q0g0000c" },
+      "fieldConfig": {
+        "defaults": {
+          "color": { "mode": "thresholds" },
+          "mappings": [{ "options": { "0": { "color": "green", "index": 0, "text": "0" } }, "type": "value" }],
+          "thresholds": { "mode": "absolute", "steps": [{ "color": "red", "value": 0 }] }
+        },
+        "overrides": []
+      },
+      "gridPos": { "h": 5, "w": 6, "x": 0, "y": 2 },
+      "id": 101,
+      "options": {
+        "colorMode": "background", "graphMode": "none", "justifyMode": "auto",
+        "orientation": "horizontal", "reduceOptions": { "calcs": ["lastNotNull"], "fields": "", "values": false },
+        "textMode": "auto", "wideLayout": true
+      },
+      "pluginVersion": "12.4.1",
+      "targets": [{
+        "dataset": "inventaire", "editorMode": "code", "format": "table",
+        "rawQuery": true,
+        "rawSql": "SELECT COUNT(DISTINCT fields.items_id) as total FROM glpi_plugin_fields_computerlivescreens fields WHERE fields.itemtype='Computer' AND JSON_VALID(fields.livescreenfield) AND CAST(JSON_EXTRACT(fields.livescreenfield, '$.metrics.black_ratio') AS DECIMAL(4,2)) >= 0.95;",
+        "refId": "A"
+      }],
+      "title": "🔴 Black Screens",
+      "type": "stat"
+    },
+    {
+      "datasource": { "type": "mysql", "uid": "afgjq2q0g0000c" },
+      "fieldConfig": {
+        "defaults": {
+          "color": { "mode": "thresholds" },
+          "mappings": [{ "options": { "0": { "color": "green", "index": 0, "text": "0" } }, "type": "value" }],
+          "thresholds": { "mode": "absolute", "steps": [{ "color": "blue", "value": 0 }] }
+        },
+        "overrides": []
+      },
+      "gridPos": { "h": 5, "w": 6, "x": 6, "y": 2 },
+      "id": 103,
+      "options": {
+        "colorMode": "background", "graphMode": "none", "justifyMode": "auto",
+        "orientation": "horizontal", "reduceOptions": { "calcs": ["lastNotNull"], "fields": "", "values": false },
+        "textMode": "auto", "wideLayout": true
+      },
+      "pluginVersion": "12.4.1",
+      "targets": [{
+        "dataset": "inventaire", "editorMode": "code", "format": "table",
+        "rawQuery": true,
+        "rawSql": "SELECT COUNT(*) as cnt FROM glpi_plugin_fields_computerlivescreens WHERE livescreenfield IS NOT NULL AND livescreenfield <> '';",
+        "refId": "A"
+      }],
+      "title": "🔷 Screens Monitored",
+      "type": "stat"
+    },
+    {
+      "datasource": { "type": "mysql", "uid": "afgjq2q0g0000c" },
+      "fieldConfig": {
+        "defaults": {
+          "color": { "mode": "thresholds" },
+          "mappings": [{ "options": { "0": { "color": "green", "index": 0, "text": "0" } }, "type": "value" }],
+          "thresholds": { "mode": "absolute", "steps": [{ "color": "orange", "value": 0 }] }
+        },
+        "overrides": []
+      },
+      "gridPos": { "h": 5, "w": 6, "x": 12, "y": 2 },
+      "id": 104,
+      "options": {
+        "colorMode": "background", "graphMode": "none", "justifyMode": "auto",
+        "orientation": "horizontal", "reduceOptions": { "calcs": ["lastNotNull"], "fields": "", "values": false },
+        "textMode": "auto", "wideLayout": true
+      },
+      "pluginVersion": "12.4.1",
+      "targets": [{
+        "dataset": "inventaire", "editorMode": "code", "format": "table",
+        "rawQuery": true,
+        "rawSql": "SELECT COUNT(DISTINCT loc.completename) as venues FROM glpi_plugin_fields_computerlivescreens fields JOIN glpi_computers comp ON fields.items_id = comp.id LEFT JOIN glpi_locations loc ON comp.locations_id = loc.id WHERE fields.itemtype='Computer' AND JSON_VALID(fields.livescreenfield) AND CAST(JSON_EXTRACT(fields.livescreenfield, '$.metrics.black_ratio') AS DECIMAL(4,2)) >= 0.95 AND loc.completename IS NOT NULL;",
+        "refId": "A"
+      }],
+      "title": "🟠 Locations Affected",
+      "type": "stat"
+    },
+    {
+      "datasource": { "type": "mysql", "uid": "afgjq2q0g0000c" },
+      "fieldConfig": {
+        "defaults": {
+          "color": { "mode": "thresholds" },
+          "mappings": [{ "options": { "0": { "color": "green", "index": 0, "text": "0" } }, "type": "value" }],
+          "thresholds": { "mode": "absolute", "steps": [{ "color": "purple", "value": 0 }] }
+        },
+        "overrides": []
+      },
+      "gridPos": { "h": 5, "w": 6, "x": 18, "y": 2 },
+      "id": 105,
+      "options": {
+        "colorMode": "background", "graphMode": "none", "justifyMode": "auto",
+        "orientation": "horizontal", "reduceOptions": { "calcs": ["lastNotNull"], "fields": "", "values": false },
+        "textMode": "auto", "wideLayout": true
+      },
+      "pluginVersion": "12.4.1",
+      "targets": [{
+        "dataset": "inventaire", "editorMode": "code", "format": "table",
+        "rawQuery": true,
+        "rawSql": "SELECT COUNT(DISTINCT tags.name) as types FROM glpi_plugin_fields_computerlivescreens fields JOIN glpi_computers comp ON fields.items_id = comp.id LEFT JOIN glpi_plugin_tag_tagitems tag_items ON (comp.id = tag_items.items_id AND tag_items.itemtype='Computer') LEFT JOIN glpi_plugin_tag_tags tags ON tag_items.plugin_tag_tags_id = tags.id WHERE fields.itemtype='Computer' AND JSON_VALID(fields.livescreenfield) AND CAST(JSON_EXTRACT(fields.livescreenfield, '$.metrics.black_ratio') AS DECIMAL(4,2)) >= 0.95 AND tags.name IS NOT NULL;",
+        "refId": "A"
+      }],
+      "title": "🟣 Venue Types Affected",
+      "type": "stat"
+    },
+    {
+      "datasource": { "type": "mysql", "uid": "afgjq2q0g0000c" },
+      "description": "Black screens count by venue location",
+      "fieldConfig": {
+        "defaults": {
+          "color": { "mode": "palette-classic" },
+          "custom": {
+            "axisBorderShow": false, "axisCenteredZero": false, "axisColorMode": "text",
+            "axisLabel": "", "axisPlacement": "auto", "fillOpacity": 80, "gradientMode": "scheme",
+            "hideFrom": { "legend": false, "tooltip": false, "viz": false },
+            "lineWidth": 1, "scaleDistribution": { "type": "linear" },
+            "thresholdsStyle": { "mode": "off" }
+          },
+          "mappings": [], "min": 0,
+          "thresholds": { "mode": "percentage", "steps": [{ "color": "red", "value": 0 }] },
+          "unit": "none"
+        },
+        "overrides": []
+      },
+      "gridPos": { "h": 8, "w": 10, "x": 0, "y": 7 },
+      "id": 106,
+      "options": {
+        "barRadius": 4, "barWidth": 0.75, "colorByField": "venue",
+        "fullHighlight": false, "groupWidth": 0.7,
+        "legend": { "calcs": [], "displayMode": "list", "placement": "bottom", "showLegend": false },
+        "orientation": "horizontal", "showValue": "always", "stacking": "normal",
+        "tooltip": { "mode": "single", "sort": "desc" },
+        "xField": "venue", "xTickLabelRotation": 0
+      },
+      "pluginVersion": "12.4.1",
+      "targets": [{
+        "dataset": "inventaire", "editorMode": "code", "format": "table",
+        "rawQuery": true,
+        "rawSql": "SELECT loc.completename AS venue, COUNT(DISTINCT fields.items_id) AS black_count FROM glpi_plugin_fields_computerlivescreens fields JOIN glpi_computers comp ON fields.items_id = comp.id LEFT JOIN glpi_locations loc ON comp.locations_id = loc.id WHERE fields.itemtype='Computer' AND JSON_VALID(fields.livescreenfield) AND CAST(JSON_EXTRACT(fields.livescreenfield, '$.metrics.black_ratio') AS DECIMAL(4,2)) >= 0.95 GROUP BY loc.completename ORDER BY black_count DESC LIMIT 15;",
+        "refId": "A"
+      }],
+      "title": "Black Screens by Venue",
+      "type": "barchart"
+    },
+    {
+      "datasource": { "type": "mysql", "uid": "afgjq2q0g0000c" },
+      "description": "Black screens breakdown by venue type (Malls, Metro, etc.)",
+      "fieldConfig": {
+        "defaults": {
+          "color": { "mode": "palette-classic" },
+          "custom": {
+            "axisBorderShow": false, "axisCenteredZero": false, "axisColorMode": "text",
+            "axisLabel": "", "axisPlacement": "auto", "fillOpacity": 90, "gradientMode": "none",
+            "hideFrom": { "legend": false, "tooltip": false, "viz": false },
+            "lineWidth": 1, "scaleDistribution": { "type": "linear" },
+            "thresholdsStyle": { "mode": "off" }
+          },
+          "mappings": [], "min": 0,
+          "thresholds": { "mode": "percentage", "steps": [{ "color": "red", "value": 0 }] },
+          "unit": "none"
+        },
+        "overrides": [
+          { "matcher": { "id": "byName", "options": "Malls" }, "properties": [{ "id": "color", "value": { "fixedColor": "#3b82f6", "mode": "fixed" } }] },
+          { "matcher": { "id": "byName", "options": "Outdoor" }, "properties": [{ "id": "color", "value": { "fixedColor": "#f59e0b", "mode": "fixed" } }] },
+          { "matcher": { "id": "byName", "options": "Convenience Stores" }, "properties": [{ "id": "color", "value": { "fixedColor": "#22c55e", "mode": "fixed" } }] },
+          { "matcher": { "id": "byName", "options": "Metro" }, "properties": [{ "id": "color", "value": { "fixedColor": "#a78bfa", "mode": "fixed" } }] },
+          { "matcher": { "id": "byName", "options": "In-Store" }, "properties": [{ "id": "color", "value": { "fixedColor": "#ec4899", "mode": "fixed" } }] }
+        ]
+      },
+      "gridPos": { "h": 8, "w": 4, "x": 10, "y": 7 },
+      "id": 107,
+      "options": {
+        "displayMode": "list", "legend": { "displayMode": "list", "placement": "right", "showLegend": true, "values": ["percent", "value"] },
+        "maxVizHeight": 300, "minVizHeight": 16, "minVizWidth": 8, "namePlacement": "auto",
+        "orientation": "auto", "reduceOptions": { "calcs": ["lastNotNull"], "fields": "", "values": true },
+        "showUnfilled": true, "sizing": "auto",
+        "text": {}, "valueMode": "text"
+      },
+      "pluginVersion": "12.4.1",
+      "targets": [{
+        "dataset": "inventaire", "editorMode": "code", "format": "table",
+        "rawQuery": true,
+        "rawSql": "SELECT COALESCE(tags.name, 'Unknown') AS type, COUNT(DISTINCT fields.items_id) AS count FROM glpi_plugin_fields_computerlivescreens fields JOIN glpi_computers comp ON fields.items_id = comp.id LEFT JOIN glpi_plugin_tag_tagitems tag_items ON (comp.id = tag_items.items_id AND tag_items.itemtype='Computer') LEFT JOIN glpi_plugin_tag_tags tags ON tag_items.plugin_tag_tags_id = tags.id WHERE fields.itemtype='Computer' AND JSON_VALID(fields.livescreenfield) AND CAST(JSON_EXTRACT(fields.livescreenfield, '$.metrics.black_ratio') AS DECIMAL(4,2)) >= 0.95 GROUP BY tags.name ORDER BY count DESC;",
+        "refId": "A"
+      }],
+      "title": "By Venue Type",
+      "type": "piechart"
+    },
+    {
+      "datasource": { "type": "mysql", "uid": "afgjq2q0g0000c" },
+      "description": "Priority matrix showing black screen count by venue type and location",
+      "fieldConfig": {
+        "defaults": {
+          "color": { "mode": "thresholds" },
+          "custom": {
+            "hideFrom": { "legend": false, "tooltip": false, "viz": false }
+          },
+          "mappings": [],
+          "thresholds": { "mode": "absolute", "steps": [{ "color": "green", "value": 0 }, { "color": "orange", "value": 2 }, { "color": "red", "value": 5 }] }
+        },
+        "overrides": []
+      },
+      "gridPos": { "h": 8, "w": 10, "x": 14, "y": 7 },
+      "id": 110,
+      "options": {
+        "calculate": true, "cellGap": 3,
+        "color": { "mode": "thresholds" },
+        "displayMode": "color-text",
+        "filterValues": { "values": { "from": 0, "to": 999 } },
+        "legend": { "displayMode": "list", "placement": "bottom", "showLegend": false },
+        "minVizHeight": 50, "minVizWidth": 50,
+        "rowHeader": true, "showLegend": false, "sortBy": { "colIndex": 0, "order": "desc" }
+      },
+      "pluginVersion": "12.4.1",
+      "targets": [{
+        "dataset": "inventaire", "editorMode": "code", "format": "table",
+        "rawQuery": true,
+        "rawSql": "SELECT COALESCE(tags.name, 'Unknown') AS type, loc.completename AS venue, COUNT(DISTINCT fields.items_id) AS black FROM glpi_plugin_fields_computerlivescreens fields JOIN glpi_computers comp ON fields.items_id = comp.id LEFT JOIN glpi_locations loc ON comp.locations_id = loc.id LEFT JOIN glpi_plugin_tag_tagitems tag_items ON (comp.id = tag_items.items_id AND tag_items.itemtype='Computer') LEFT JOIN glpi_plugin_tag_tags tags ON tag_items.plugin_tag_tags_id = tags.id WHERE fields.itemtype='Computer' AND JSON_VALID(fields.livescreenfield) AND CAST(JSON_EXTRACT(fields.livescreenfield, '$.metrics.black_ratio') AS DECIMAL(4,2)) >= 0.95 GROUP BY tags.name, loc.completename HAVING black >= 1 ORDER BY black DESC;",
+        "refId": "A"
+      }],
+      "title": "Priority Matrix",
+      "type": "table"
+    },
+    {
+      "datasource": { "type": "mysql", "uid": "afgjq2q0g0000c" },
+      "description": "Detailed list of all PCs with black screen",
+      "fieldConfig": {
+        "defaults": {
+          "color": { "mode": "thresholds" },
+          "custom": {
+            "align": "auto", "cellOptions": { "mode": "color-text", "type": "auto" },
+            "hideFrom": { "legend": false, "tooltip": false, "viz": false },
+            "inspect": false
+          },
+          "mappings": [],
+          "thresholds": { "mode": "absolute", "steps": [{ "color": "red", "value": 0 }] }
+        },
+        "overrides": [
+          { "matcher": { "id": "byName", "options": "ratio" }, "properties": [{ "id": "custom.cellOptions", "value": { "mode": "basic", "type": "color-background" } }, { "id": "thresholds", "value": { "mode": "absolute", "steps": [{ "color": "rgba(239, 68, 68, 0.85)", "value": 0.95 }] } }, { "id": "unit", "value": "percentunit" }] },
+          { "matcher": { "id": "byName", "options": "pc" }, "properties": [{ "id": "custom.width", "value": 180 }] },
+          { "matcher": { "id": "byName", "options": "venue" }, "properties": [{ "id": "custom.width", "value": 180 }] },
+          { "matcher": { "id": "byName", "options": "playerid" }, "properties": [{ "id": "custom.width", "value": 140 }] }
+        ]
+      },
+      "gridPos": { "h": 10, "w": 24, "x": 0, "y": 15 },
+      "id": 108,
+      "options": {
+        "cellHeight": "sm", "footer": { "countRows": true, "enablePagination": true, "fields": "", "reducer": ["count"], "show": true },
+        "frameIndex": 0, "showHeader": true, "sortBy": [{ "displayName": "ratio", "desc": true }]
+      },
+      "pluginVersion": "12.4.1",
+      "targets": [{
+        "dataset": "inventaire", "editorMode": "code", "format": "table",
+        "rawQuery": true,
+        "rawSql": "SELECT comp.name AS pc, loc.completename AS venue, COALESCE(tags.name, '-') AS type, CAST(JSON_EXTRACT(fields.livescreenfield, '$.metrics.black_ratio') AS DECIMAL(4,2)) AS ratio, agents.tag AS playerid, fields.date_mod AS lastcheck FROM glpi_plugin_fields_computerlivescreens fields JOIN glpi_computers comp ON fields.items_id = comp.id LEFT JOIN glpi_locations loc ON comp.locations_id = loc.id LEFT JOIN glpi_agents agents ON (comp.id = agents.items_id AND agents.itemtype='Computer') LEFT JOIN glpi_plugin_tag_tagitems tag_items ON (comp.id = tag_items.items_id AND tag_items.itemtype='Computer') LEFT JOIN glpi_plugin_tag_tags tags ON tag_items.plugin_tag_tags_id = tags.id WHERE fields.itemtype='Computer' AND JSON_VALID(fields.livescreenfield) AND CAST(JSON_EXTRACT(fields.livescreenfield, '$.metrics.black_ratio') AS DECIMAL(4,2)) >= 0.95 ORDER BY ratio DESC, fields.date_mod DESC;",
+        "refId": "A"
+      }],
+      "title": "📋 PC with Black Screen — Detailed List",
+      "type": "table"
+    }
+  ],
+  "preload": false,
+  "refresh": "5m",
+  "schemaVersion": 42,
+  "tags": ["nsoc", "black-screen", "monitoring"],
+  "templating": { "list": [] },
+  "time": { "from": "now-24h", "to": "now" },
+  "timepicker": {
+    "refresh_intervals": ["5s", "10s", "30s", "1m", "5m", "15m", "30m", "1h", "2h", "1d"],
+    "time_options": ["5m", "15m", "1h", "6h", "12h", "24h", "2d", "7d", "30d"]
+  },
+  "timezone": "Asia/Dubai",
+  "title": "NSOC BLACK SCREEN",
+  "uid": "nsoc-black-screen-v2"
+}

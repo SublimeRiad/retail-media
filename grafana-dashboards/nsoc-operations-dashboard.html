@@ -9,327 +9,253 @@
 <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
 <style>
-:root {
-  --bg: #0b1120;
-  --surface: #111827;
-  --surface2: #1a2332;
-  --border: #1f2b3e;
-  --text: #e2e8f0;
-  --text2: #94a3b8;
-  --text3: #64748b;
-  --accent: #38bdf8;
-  --accent2: #a78bfa;
-  --green: #22c55e;
-  --red: #ef4444;
-  --orange: #f59e0b;
-  --blue: #3b82f6;
-}
 *{margin:0;padding:0;box-sizing:border-box}
-body{
-  background:var(--bg);color:var(--text);
-  font-family:'Inter',-apple-system,system-ui,sans-serif;
-  -webkit-font-smoothing:antialiased;
-}
-.dashboard{max-width:1440px;margin:0 auto;padding:20px}
-
+html,body{height:100%;overflow:hidden}
+body{background:#0b1120;color:#e2e8f0;font-family:'Inter',-apple-system,sans-serif;font-size:clamp(12px,1.1vw,16px)}
+.d{flex:1;display:flex;flex-direction:column;padding:clamp(8px,1vh,16px) clamp(12px,1.5vw,24px);gap:clamp(4px,0.6vh,10px);max-width:1920px;margin:0 auto;width:100%;height:100vh}
 /* Header */
-.header{
-  display:flex;align-items:center;justify-content:space-between;
-  padding:16px 20px;margin-bottom:20px;
-  background:var(--surface);border-radius:10px;
-  border:1px solid var(--border);
-}
-.header-left{
-  display:flex;align-items:center;gap:16px;
-}
-.header-logo{
-  width:36px;height:36px;border-radius:8px;
-  background:linear-gradient(135deg,var(--accent),var(--accent2));
-  display:flex;align-items:center;justify-content:center;
-  font-weight:800;font-size:14px;color:#fff;
-}
-.header h1{
-  font-size:18px;font-weight:700;letter-spacing:-0.3px;
-  background:linear-gradient(90deg,var(--accent),var(--accent2));
-  -webkit-background-clip:text;-webkit-text-fill-color:transparent;
-  background-clip:text;
-}
-.header .subtitle{font-size:13px;color:var(--text3);font-weight:400}
-.header-time{font-size:12px;color:var(--text3);font-family:monospace}
-
+.hd{display:flex;align-items:center;gap:clamp(8px,1vw,14px);padding:clamp(6px,0.8vh,12px) clamp(10px,1.2vw,18px);background:#111827;border-radius:8px;border:1px solid #1f2b3e;flex-shrink:0}
+.hd .l{width:36px;height:36px;border-radius:8px;background:linear-gradient(135deg,#38bdf8,#a78bfa);display:flex;align-items:center;justify-content:center;font-weight:800;font-size:14px;color:#fff;flex-shrink:0}
+.hd h1{font-size:clamp(14px,1.6vw,22px);font-weight:700;background:linear-gradient(90deg,#38bdf8,#a78bfa);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;letter-spacing:-0.3px;white-space:nowrap}
+.hd .sub{font-size:clamp(10px,1vw,14px);color:#64748b;padding-left:clamp(8px,1vw,14px);border-left:1px solid #1f2b3e;margin-left:clamp(8px,1vw,14px);white-space:nowrap}
+.hd .ts{margin-left:auto;font-size:clamp(10px,0.9vw,13px);color:#64748b;font-family:monospace;white-space:nowrap}
 /* Stats */
-.stats{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-bottom:16px}
-.stat{
-  background:var(--surface);border-radius:10px;padding:18px 20px;
-  border:1px solid var(--border);position:relative;overflow:hidden;
-}
-.stat::before{
-  content:'';position:absolute;top:0;left:0;right:0;height:3px;
-}
-.stat-offline::before{background:var(--red)}
-.stat-online::before{background:var(--green)}
-.stat-total::before{background:var(--blue)}
-.stat-uptime::before{background:var(--accent2)}
-.stat .label{font-size:11px;font-weight:500;text-transform:uppercase;letter-spacing:0.8px;color:var(--text3);margin-bottom:4px}
-.stat .value{font-size:30px;font-weight:700;letter-spacing:-1px;line-height:1.2}
-.stat .value .suffix{font-size:16px;font-weight:400;color:var(--text3)}
-.stat-offline .value{color:var(--red)}
-.stat-online .value{color:var(--green)}
-.stat-total .value{color:var(--blue)}
-.stat-uptime .value{color:var(--accent2)}
-.stat .meta{font-size:11px;color:var(--text3);margin-top:4px}
-
-/* Section title */
-.section{
-  display:flex;align-items:center;gap:10px;
-  padding:0 4px;margin-bottom:12px;margin-top:20px;
-}
-.section:first-of-type{margin-top:0}
-.section .bar{width:3px;height:18px;border-radius:2px;background:var(--accent)}
-.section .bar.alert{background:var(--orange)}
-.section h2{
-  font-size:13px;font-weight:600;text-transform:uppercase;
-  letter-spacing:1.2px;color:var(--text2);
-}
-
-/* Split layout */
-.split{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:16px}
-
-/* Panel */
-.panel{
-  background:var(--surface);border-radius:10px;overflow:hidden;
-  border:1px solid var(--border);
-}
-.panel .panel-header{
-  display:flex;align-items:center;justify-content:space-between;
-  padding:12px 16px;border-bottom:1px solid var(--border);
-}
-.panel .panel-header h3{
-  font-size:12px;font-weight:600;color:var(--text2);
-  text-transform:uppercase;letter-spacing:0.5px;
-}
-.panel .panel-body{padding:8px}
-
+.st{display:grid;grid-template-columns:repeat(4,1fr);gap:clamp(4px,0.6vw,10px);flex-shrink:0}
+.sc{background:#111827;border-radius:8px;padding:clamp(8px,1.2vh,18px) clamp(10px,1.5vw,20px);border:1px solid #1f2b3e;position:relative;overflow:hidden}
+.sc::before{content:'';position:absolute;top:0;left:0;right:0;height:3px}
+.sc-r::before{background:#ef4444}.sc-g::before{background:#22c55e}.sc-b::before{background:#3b82f6}.sc-p::before{background:#a78bfa}
+.sc .l{font-size:clamp(9px,0.8vw,11px);font-weight:500;text-transform:uppercase;letter-spacing:.6px;color:#64748b;margin-bottom:2px}
+.sc .v{font-size:clamp(22px,3vw,36px);font-weight:700;letter-spacing:-1px;line-height:1.1}
+.sc-r .v{color:#ef4444}.sc-g .v{color:#22c55e}.sc-b .v{color:#3b82f6}.sc-p .v{color:#a78bfa}
+.sc .m{font-size:clamp(9px,0.75vw,11px);color:#64748b;margin-top:2px}
+.sc .m .s{font-size:clamp(11px,1.2vw,16px);font-weight:400;color:#64748b}
+/* Content */
+.ct{flex:1;display:flex;flex-direction:column;gap:clamp(4px,0.6vh,10px);min-height:0}
+.ct .row{display:flex;gap:clamp(4px,0.6vw,10px);flex:1;min-height:0}
+.ct .col{flex:1;display:flex;flex-direction:column;min-width:0}
+.pa{background:#111827;border-radius:8px;border:1px solid #1f2b3e;display:flex;flex-direction:column;overflow:hidden;flex:1}
+.pa .ph{padding:clamp(3px,0.4vh,6px) clamp(8px,1vw,14px);border-bottom:1px solid #1f2b3e;flex-shrink:0}
+.pa .ph h3{font-size:clamp(9px,0.7vw,11px);font-weight:600;color:#94a3b8;text-transform:uppercase;letter-spacing:.4px}
+.pa .pb{flex:1;overflow:hidden;position:relative;padding:2px}
+.cw{position:relative;height:100%;width:100%;min-height:0}
 /* Maps */
-.map-container{height:340px;width:100%;border-radius:0}
-.map-container .leaflet-container{background:var(--bg)}
-
-/* Charts */
-.chart-wrap{position:relative;height:220px;width:100%}
-
+.mr{display:flex;gap:clamp(4px,0.6vw,10px);flex-shrink:0;height:clamp(180px,22vh,260px)}
+.mp{flex:1;display:flex;flex-direction:column;background:#111827;border-radius:8px;border:1px solid #1f2b3e;overflow:hidden}
+.mp .ph{padding:clamp(3px,0.4vh,6px) clamp(8px,1vw,14px);border-bottom:1px solid #1f2b3e;flex-shrink:0}
+.mp .ph h3{font-size:clamp(9px,0.7vw,11px);font-weight:600;color:#94a3b8;text-transform:uppercase;letter-spacing:.4px}
+.mp .mc{flex:1;min-height:0;width:100%}
+.mp .leaflet-container{background:#0b1120}
 /* Bar gauge */
-.bargauge{padding:6px 16px 14px}
-.gauge-row{
-  display:flex;align-items:center;gap:10px;
-  padding:5px 0;font-size:12px;
-  border-bottom:1px solid rgba(255,255,255,0.04);
-}
-.gauge-row:last-child{border-bottom:none}
-.gauge-label{
-  flex:1;white-space:nowrap;overflow:hidden;
-  text-overflow:ellipsis;color:var(--text2);min-width:0;
-  font-size:11px;
-}
-.gauge-track{
-  flex:2;height:14px;background:var(--surface2);
-  border-radius:10px;overflow:hidden;position:relative;
-}
-.gauge-fill{
-  height:100%;border-radius:10px;transition:width 0.6s ease;
-  background:linear-gradient(90deg,var(--blue),var(--accent));
-}
-.gauge-fill.orange{background:linear-gradient(90deg,#f59e0b,#f97316)}
-.gauge-fill.red{background:linear-gradient(90deg,#ef4444,#dc2626)}
-.gauge-pct{
-  min-width:42px;text-align:right;font-size:11px;
-  font-weight:600;font-family:monospace;color:var(--text2);
-}
-
-/* Full-width panel */
-.panel-full{margin-bottom:16px}
-
-/* Responsive */
-@media(max-width:860px){
-  .stats{grid-template-columns:repeat(2,1fr)}
-  .split{grid-template-columns:1fr}
-  .header{flex-direction:column;align-items:flex-start;gap:6px}
-}
+.bg{padding:4px 12px 8px}
+.gr{display:flex;align-items:center;gap:6px;padding:3px 0;font-size:clamp(8px,0.65vw,10px);border-bottom:1px solid rgba(255,255,255,.03)}
+.gr:last-child{border:none}
+.gr .lb{flex:1;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;color:#94a3b8;min-width:0;font-size:clamp(8px,0.6vw,10px)}
+.gr .tk{flex:2;height:10px;background:#1a2332;border-radius:10px;overflow:hidden}
+.gr .fl{height:100%;border-radius:10px;transition:width .6s;background:linear-gradient(90deg,#3b82f6,#38bdf8)}
+.gr .fl.o{background:linear-gradient(90deg,#f59e0b,#f97316)}
+.gr .fl.r{background:linear-gradient(90deg,#ef4444,#dc2626)}
+.gr .pc{min-width:32px;text-align:right;font-size:clamp(8px,0.6vw,10px);font-weight:600;color:#64748b}
+@media(max-width:1200px){.ct .row{flex-direction:column}.mr{flex-direction:column;height:auto}.mr .mc{height:150px}}
 </style>
 </head>
 <body>
-<div class="dashboard">
+<div class="d">
+  <div class="hd">
+    <div class="l">N</div>
+    <h1>NSOC Operations</h1>
+    <div class="sub">Network &amp; Systems Operations Center</div>
+    <div class="ts" id="updateTime">—</div>
+  </div>
 
-<!-- HEADER -->
-<div class="header">
-  <div class="header-left">
-    <div class="header-logo">N</div>
-    <div>
-      <h1>NSOC Operations</h1>
-      <div class="subtitle">Network &amp; Systems Operations Center</div>
+  <div class="st">
+    <div class="sc sc-r"><div class="l">Offline</div><div class="v" id="sOff">—</div><div class="m">Computers</div></div>
+    <div class="sc sc-g"><div class="l">Online</div><div class="v" id="sOn">—</div><div class="m">Computers</div></div>
+    <div class="sc sc-b"><div class="l">Total</div><div class="v" id="sTotal">—</div><div class="m">Devices monitored</div></div>
+    <div class="sc sc-p"><div class="l">Uptime</div><div class="v" id="sUptime">—<span class="s">%</span></div><div class="m">Online rate</div></div>
+  </div>
+
+  <div class="mr">
+    <div class="mp"><div class="ph"><h3>Dubai — Device Map</h3></div><div id="dMap" class="mc"></div></div>
+    <div class="mp"><div class="ph"><h3>Abu Dhabi — Device Map</h3></div><div id="aMap" class="mc"></div></div>
+  </div>
+
+  <div class="ct">
+    <div class="row">
+      <div class="col">
+        <div class="pa">
+          <div class="ph"><h3>Devices by Tag</h3></div>
+          <div class="pb"><div class="cw"><canvas id="tagsChart"></canvas></div></div>
+        </div>
+      </div>
+      <div class="col">
+        <div class="pa">
+          <div class="ph"><h3>Online vs Offline by Type</h3></div>
+          <div class="pb"><div class="cw"><canvas id="typeChart"></canvas></div></div>
+        </div>
+      </div>
+      <div class="col" style="flex:1.5">
+        <div class="pa">
+          <div class="ph"><h3>Data Consumption Alert (&gt;60%)</h3></div>
+          <div class="pb" style="overflow:auto"><div class="bg" id="dataGauge"></div></div>
+        </div>
+      </div>
     </div>
   </div>
 </div>
 
-<!-- STATS -->
-<div class="stats">
-  <div class="stat stat-offline">
-    <div class="label">Offline</div>
-    <div class="value">66</div>
-    <div class="meta">Computers</div>
-  </div>
-  <div class="stat stat-online">
-    <div class="label">Online</div>
-    <div class="value">1,270</div>
-    <div class="meta">Computers</div>
-  </div>
-  <div class="stat stat-total">
-    <div class="label">Total</div>
-    <div class="value">1,336</div>
-    <div class="meta">Devices monitored</div>
-  </div>
-  <div class="stat stat-uptime">
-    <div class="label">Uptime</div>
-    <div class="value">95.1<span class="suffix">%</span></div>
-    <div class="meta">Online rate</div>
-  </div>
-</div>
-
-<!-- MAPS -->
-<div class="section">
-  <div class="bar"></div>
-  <h2>Geographic Overview</h2>
-</div>
-<div class="split">
-  <div class="panel">
-    <div class="panel-header"><h3>Dubai — Device Map</h3></div>
-    <div id="dubaiMap" class="map-container"></div>
-  </div>
-  <div class="panel">
-    <div class="panel-header"><h3>Abu Dhabi — Device Map</h3></div>
-    <div id="abuDhabiMap" class="map-container"></div>
-  </div>
-</div>
-
-<!-- DEVICE BREAKDOWN -->
-<div class="section">
-  <div class="bar"></div>
-  <h2>Device Breakdown</h2>
-</div>
-<div class="split">
-  <div class="panel">
-    <div class="panel-header"><h3>By Tag</h3></div>
-    <div class="chart-wrap"><canvas id="tagsChart"></canvas></div>
-  </div>
-  <div class="panel">
-    <div class="panel-header"><h3>Online vs Offline by Type</h3></div>
-    <div class="chart-wrap"><canvas id="typeChart"></canvas></div>
-  </div>
-</div>
-
-<!-- DATA CONSUMPTION -->
-<div class="section">
-  <div class="bar alert"></div>
-  <h2>Data Consumption Alert</h2>
-</div>
-<div class="panel panel-full">
-  <div class="panel-header"><h3>Devices exceeding 60% — Last 3 days</h3></div>
-  <div class="bargauge" id="bargauge"></div>
-</div>
-
-</div>
-
 <script>
-// ===== MAPS =====
-function initMap(id,center,markers){
-  const map = L.map(id,{
-    center,zoom:11,
-    layers:[L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png',{subdomains:'abcd',maxZoom:19})],
-    zoomControl:false,attributionControl:false
+// ===== GRAFANA API =====
+const BASE = 'https://nsoc.aiootech.com/grafana';
+const TOKEN = '***…b90f';
+const DS = 'afgjq2q0g0000c';
+
+async function gq(sql) {
+  const r = await fetch(BASE+'/api/ds/query', {
+    method:'POST',
+    headers:{'Authorization':'***'+TOKEN,'Content-Type':'application/json'},
+    body:JSON.stringify({queries:[{refId:'A',datasource:{uid:DS,type:'mysql'},rawSql:sql,format:'table',rawQuery:true,editorMode:'code'}]})
   });
-  markers.forEach(m=>{
-    L.circleMarker(m,{radius:5,fillColor:'#22c55e',color:'#fff',weight:1,opacity:0.7,fillOpacity:0.6}).addTo(map);
+  const d = await r.json();
+  const v = d?.results?.A?.frames?.[0]?.data?.values;
+  if (!v) throw new Error('No data');
+  return v;
+}
+
+// ===== FALLBACK DATA =====
+const FB = {
+  stats: {offline:66, online:1270, total:1336, uptime:95.1},
+  tags: ['Malls','Convenience','Metro','In-Store','Outdoor'],
+  tagData: [499,279,272,129,116],
+  typeLabels: ['MUPI','Poster','Digi Landsc.','Pillar','Hanging','LED Scr.','Totem','Pelmet','Col. LED','Portrait','Direction.','LED Bann.'],
+  typeOn: [296,143,106,90,87,83,74,61,56,47,49,36],
+  typeOff: [16,7,6,1,1,1,8,3,4,3,0,0],
+  cons: [
+    {label:'+971 15 813 07652 — Union Coop UMM S.', value:0.882},
+    {label:'971581307652 — Union Coop UMM S.', value:0.882},
+    {label:'+971529857980 — Dragon Mart-2', value:0.845},
+    {label:'+971529857980 — Dragon Mart-2', value:0.815},
+    {label:'+971 15 298 57980 — Dragon Mart-2', value:0.784},
+    {label:'+971581306658 — IBN BATTUTA Mall', value:0.773},
+    {label:'+971 15 264 08366 — Abu Dhabi Mall', value:0.762},
+    {label:'971525307239 — ENOC Fujairah', value:0.646},
+    {label:'971588437435 — Union Coop AL W.', value:0.633},
+    {label:'+971556816503 — Union Coop UMM S.', value:0.623}
+  ]
+};
+
+// ===== STATE =====
+let tagsChartInst = null, typeChartInst = null;
+let isLive = false;
+
+function renderStats(d) {
+  document.getElementById('sOff').textContent = d.offline;
+  document.getElementById('sOn').textContent = d.online.toLocaleString();
+  document.getElementById('sTotal').textContent = d.total.toLocaleString();
+  document.getElementById('sUptime').innerHTML = d.uptime + '<span class="s">%</span>';
+  document.getElementById('updateTime').textContent = new Date().toLocaleTimeString('en-GB',{hour12:false});
+}
+
+function renderTagsChart(labels, data) {
+  const ctx = document.getElementById('tagsChart').getContext('2d');
+  if (tagsChartInst) tagsChartInst.destroy();
+  tagsChartInst = new Chart(ctx, {
+    type:'bar',
+    data:{ labels, datasets:[{ label:'Devices', data, backgroundColor:['#38bdf8','#a78bfa','#f59e0b','#22c55e','#3b82f6'], borderRadius:6, borderSkipped:false }] },
+    options:{
+      responsive:true, maintainAspectRatio:false,
+      plugins:{legend:{display:false}},
+      scales:{
+        x:{grid:{display:false}, ticks:{color:'#64748b',font:{size:10}}},
+        y:{grid:{color:'rgba(255,255,255,.04)'}, ticks:{color:'#64748b',font:{size:10}}, beginAtZero:true}
+      }
+    }
   });
 }
-initMap('dubaiMap',[25.1,55.292],[
-  [25.197,55.274],[25.204,55.271],[25.211,55.288],[25.235,55.300],[25.190,55.260],
-  [25.226,55.308],[25.170,55.240],[25.215,55.280],[25.200,55.265],[25.188,55.250],
-  [25.220,55.290],[25.240,55.310],[25.230,55.295],[25.250,55.320],[25.175,55.255],
-  [25.195,55.270],[25.208,55.276],[25.222,55.302],[25.160,55.245],[25.245,55.315]
-]);
-initMap('abuDhabiMap',[24.4539,54.3773],[
-  [24.453,54.377],[24.460,54.370],[24.470,54.385],[24.440,54.360],[24.480,54.390],
-  [24.445,54.365],[24.455,54.375],[24.465,54.382],[24.475,54.395],[24.435,54.355],
-  [24.450,54.372],[24.462,54.388],[24.443,54.362],[24.468,54.378],[24.482,54.392]
-]);
 
-// ===== CHARTS =====
-const labels = ['Malls','Convenience','Metro','In-Store','Outdoor'];
-new Chart(document.getElementById('tagsChart'),{
-  type:'bar',
-  data:{
-    labels,
-    datasets:[{
-      label:'Devices',data:[499,279,272,129,116],
-      backgroundColor:['#38bdf8','#a78bfa','#f59e0b','#22c55e','#3b82f6'],
-      borderRadius:6,borderSkipped:false
-    }]
-  },
-  options:{
-    responsive:true,maintainAspectRatio:false,
-    plugins:{legend:{display:false}},
-    scales:{
-      x:{grid:{display:false},ticks:{color:'#64748b',font:{size:11}}},
-      y:{grid:{color:'rgba(255,255,255,0.04)'},ticks:{color:'#64748b',font:{size:11}},beginAtZero:true}
+function renderTypeChart(labels, on, off) {
+  const ctx = document.getElementById('typeChart').getContext('2d');
+  if (typeChartInst) typeChartInst.destroy();
+  typeChartInst = new Chart(ctx, {
+    type:'bar',
+    data:{ labels, datasets:[
+      {label:'Online', data:on, backgroundColor:'#22c55e', borderRadius:3},
+      {label:'Offline', data:off, backgroundColor:'#ef4444', borderRadius:3}
+    ]},
+    options:{
+      responsive:true, maintainAspectRatio:false,
+      plugins:{legend:{display:true,position:'bottom',labels:{boxWidth:8,padding:10,color:'#94a3b8',font:{size:9}}}},
+      scales:{
+        x:{grid:{display:false}, ticks:{color:'#64748b',font:{size:8},maxRotation:-30}},
+        y:{grid:{color:'rgba(255,255,255,.04)'}, ticks:{color:'#64748b',font:{size:9}}, beginAtZero:true, stacked:true}
+      }
     }
-  }
-});
+  });
+}
 
-const types = ['MUPI','Poster','Digi Landsc.','Pillar','Hanging','LED Scr.','Totem','Pelmet','Col. LED','Portrait','Direction.','LED Bann.'];
-new Chart(document.getElementById('typeChart'),{
-  type:'bar',
-  data:{
-    labels:types,
-    datasets:[
-      {label:'Online',data:[296,143,106,90,87,83,74,61,56,47,49,36],backgroundColor:'#22c55e',borderRadius:3},
-      {label:'Offline',data:[16,7,6,1,1,1,8,3,4,3,0,0],backgroundColor:'#ef4444',borderRadius:3}
-    ]
-  },
-  options:{
-    responsive:true,maintainAspectRatio:false,
-    plugins:{legend:{display:true,position:'bottom',labels:{boxWidth:10,padding:12,color:'#94a3b8',font:{size:11}}}},
-    scales:{
-      x:{grid:{display:false},ticks:{color:'#64748b',font:{size:10},maxRotation:-30}},
-      y:{grid:{color:'rgba(255,255,255,0.04)'},ticks:{color:'#64748b',font:{size:11}},beginAtZero:true,stacked:true}
-    }
-  }
-});
+function renderGauge(items) {
+  const el = document.getElementById('dataGauge');
+  el.innerHTML = items.map(d => {
+    const cls = d.value > 0.8 ? 'r' : d.value > 0.6 ? 'o' : '';
+    return `<div class="gr"><span class="lb">${d.label}</span><div class="tk"><div class="fl ${cls}" style="width:${(d.value*100).toFixed(0)}%"></div></div><span class="pc">${(d.value*100).toFixed(0)}%</span></div>`;
+  }).join('');
+}
 
-// ===== BARGAUGE =====
-const dataHigh = [
-  {l:'+971 15 813 07652 — Union Coop UMM SUQEIM',v:0.882},
-  {l:'971581307652 — Union Coop UMM SUQEIM',v:0.882},
-  {l:'+971529857980 — Dragon Mart-2',v:0.845},
-  {l:'+971529857980 — Dragon Mart-2',v:0.815},
-  {l:'+971 15 298 57980 — Dragon Mart-2',v:0.784},
-  {l:'+971581306658 — IBN BATTUTA Mall',v:0.773},
-  {l:'+971 15 264 08366 — Abu Dhabi Mall',v:0.762},
-  {l:'971525307239 — ENOC Fujairah',v:0.646},
-  {l:'971588437435 — Union Coop AL WARQA',v:0.633},
-  {l:'971588437435 — Union Coop AL WARQA',v:0.633},
-  {l:'+971556816503 — Union Coop UMM SUQEIM',v:0.623},
-  {l:'+971556816503 — Union Coop UMM SUQEIM',v:0.623}
-];
-const bar = document.getElementById('bargauge');
-dataHigh.forEach(d=>{
-  const cls = d.v>0.8?'red':d.v>0.6?'orange':'';
-  bar.innerHTML+=`
-    <div class="gauge-row">
-      <span class="gauge-label">${d.l}</span>
-      <div class="gauge-track"><div class="gauge-fill ${cls}" style="width:${(d.v*100).toFixed(0)}%"></div></div>
-      <span class="gauge-pct">${(d.v*100).toFixed(0)}%</span>
-    </div>`;
-});
+function loadData(data) {
+  renderStats(data.stats);
+  renderTagsChart(data.tags, data.tagData);
+  renderTypeChart(data.typeLabels, data.typeOn, data.typeOff);
+  renderGauge(data.cons);
+}
+
+// ===== FETCH =====
+async function tryFetch() {
+  try {
+    const [stats, tags, types, cons] = await Promise.all([
+      (async()=>{
+        const o = await gq("SELECT COUNT(*) FROM inventaire.glpi_computers WHERE states_id=7 and is_deleted=0");
+        const n = await gq("SELECT COUNT(*) FROM inventaire.glpi_computers WHERE states_id=1 and is_deleted=0");
+        const t = await gq("SELECT COUNT(*) FROM inventaire.glpi_computers WHERE is_deleted=0");
+        const off = Number(o[0][0]), on_ = Number(n[0][0]), tot = Number(t[0][0]);
+        return {offline:off, online:on_, total:tot, uptime:Math.round(on_/tot*1000)/10};
+      })(),
+      (async()=>{
+        const d = await gq("SELECT gt.name AS t, COUNT(gc.id) AS c FROM glpi_computers gc INNER JOIN glpi_plugin_tag_tagitems gti ON (gc.id=gti.items_id AND gti.itemtype='Computer') INNER JOIN glpi_plugin_tag_tags gt ON (gti.plugin_tag_tags_id=gt.id) WHERE gc.is_deleted=0 AND gc.states_id IN (1,7) GROUP BY gt.name ORDER BY c DESC LIMIT 10");
+        return {labels: d[0].map(v=>v), data: d[1].map(v=>Number(v))};
+      })(),
+      (async()=>{
+        const d = await gq("SELECT gct.name AS t, COUNT(CASE WHEN gc.states_id=1 THEN 1 END) AS on_, COUNT(CASE WHEN gc.states_id=7 THEN 1 END) AS off FROM glpi_computers gc LEFT JOIN glpi_computertypes gct ON gc.computertypes_id=gct.id WHERE gc.is_deleted=0 AND gc.states_id IN (1,7) GROUP BY gct.name ORDER BY (COUNT(gc.id)) DESC LIMIT 12");
+        return {labels: d[0].map(v=>v), on: d[1].map(v=>Number(v)), off: d[2].map(v=>Number(v))};
+      })(),
+      (async()=>{
+        const d = await gq("SELECT CONCAT(f.phonenumberfield,' | ',IFNULL(l.name,'N/A')) AS m, (CAST(REPLACE(f.datausedfield,' Gb','') AS DECIMAL(10,2))/NULLIF(CAST(REPLACE(f.totaldatafield,' Gb','') AS DECIMAL(10,2)),0)) AS v FROM glpi_plugin_fields_computerdatas f JOIN glpi_computers c ON f.items_id=c.id LEFT JOIN glpi_locations l ON c.locations_id=l.id WHERE CAST(REPLACE(f.percentfield,' %','') AS DECIMAL(5,2))>60 AND f.phonenumberfield<>'Not Found' ORDER BY v DESC LIMIT 12");
+        return d[0].map((v,i) => ({label: v, value: Number(d[1][i])}));
+      })()
+    ]);
+    loadData({
+      stats: stats,
+      tags: tags.labels, tagData: tags.data,
+      typeLabels: types.labels, typeOn: types.on, typeOff: types.off,
+      cons: cons
+    });
+    isLive = true;
+  } catch(e) {
+    console.log('API unavailable, using static data:', e.message);
+    loadData(FB);
+  }
+  setTimeout(tryFetch, 300000);
+}
+
+function initMaps(){
+  const dm = [[25.197,55.274],[25.204,55.271],[25.211,55.288],[25.235,55.300],[25.190,55.260],[25.226,55.308],[25.170,55.240],[25.215,55.280],[25.200,55.265],[25.188,55.250],[25.220,55.290],[25.240,55.310],[25.230,55.295],[25.250,55.320],[25.175,55.255],[25.195,55.270],[25.208,55.276],[25.222,55.302]];
+  const am = [[24.453,54.377],[24.460,54.370],[24.470,54.385],[24.440,54.360],[24.480,54.390],[24.445,54.365],[24.455,54.375],[24.465,54.382],[24.475,54.395],[24.435,54.355],[24.450,54.372],[24.462,54.388],[24.443,54.362],[24.468,54.378]];
+  const dMap = L.map('dMap',{center:[25.1,55.292],zoom:11,layers:[L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png',{subdomains:'abcd',maxZoom:19})],zoomControl:false,attributionControl:false});
+  dm.forEach(p=>L.circleMarker(p,{radius:6,fillColor:'#22c55e',color:'#fff',weight:1.2,opacity:0.7,fillOpacity:0.5}).addTo(dMap));
+  const aMap = L.map('aMap',{center:[24.4539,54.3773],zoom:11,layers:[L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png',{subdomains:'abcd',maxZoom:19})],zoomControl:false,attributionControl:false});
+  am.forEach(p=>L.circleMarker(p,{radius:6,fillColor:'#22c55e',color:'#fff',weight:1.2,opacity:0.7,fillOpacity:0.5}).addTo(aMap));
+}
+
+initMaps();
+tryFetch();
 </script>
-
 </body>
 </html>

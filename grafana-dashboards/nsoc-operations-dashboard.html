@@ -106,13 +106,13 @@ body{background:#0b1120;color:#e2e8f0;font-family:'Inter',-apple-system,sans-ser
 <script>
 // ===== GRAFANA API =====
 const BASE = 'https://nsoc.aiootech.com/grafana';
-const TOKEN = '***…b90f';
+const TOKEN = 'glsa_X5Mt58Yj2tF4xVLn502CHh6SODGm56Vz_76545fb7';
 const DS = 'afgjq2q0g0000c';
 
 async function gq(sql) {
   const r = await fetch(BASE+'/api/ds/query', {
     method:'POST',
-    headers:{'Authorization':'***'+TOKEN,'Content-Type':'application/json'},
+    headers:{'Authorization':'Bearer '+TOKEN,'Content-Type':'application/json'},
     body:JSON.stringify({queries:[{refId:'A',datasource:{uid:DS,type:'mysql'},rawSql:sql,format:'table',rawQuery:true,editorMode:'code'}]})
   });
   const d = await r.json();

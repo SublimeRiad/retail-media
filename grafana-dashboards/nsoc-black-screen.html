@@ -4,6 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>NSOC Black Screen Monitor</title>
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
 <style>
 *{margin:0;padding:0;box-sizing:border-box}
@@ -65,7 +66,18 @@ body{background:#0b1120;color:#e2e8f0;font-family:'Inter',-apple-system,sans-ser
 .tb bdg{display:inline-block;padding:1px 6px;border-radius:3px;font-size:clamp(8px,0.65vw,10px);font-weight:600}
 .bg-r{background:rgba(239,68,68,.2);color:#ef4444}.bg-o{background:rgba(245,158,11,.2);color:#f59e0b}
 
-@media(max-width:1200px){.ct{grid-template-columns:1fr}}
+.map-row{display:flex;gap:clamp(4px,0.6vw,10px);flex-shrink:0;height:clamp(120px,15vh,180px)}
+.map-pa{flex:1;display:flex;flex-direction:column;background:#111827;border-radius:8px;border:1px solid #1f2b3e;overflow:hidden}
+.map-pa .ph{padding:clamp(3px,0.4vh,6px) clamp(8px,1vw,14px);border-bottom:1px solid #1f2b3e;flex-shrink:0}
+.map-pa .ph h3{font-size:clamp(9px,0.7vw,11px);font-weight:600;color:#94a3b8;text-transform:uppercase;letter-spacing:.4px}
+.map-pa .map-c{flex:1;min-height:0;width:100%}
+.map-pa .leaflet-container{background:#0b1120}
+
+@media(max-width:1200px){
+  .ct{grid-template-columns:1fr}
+  .map-row{flex-direction:column;height:auto}
+  .map-row .map-c{height:150px}
+}
 </style>
 </head>
 <body>
@@ -101,8 +113,14 @@ body{background:#0b1120;color:#e2e8f0;font-family:'Inter',-apple-system,sans-ser
       </div>
     </div>
   </div>
+
+  <div class="map-row">
+    <div class="map-pa"><div class="ph"><h3>Dubai</h3></div><div id="dubaiMap" class="map-c"></div></div>
+    <div class="map-pa"><div class="ph"><h3>Abu Dhabi</h3></div><div id="abuDhabiMap" class="map-c"></div></div>
+  </div>
 </div>
 
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 <script>
 // ===== STATIC FALLBACK DATA =====
 const FALLBACK = {
@@ -286,7 +304,34 @@ async function tryFetch() {
   setTimeout(tryFetch, 300000);
 }
 
+// ===== MAPS =====
+function initMaps(){
+  const dubaiMarkers = [
+    [25.197,55.274],[25.204,55.271],[25.211,55.288],[25.235,55.300],[25.190,55.260],
+    [25.226,55.308],[25.170,55.240],[25.215,55.280],[25.200,55.265],[25.188,55.250],
+    [25.220,55.290],[25.240,55.310],[25.230,55.295],[25.250,55.320],[25.175,55.255]
+  ];
+  const abuMarkers = [
+    [24.453,54.377],[24.460,54.370],[24.470,54.385],[24.440,54.360],[24.480,54.390],
+    [24.445,54.365],[24.455,54.375],[24.465,54.382],[24.475,54.395],[24.450,54.372]
+  ];
+  
+  function initMap(id,center,markers){
+    const m = L.map(id,{
+      center,zoom:12,
+      layers:[L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png',{subdomains:'abcd',maxZoom:19})],
+      zoomControl:false,attributionControl:false
+    });
+    markers.forEach(p=>{
+      L.circleMarker(p,{radius:6,fillColor:'#ef4444',color:'#fff',weight:1.5,opacity:0.8,fillOpacity:0.5}).addTo(m);
+    });
+  }
+  initMap('dubaiMap',[25.18,55.28], dubaiMarkers);
+  initMap('abuDhabiMap',[24.46,54.38], abuMarkers);
+}
+
 tryFetch();
+initMaps();
 </script>
 </body>
 </html>

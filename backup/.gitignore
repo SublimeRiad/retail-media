@@ -1,0 +1,7 @@
+# Sensitive files - do not commit
+.env
+.creds
+.nsoc_*
+credentials/
+*.key
+*.pem

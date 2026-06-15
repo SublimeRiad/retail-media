@@ -1,0 +1,9 @@
+{
+  "version": 1,
+  "socket": {
+    "path": "/home/iots/.openclaw/exec-approvals.sock",
+    "token": "M8G_BScUv8eac2aseUPAmjT3j1amUP4A"
+  },
+  "defaults": {},
+  "agents": {}
+}

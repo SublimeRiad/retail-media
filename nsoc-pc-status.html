@@ -1,0 +1,663 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>NSOC PC Status — Union Coop & Lulu Market</title>
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;background:#0f1117;color:#e8eaed;font-size:14px;min-height:100vh}
+.header{background:linear-gradient(135deg,#1a1d29,#2d3748);padding:20px 28px;border-bottom:1px solid #2d3748}
+.header h1{font-size:20px;font-weight:700;background:linear-gradient(90deg,#60a5fa,#a78bfa);-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+.header .sub{color:#94a3b8;font-size:12px;margin-top:3px}
+
+.summary{display:flex;gap:10px;padding:14px 28px;background:#161922;border-bottom:1px solid #1e293b;flex-wrap:wrap}
+.sc{background:#1e293b;border-radius:8px;padding:10px 14px;min-width:110px;flex:1;border:1px solid #334155}
+.sc .l{font-size:10px;text-transform:uppercase;color:#64748b;letter-spacing:.5px}
+.sc .v{font-size:18px;font-weight:700;margin-top:3px}
+
+.venue-group{padding:16px 28px 8px}
+.venue-group h2{font-size:16px;font-weight:600;color:#94a3b8;text-transform:uppercase;letter-spacing:.8px;margin-bottom:10px;padding-bottom:6px;border-bottom:1px solid #1e293b}
+.venue{margin-bottom:10px}
+.venue-header{display:flex;align-items:center;gap:10px;margin-bottom:8px}
+.venue-header h3{font-size:15px;font-weight:600}
+.venue-header .badge{background:#334155;font-size:11px;padding:2px 10px;border-radius:20px;color:#94a3b8}
+
+.pc-table{width:100%;border-collapse:collapse;font-size:12px}
+.pc-table th{text-align:left;padding:6px 8px;background:#1e293b;color:#64748b;font-weight:500;font-size:10px;text-transform:uppercase;letter-spacing:.5px;border-bottom:1px solid #334155}
+.pc-table td{padding:5px 8px;border-bottom:1px solid #1e293b}
+.pc-table tr:hover{background:#1a1d29}
+.pc-table .name{font-weight:500;font-family:'SF Mono',Consolas,monospace;font-size:11px}
+.pc-table .loc{color:#94a3b8;font-size:11px}
+.data-bar{display:inline-block;height:6px;border-radius:3px;vertical-align:middle;margin-right:4px;min-width:2px}
+.data-cell{display:flex;align-items:center;gap:4px;font-family:'SF Mono',Consolas,monospace;font-size:11px}
+.icon{display:inline-flex;align-items:center;justify-content:center;width:18px;height:18px;border-radius:50%;font-size:10px;font-weight:700}
+.icon.online{background:#052e16;color:#4ade80;border:1px solid #166534}
+.icon.offline{background:#450a0a;color:#ef4444;border:1px solid #7f1d1d}
+
+.top5-section{padding:8px 28px 20px}
+.top5-section h3{font-size:13px;color:#94a3b8;margin-bottom:8px;font-weight:500}
+.top5-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:8px}
+.top5-card{background:#1a1d29;border:1px solid #2d3748;border-radius:8px;padding:10px 12px;display:flex;align-items:center;gap:10px}
+.top5-card .rank{font-size:14px;font-weight:700;color:#64748b;min-width:20px}
+.top5-card .tname{font-weight:500;font-size:12px;flex:1}
+.top5-card .tloc{font-size:10px;color:#64748b}
+.top5-card .tdata{font-size:13px;font-weight:700;font-family:'SF Mono',Consolas,monospace}
+
+.footer{text-align:center;padding:14px;color:#475569;font-size:11px;border-top:1px solid #1e293b}
+
+@media (max-width:768px){
+ .summary{flex-direction:column}
+ .pc-table{font-size:11px}
+ .pc-table th,.pc-table td{padding:4px 6px}
+}
+</style></head>
+<body>
+<div class="header">
+<h1>NSOC — PC Status Dashboard</h1>
+<div class="sub">Union Coop (Umm Suqeim + Al Warqa) &amp; Lulu Market (Al Wahda) | 2026-06-15 04:38 UTC</div>
+</div>
+
+<div class="summary">
+<div class="sc"><div class="l">Total PCs</div><div class="v">78</div></div>
+<div class="sc"><div class="l">Online</div><div class="v" style="color:#4ade80">78</div></div>
+<div class="sc"><div class="l">Offline</div><div class="v" style="color:#ef4444">0</div></div>
+<div class="sc"><div class="l">Umm Suqeim</div><div class="v" style="color:#60a5fa">15</div></div>
+<div class="sc"><div class="l">Al Warqa</div><div class="v" style="color:#a78bfa">16</div></div>
+<div class="sc"><div class="l">Lulu Market</div><div class="v" style="color:#f59e0b">47</div></div>
+</div>
+
+<div class="venue-group">
+<h2>UNION COOP</h2>
+
+<div class="venue">
+<div class="venue-header">
+<h3 style="color:#60a5fa">Umm Suqeim</h3>
+<span class="badge">15 PCs &middot; 15 online &middot; 0 offline</span>
+</div>
+<table class="pc-table">
+<thead><tr><th>Status</th><th>Name</th><th>Tag</th><th>OS</th><th style="text-align:right">Data</th></tr></thead>
+<tbody><tr>
+<td><span class="icon online">✓</span></td>
+<td class="name">DESKTOP-D6J29GK</td>
+<td class="loc">1941073020</td>
+<td class="loc">Windows 11 Pro</td>
+<td style="text-align:right"><div class="data-cell" style="justify-content:flex-end"><span class="data-bar" style="width:88.25px;background:#ef4444"></span>88.25 %</div></td>
+</tr><tr>
+<td><span class="icon online">✓</span></td>
+<td class="name">DESKTOP-VTM08H0</td>
+<td class="loc">1941070099</td>
+<td class="loc">Windows 11 Pro</td>
+<td style="text-align:right"><div class="data-cell" style="justify-content:flex-end"><span class="data-bar" style="width:88.25px;background:#ef4444"></span>88.25 %</div></td>
+</tr><tr>
+<td><span class="icon online">✓</span></td>
+<td class="name">DESKTOP-0QP9AB0</td>
+<td class="loc">1941083848</td>
+<td class="loc">Windows 11 Pro</td>
+<td style="text-align:right"><div class="data-cell" style="justify-content:flex-end"><span class="data-bar" style="width:62.29px;background:#f59e0b"></span>62.29 %</div></td>
+</tr><tr>
+<td><span class="icon online">✓</span></td>
+<td class="name">DESKTOP-V1VPUTR</td>
+<td class="loc">1941083797</td>
+<td class="loc">Windows 11 Pro</td>
+<td style="text-align:right"><div class="data-cell" style="justify-content:flex-end"><span class="data-bar" style="width:62.29px;background:#f59e0b"></span>62.29 %</div></td>
+</tr><tr>
+<td><span class="icon online">✓</span></td>
+<td class="name">DESKTOP-QOJKQ58</td>
+<td class="loc">1941082177</td>
+<td class="loc">Windows 11 Pro</td>
+<td style="text-align:right"><div class="data-cell" style="justify-content:flex-end"><span class="data-bar" style="width:43.04px;background:#eab308"></span>43.04 %</div></td>
+</tr><tr>
+<td><span class="icon online">✓</span></td>
+<td class="name">DESKTOP-A86104T</td>
+<td class="loc">1941081308</td>
+<td class="loc">Windows 11 Pro</td>
+<td style="text-align:right"><div class="data-cell" style="justify-content:flex-end"><span class="data-bar" style="width:43.04px;background:#eab308"></span>43.04 %</div></td>
+</tr><tr>
+<td><span class="icon online">✓</span></td>
+<td class="name">PC-E43A6E5D6D59</td>
+<td class="loc">845327402</td>
+<td class="loc">Microsoft Windows 10 Pro</td>
+<td style="text-align:right"><div class="data-cell" style="justify-content:flex-end"><span class="data-bar" style="width:40.89px;background:#eab308"></span>40.89 %</div></td>
+</tr><tr>
+<td><span class="icon online">✓</span></td>
+<td class="name">UMM-SUQEIM-H-EN</td>
+<td class="loc">846447206</td>
+<td class="loc">Microsoft Windows 10 Pro</td>
+<td style="text-align:right"><div class="data-cell" style="justify-content:flex-end"><span class="data-bar" style="width:39.55px;background:#eab308"></span>39.55 %</div></td>
+</tr><tr>
+<td><span class="icon online">✓</span></td>
+<td class="name">DESKTOP-OT7TG9A</td>
+<td class="loc">1941725172</td>
+<td class="loc">Windows 11 Pro</td>
+<td style="text-align:right"><div class="data-cell" style="justify-content:flex-end"><span class="data-bar" style="width:39.14px;background:#eab308"></span>39.14 %</div></td>
+</tr><tr>
+<td><span class="icon online">✓</span></td>
+<td class="name">DESKTOP-C0U16E0</td>
+<td class="loc">1941726206</td>
+<td class="loc">Windows 11 Pro</td>
+<td style="text-align:right"><div class="data-cell" style="justify-content:flex-end"><span class="data-bar" style="width:39.14px;background:#eab308"></span>39.14 %</div></td>
+</tr><tr>
+<td><span class="icon online">✓</span></td>
+<td class="name">uMM-SUQEIM-H-C</td>
+<td class="loc">845327152</td>
+<td class="loc">Microsoft Windows 10 Pro</td>
+<td style="text-align:right"><div class="data-cell" style="justify-content:flex-end"><span class="data-bar" style="width:36.04px;background:#eab308"></span>36.04 %</div></td>
+</tr><tr>
+<td><span class="icon online">✓</span></td>
+<td class="name">UMM-SUQEIM-H-B</td>
+<td class="loc">845323473</td>
+<td class="loc">Microsoft Windows 10 Pro</td>
+<td style="text-align:right"><div class="data-cell" style="justify-content:flex-end"><span class="data-bar" style="width:32.18px;background:#eab308"></span>32.18 %</div></td>
+</tr><tr>
+<td><span class="icon online">✓</span></td>
+<td class="name">UMM-SUQEIM-H-A</td>
+<td class="loc">845322532</td>
+<td class="loc">Microsoft Windows 10 Pro</td>
+<td style="text-align:right"><div class="data-cell" style="justify-content:flex-end"><span class="data-bar" style="width:28.21px;background:#eab308"></span>28.21 %</div></td>
+</tr><tr>
+<td><span class="icon online">✓</span></td>
+<td class="name">UMM-SUQEIM-H-F</td>
+<td class="loc">845328240</td>
+<td class="loc">Windows 10 Pro</td>
+<td style="text-align:right"><div class="data-cell" style="justify-content:flex-end"><span class="data-bar" style="width:19.72px;background:#22c55e"></span>19.72 %</div></td>
+</tr><tr>
+<td><span class="icon online">✓</span></td>
+<td class="name">UMM-SUQEIM-H-E</td>
+<td class="loc">845328088</td>
+<td class="loc">Microsoft Windows 10 Pro</td>
+<td style="text-align:right"><div class="data-cell" style="justify-content:flex-end"><span class="data-bar" style="width:2px;background:#22c55e"></span>0 %</div></td>
+</tr></tbody></table>
+<div class="top5-section" style="padding:6px 0 0">
+<h3>🔥 Top 5 Data Consumers — Umm Suqeim</h3>
+<div class="top5-grid"><div class="top5-card">
+<div class="rank">#1</div>
+<div><div class="tname">DESKTOP-D6J29GK</div><div class="tloc">Union Coop UMM SUQEIM</div></div>
+<div class="tdata" style="color:#ef4444">88.25 %</div>
+</div><div class="top5-card">
+<div class="rank">#2</div>
+<div><div class="tname">DESKTOP-VTM08H0</div><div class="tloc">Union Coop UMM SUQEIM</div></div>
+<div class="tdata" style="color:#ef4444">88.25 %</div>
+</div><div class="top5-card">
+<div class="rank">#3</div>
+<div><div class="tname">DESKTOP-0QP9AB0</div><div class="tloc">Union Coop UMM SUQEIM</div></div>
+<div class="tdata" style="color:#f59e0b">62.29 %</div>
+</div><div class="top5-card">
+<div class="rank">#4</div>
+<div><div class="tname">DESKTOP-V1VPUTR</div><div class="tloc">Union Coop UMM SUQEIM</div></div>
+<div class="tdata" style="color:#f59e0b">62.29 %</div>
+</div><div class="top5-card">
+<div class="rank">#5</div>
+<div><div class="tname">DESKTOP-QOJKQ58</div><div class="tloc">Union Coop UMM SUQEIM</div></div>
+<div class="tdata" style="color:#eab308">43.04 %</div>
+</div></div></div></div>
+<div class="venue">
+<div class="venue-header">
+<h3 style="color:#a78bfa">Al Warqa</h3>
+<span class="badge">16 PCs &middot; 16 online &middot; 0 offline</span>
+</div>
+<table class="pc-table">
+<thead><tr><th>Status</th><th>Name</th><th>Tag</th><th>OS</th><th style="text-align:right">Data</th></tr></thead>
+<tbody><tr>
+<td><span class="icon online">✓</span></td>
+<td class="name">DESKTOP-C7OQU4Q</td>
+<td class="loc">1907489509</td>
+<td class="loc">Windows 11 Pro</td>
+<td style="text-align:right"><div class="data-cell" style="justify-content:flex-end"><span class="data-bar" style="width:63.27px;background:#f59e0b"></span>63.27 %</div></td>
+</tr><tr>
+<td><span class="icon online">✓</span></td>
+<td class="name">instore</td>
+<td class="loc">1912320709</td>
+<td class="loc">Microsoft Windows 11 Pro</td>
+<td style="text-align:right"><div class="data-cell" style="justify-content:flex-end"><span class="data-bar" style="width:63.27px;background:#f59e0b"></span>63.27 %</div></td>
+</tr><tr>
+<td><span class="icon online">✓</span></td>
+<td class="name">DESKTOP-S82A2FD</td>
+<td class="loc">1912321155</td>
+<td class="loc">Windows 11 Pro</td>
+<td style="text-align:right"><div class="data-cell" style="justify-content:flex-end"><span class="data-bar" style="width:50.46px;background:#f59e0b"></span>50.46 %</div></td>
+</tr><tr>
+<td><span class="icon online">✓</span></td>
+<td class="name">DESKTOP-LJ48QVN</td>
+<td class="loc">1912324356</td>
+<td class="loc">Windows 11 Pro</td>
+<td style="text-align:right"><div class="data-cell" style="justify-content:flex-end"><span class="data-bar" style="width:50.07px;background:#f59e0b"></span>50.07 %</div></td>
+</tr><tr>
+<td><span class="icon online">✓</span></td>
+<td class="name">DESKTOP-0JBMRIA</td>
+<td class="loc">1912950601</td>
+<td class="loc">Windows 11 Pro</td>
+<td style="text-align:right"><div class="data-cell" style="justify-content:flex-end"><span class="data-bar" style="width:50.06px;background:#f59e0b"></span>50.06 %</div></td>
+</tr><tr>
+<td><span class="icon online">✓</span></td>
+<td class="name">DESKTOP-P045QOV</td>
+<td class="loc">1912322297</td>
+<td class="loc">Windows 11 Pro</td>
+<td style="text-align:right"><div class="data-cell" style="justify-content:flex-end"><span class="data-bar" style="width:46.07px;background:#eab308"></span>46.07 %</div></td>
+</tr><tr>
+<td><span class="icon online">✓</span></td>
+<td class="name">DESKTOP-B8KKPF0</td>
+<td class="loc">1912325227</td>
+<td class="loc">Windows 11 Pro</td>
+<td style="text-align:right"><div class="data-cell" style="justify-content:flex-end"><span class="data-bar" style="width:44.04px;background:#eab308"></span>44.04 %</div></td>
+</tr><tr>
+<td><span class="icon online">✓</span></td>
+<td class="name">DESKTOP-B799TNL</td>
+<td class="loc">1912325628</td>
+<td class="loc">Windows 11 Pro</td>
+<td style="text-align:right"><div class="data-cell" style="justify-content:flex-end"><span class="data-bar" style="width:44.04px;background:#eab308"></span>44.04 %</div></td>
+</tr><tr>
+<td><span class="icon online">✓</span></td>
+<td class="name">WARQA-H-G</td>
+<td class="loc">842707388</td>
+<td class="loc">Microsoft Windows 10 Pro</td>
+<td style="text-align:right"><div class="data-cell" style="justify-content:flex-end"><span class="data-bar" style="width:29.64px;background:#eab308"></span>29.64 %</div></td>
+</tr><tr>
+<td><span class="icon online">✓</span></td>
+<td class="name">WARQA-H-E</td>
+<td class="loc">844956739</td>
+<td class="loc">Microsoft Windows 10 Pro</td>
+<td style="text-align:right"><div class="data-cell" style="justify-content:flex-end"><span class="data-bar" style="width:29.07px;background:#eab308"></span>29.07 %</div></td>
+</tr><tr>
+<td><span class="icon online">✓</span></td>
+<td class="name">WARQA-H-F</td>
+<td class="loc">842706573</td>
+<td class="loc">Microsoft Windows 10 Pro</td>
+<td style="text-align:right"><div class="data-cell" style="justify-content:flex-end"><span class="data-bar" style="width:23.19px;background:#eab308"></span>23.19 %</div></td>
+</tr><tr>
+<td><span class="icon online">✓</span></td>
+<td class="name">WARQA-H-D</td>
+<td class="loc">844949819</td>
+<td class="loc">Windows 10 Pro</td>
+<td style="text-align:right"><div class="data-cell" style="justify-content:flex-end"><span class="data-bar" style="width:22.5px;background:#eab308"></span>22.5 %</div></td>
+</tr><tr>
+<td><span class="icon online">✓</span></td>
+<td class="name">WARQA-H-B</td>
+<td class="loc">842704839</td>
+<td class="loc">Windows 10 Pro</td>
+<td style="text-align:right"><div class="data-cell" style="justify-content:flex-end"><span class="data-bar" style="width:20.15px;background:#eab308"></span>20.15 %</div></td>
+</tr><tr>
+<td><span class="icon online">✓</span></td>
+<td class="name">WARQA-H-C</td>
+<td class="loc">844948791</td>
+<td class="loc">Microsoft Windows 10 Pro</td>
+<td style="text-align:right"><div class="data-cell" style="justify-content:flex-end"><span class="data-bar" style="width:19.09px;background:#22c55e"></span>19.09 %</div></td>
+</tr><tr>
+<td><span class="icon online">✓</span></td>
+<td class="name">WARQA-H-A</td>
+<td class="loc">842703712</td>
+<td class="loc">Microsoft Windows 10 Pro</td>
+<td style="text-align:right"><div class="data-cell" style="justify-content:flex-end"><span class="data-bar" style="width:2px;background:#22c55e"></span>0 %</div></td>
+</tr><tr>
+<td><span class="icon online">✓</span></td>
+<td class="name">COOP-WARQA-ARCH</td>
+<td class="loc">675141853</td>
+<td class="loc">Windows 10 Pro</td>
+<td style="text-align:right"><div class="data-cell" style="justify-content:flex-end"><span class="data-bar" style="width:2px;background:#22c55e"></span>0 %</div></td>
+</tr></tbody></table>
+<div class="top5-section" style="padding:6px 0 0">
+<h3>🔥 Top 5 Data Consumers — Al Warqa</h3>
+<div class="top5-grid"><div class="top5-card">
+<div class="rank">#1</div>
+<div><div class="tname">DESKTOP-C7OQU4Q</div><div class="tloc">Union Coop AL WARQA</div></div>
+<div class="tdata" style="color:#f59e0b">63.27 %</div>
+</div><div class="top5-card">
+<div class="rank">#2</div>
+<div><div class="tname">instore</div><div class="tloc">Union Coop AL WARQA</div></div>
+<div class="tdata" style="color:#f59e0b">63.27 %</div>
+</div><div class="top5-card">
+<div class="rank">#3</div>
+<div><div class="tname">DESKTOP-S82A2FD</div><div class="tloc">Union Coop AL WARQA</div></div>
+<div class="tdata" style="color:#f59e0b">50.46 %</div>
+</div><div class="top5-card">
+<div class="rank">#4</div>
+<div><div class="tname">DESKTOP-LJ48QVN</div><div class="tloc">Union Coop AL WARQA</div></div>
+<div class="tdata" style="color:#f59e0b">50.07 %</div>
+</div><div class="top5-card">
+<div class="rank">#5</div>
+<div><div class="tname">DESKTOP-0JBMRIA</div><div class="tloc">Union Coop AL WARQA</div></div>
+<div class="tdata" style="color:#f59e0b">50.06 %</div>
+</div></div></div></div></div><div class="venue-group">
+<h2>LULU MARKET</h2>
+
+<div class="venue">
+<div class="venue-header">
+<h3 style="color:#f59e0b">Al Wahda</h3>
+<span class="badge">47 PCs &middot; 47 online &middot; 0 offline</span>
+</div>
+<table class="pc-table">
+<thead><tr><th>Status</th><th>Name</th><th>Tag</th><th>OS</th><th style="text-align:right">Data</th></tr></thead>
+<tbody><tr>
+<td><span class="icon online">✓</span></td>
+<td class="name">LULU-MSRF-P-2</td>
+<td class="loc">814950478</td>
+<td class="loc">Microsoft Windows 10 Pro</td>
+<td style="text-align:right"><div class="data-cell" style="justify-content:flex-end"><span class="data-bar" style="width:32.76px;background:#eab308"></span>32.76 %</div></td>
+</tr><tr>
+<td><span class="icon online">✓</span></td>
+<td class="name">LULU-MSRF-ENTR1</td>
+<td class="loc">884602823</td>
+<td class="loc">Windows 11 Pro</td>
+<td style="text-align:right"><div class="data-cell" style="justify-content:flex-end"><span class="data-bar" style="width:32.76px;background:#eab308"></span>32.76 %</div></td>
+</tr><tr>
+<td><span class="icon online">✓</span></td>
+<td class="name">LULU-MSRF-RBBN</td>
+<td class="loc">814948102</td>
+<td class="loc">Microsoft Windows 10 Pro</td>
+<td style="text-align:right"><div class="data-cell" style="justify-content:flex-end"><span class="data-bar" style="width:32.76px;background:#eab308"></span>32.76 %</div></td>
+</tr><tr>
+<td><span class="icon online">✓</span></td>
+<td class="name">LULU-KHLDY-P4-I</td>
+<td class="loc">873034696</td>
+<td class="loc">Windows 10 Pro</td>
+<td style="text-align:right"><div class="data-cell" style="justify-content:flex-end"><span class="data-bar" style="width:15.12px;background:#22c55e"></span>15.12 %</div></td>
+</tr><tr>
+<td><span class="icon online">✓</span></td>
+<td class="name">LULU-KHLDY-P2-L</td>
+<td class="loc">873042746</td>
+<td class="loc">Windows 10 Pro</td>
+<td style="text-align:right"><div class="data-cell" style="justify-content:flex-end"><span class="data-bar" style="width:15.1px;background:#22c55e"></span>15.1 %</div></td>
+</tr><tr>
+<td><span class="icon online">✓</span></td>
+<td class="name">LULU-KHLDY-P4-H</td>
+<td class="loc">873028346</td>
+<td class="loc">Windows 10 Pro</td>
+<td style="text-align:right"><div class="data-cell" style="justify-content:flex-end"><span class="data-bar" style="width:14.04px;background:#22c55e"></span>14.04 %</div></td>
+</tr><tr>
+<td><span class="icon online">✓</span></td>
+<td class="name">LULU-KHLFA-P4-K</td>
+<td class="loc">853819213</td>
+<td class="loc">Microsoft Windows 10 Pro</td>
+<td style="text-align:right"><div class="data-cell" style="justify-content:flex-end"><span class="data-bar" style="width:13.08px;background:#22c55e"></span>13.08 %</div></td>
+</tr><tr>
+<td><span class="icon online">✓</span></td>
+<td class="name">DESKTOP-1MHRQRB</td>
+<td class="loc">1162209914</td>
+<td class="loc">Windows 10 Pro</td>
+<td style="text-align:right"><div class="data-cell" style="justify-content:flex-end"><span class="data-bar" style="width:13.07px;background:#22c55e"></span>13.07 %</div></td>
+</tr><tr>
+<td><span class="icon online">✓</span></td>
+<td class="name">LULU-KHLDY-P2-M</td>
+<td class="loc">873044176</td>
+<td class="loc">Windows 10 Pro</td>
+<td style="text-align:right"><div class="data-cell" style="justify-content:flex-end"><span class="data-bar" style="width:13.02px;background:#22c55e"></span>13.02 %</div></td>
+</tr><tr>
+<td><span class="icon online">✓</span></td>
+<td class="name">LULU-KHLFA-P2-G</td>
+<td class="loc">853814630</td>
+<td class="loc">Microsoft Windows 10 Pro</td>
+<td style="text-align:right"><div class="data-cell" style="justify-content:flex-end"><span class="data-bar" style="width:12.92px;background:#22c55e"></span>12.92 %</div></td>
+</tr><tr>
+<td><span class="icon online">✓</span></td>
+<td class="name">LULU-WTC-C-B</td>
+<td class="loc">801323854</td>
+<td class="loc">Microsoft Windows 10 Pro</td>
+<td style="text-align:right"><div class="data-cell" style="justify-content:flex-end"><span class="data-bar" style="width:12.19px;background:#22c55e"></span>12.19 %</div></td>
+</tr><tr>
+<td><span class="icon online">✓</span></td>
+<td class="name">LULU-KHLFA-P2-J</td>
+<td class="loc">853818541</td>
+<td class="loc">Microsoft Windows 10 Pro</td>
+<td style="text-align:right"><div class="data-cell" style="justify-content:flex-end"><span class="data-bar" style="width:12.18px;background:#22c55e"></span>12.18 %</div></td>
+</tr><tr>
+<td><span class="icon online">✓</span></td>
+<td class="name">LULU-KHLFA-P4-F</td>
+<td class="loc">853795603</td>
+<td class="loc">Microsoft Windows 10 Pro</td>
+<td style="text-align:right"><div class="data-cell" style="justify-content:flex-end"><span class="data-bar" style="width:11.39px;background:#22c55e"></span>11.39 %</div></td>
+</tr><tr>
+<td><span class="icon online">✓</span></td>
+<td class="name">LULU-KHLFA-P4-H</td>
+<td class="loc">853815468</td>
+<td class="loc">Microsoft Windows 10 Pro</td>
+<td style="text-align:right"><div class="data-cell" style="justify-content:flex-end"><span class="data-bar" style="width:10.35px;background:#22c55e"></span>10.35 %</div></td>
+</tr><tr>
+<td><span class="icon online">✓</span></td>
+<td class="name">LULU-WTC-C-D</td>
+<td class="loc">801298771</td>
+<td class="loc">Microsoft Windows 10 Pro</td>
+<td style="text-align:right"><div class="data-cell" style="justify-content:flex-end"><span class="data-bar" style="width:9.72px;background:#22c55e"></span>9.72 %</div></td>
+</tr><tr>
+<td><span class="icon online">✓</span></td>
+<td class="name">LULU-WHDA-C-E</td>
+<td class="loc">817775683</td>
+<td class="loc">Microsoft Windows 10 Pro</td>
+<td style="text-align:right"><div class="data-cell" style="justify-content:flex-end"><span class="data-bar" style="width:7.13px;background:#22c55e"></span>7.13 %</div></td>
+</tr><tr>
+<td><span class="icon online">✓</span></td>
+<td class="name">LULU-WHDA-C-F</td>
+<td class="loc">817773042</td>
+<td class="loc">Microsoft Windows 10 Pro</td>
+<td style="text-align:right"><div class="data-cell" style="justify-content:flex-end"><span class="data-bar" style="width:6.64px;background:#22c55e"></span>6.64 %</div></td>
+</tr><tr>
+<td><span class="icon online">✓</span></td>
+<td class="name">LULU-WHDA-C-G</td>
+<td class="loc">632047105</td>
+<td class="loc">Microsoft Windows 10 Pro</td>
+<td style="text-align:right"><div class="data-cell" style="justify-content:flex-end"><span class="data-bar" style="width:6.04px;background:#22c55e"></span>6.04 %</div></td>
+</tr><tr>
+<td><span class="icon online">✓</span></td>
+<td class="name">LULU-KHLDY-ARCH</td>
+<td class="loc">771914686</td>
+<td class="loc">Windows 10 Pro</td>
+<td style="text-align:right"><div class="data-cell" style="justify-content:flex-end"><span class="data-bar" style="width:2px;background:#22c55e"></span>0 %</div></td>
+</tr><tr>
+<td><span class="icon online">✓</span></td>
+<td class="name">LULU-KHLFA-P4-B</td>
+<td class="loc">853750242</td>
+<td class="loc">Microsoft Windows 10 Pro</td>
+<td style="text-align:right"><div class="data-cell" style="justify-content:flex-end"><span class="data-bar" style="width:2px;background:#22c55e"></span>0 %</div></td>
+</tr><tr>
+<td><span class="icon online">✓</span></td>
+<td class="name">LULU-MSRF-P-1</td>
+<td class="loc">889119735</td>
+<td class="loc">Windows 11 Pro</td>
+<td style="text-align:right"><div class="data-cell" style="justify-content:flex-end"><span class="data-bar" style="width:2px;background:#22c55e"></span>0 %</div></td>
+</tr><tr>
+<td><span class="icon online">✓</span></td>
+<td class="name">LULU-MSRF-ENTR2</td>
+<td class="loc">814956371</td>
+<td class="loc">Microsoft Windows 11 Pro</td>
+<td style="text-align:right"><div class="data-cell" style="justify-content:flex-end"><span class="data-bar" style="width:2px;background:#22c55e"></span>0 %</div></td>
+</tr><tr>
+<td><span class="icon online">✓</span></td>
+<td class="name">LULU-WHDA-ARCH</td>
+<td class="loc">632940959</td>
+<td class="loc">Windows 10 Pro</td>
+<td style="text-align:right"><div class="data-cell" style="justify-content:flex-end"><span class="data-bar" style="width:2px;background:#22c55e"></span>0 %</div></td>
+</tr><tr>
+<td><span class="icon online">✓</span></td>
+<td class="name">LULU-KHLFA-ARCH</td>
+<td class="loc">772103807</td>
+<td class="loc">Windows 10 Pro</td>
+<td style="text-align:right"><div class="data-cell" style="justify-content:flex-end"><span class="data-bar" style="width:2px;background:#22c55e"></span>0 %</div></td>
+</tr><tr>
+<td><span class="icon online">✓</span></td>
+<td class="name">LULU-WTC-C-C</td>
+<td class="loc">800902243</td>
+<td class="loc">Microsoft Windows 10 Pro</td>
+<td style="text-align:right"><div class="data-cell" style="justify-content:flex-end"><span class="data-bar" style="width:2px;background:#22c55e"></span>%</div></td>
+</tr><tr>
+<td><span class="icon online">✓</span></td>
+<td class="name">LULU-MSHRF-ARCH</td>
+<td class="loc">771936909</td>
+<td class="loc">Microsoft Windows 10 Pro</td>
+<td style="text-align:right"><div class="data-cell" style="justify-content:flex-end"><span class="data-bar" style="width:2px;background:#22c55e"></span>0 %</div></td>
+</tr><tr>
+<td><span class="icon online">✓</span></td>
+<td class="name">LULU-KHLFA-P4-C</td>
+<td class="loc">853776928</td>
+<td class="loc">Microsoft Windows 10 Pro</td>
+<td style="text-align:right"><div class="data-cell" style="justify-content:flex-end"><span class="data-bar" style="width:2px;background:#22c55e"></span>0 %</div></td>
+</tr><tr>
+<td><span class="icon online">✓</span></td>
+<td class="name">LULU-WTC-C-A</td>
+<td class="loc">801325418</td>
+<td class="loc">Microsoft Windows 10 Pro</td>
+<td style="text-align:right"><div class="data-cell" style="justify-content:flex-end"><span class="data-bar" style="width:2px;background:#22c55e"></span>0 %</div></td>
+</tr><tr>
+<td><span class="icon online">✓</span></td>
+<td class="name">LULU-KHLDY-P2-J</td>
+<td class="loc">873040961</td>
+<td class="loc">Windows 10 Pro</td>
+<td style="text-align:right"><div class="data-cell" style="justify-content:flex-end"><span class="data-bar" style="width:2px;background:#22c55e"></span>0 %</div></td>
+</tr><tr>
+<td><span class="icon online">✓</span></td>
+<td class="name">LULU-KHLFA-P4-A</td>
+<td class="loc">853745482</td>
+<td class="loc">Microsoft Windows 10 Pro</td>
+<td style="text-align:right"><div class="data-cell" style="justify-content:flex-end"><span class="data-bar" style="width:2px;background:#22c55e"></span>0 %</div></td>
+</tr><tr>
+<td><span class="icon online">✓</span></td>
+<td class="name">LULU-WHDA-C-C</td>
+<td class="loc">817151406</td>
+<td class="loc">Microsoft Windows 10 Pro</td>
+<td style="text-align:right"><div class="data-cell" style="justify-content:flex-end"><span class="data-bar" style="width:2px;background:#22c55e"></span>0 %</div></td>
+</tr><tr>
+<td><span class="icon online">✓</span></td>
+<td class="name">LULU-KHLDY-P4-F</td>
+<td class="loc">872942568</td>
+<td class="loc">Microsoft Windows 10 Pro</td>
+<td style="text-align:right"><div class="data-cell" style="justify-content:flex-end"><span class="data-bar" style="width:2px;background:#22c55e"></span>0 %</div></td>
+</tr><tr>
+<td><span class="icon online">✓</span></td>
+<td class="name">LULU-WTC-C-E</td>
+<td class="loc">801320828</td>
+<td class="loc">Microsoft Windows 10 Pro</td>
+<td style="text-align:right"><div class="data-cell" style="justify-content:flex-end"><span class="data-bar" style="width:2px;background:#22c55e"></span>0 %</div></td>
+</tr><tr>
+<td><span class="icon online">✓</span></td>
+<td class="name">LULU-WHDA-C-A</td>
+<td class="loc">819531269</td>
+<td class="loc">Windows 10 Pro</td>
+<td style="text-align:right"><div class="data-cell" style="justify-content:flex-end"><span class="data-bar" style="width:2px;background:#22c55e"></span>0 %</div></td>
+</tr><tr>
+<td><span class="icon online">✓</span></td>
+<td class="name">LULU-WHDA-C-D</td>
+<td class="loc">817153882</td>
+<td class="loc">Microsoft Windows 10 Pro</td>
+<td style="text-align:right"><div class="data-cell" style="justify-content:flex-end"><span class="data-bar" style="width:2px;background:#22c55e"></span>0 %</div></td>
+</tr><tr>
+<td><span class="icon online">✓</span></td>
+<td class="name">LULU-WHDA-C-B</td>
+<td class="loc">817770413</td>
+<td class="loc">Microsoft Windows 10 Pro</td>
+<td style="text-align:right"><div class="data-cell" style="justify-content:flex-end"><span class="data-bar" style="width:2px;background:#22c55e"></span>0 %</div></td>
+</tr><tr>
+<td><span class="icon online">✓</span></td>
+<td class="name">LULU-KHLDY-P4-G</td>
+<td class="loc">872995287</td>
+<td class="loc">Microsoft Windows 10 Pro</td>
+<td style="text-align:right"><div class="data-cell" style="justify-content:flex-end"><span class="data-bar" style="width:2px;background:#22c55e"></span>0 %</div></td>
+</tr><tr>
+<td><span class="icon online">✓</span></td>
+<td class="name">LULU-WTC-ARCH</td>
+<td class="loc">771944269</td>
+<td class="loc">Microsoft Windows 10 Pro</td>
+<td style="text-align:right"><div class="data-cell" style="justify-content:flex-end"><span class="data-bar" style="width:2px;background:#22c55e"></span>0 %</div></td>
+</tr><tr>
+<td><span class="icon online">✓</span></td>
+<td class="name">LULU-KHLFA-P4-I</td>
+<td class="loc">853817875</td>
+<td class="loc">Microsoft Windows 10 Pro</td>
+<td style="text-align:right"><div class="data-cell" style="justify-content:flex-end"><span class="data-bar" style="width:2px;background:#22c55e"></span>0 %</div></td>
+</tr><tr>
+<td><span class="icon online">✓</span></td>
+<td class="name">DESKTOP-J8GL4CP</td>
+<td class="loc">1963214783</td>
+<td class="loc">Windows 11 Pro</td>
+<td style="text-align:right"><div class="data-cell" style="justify-content:flex-end"><span class="data-bar" style="width:2px;background:#22c55e"></span>0 %</div></td>
+</tr><tr>
+<td><span class="icon online">✓</span></td>
+<td class="name">DESKTOP-VLBITIU</td>
+<td class="loc">1963244479</td>
+<td class="loc">Windows 11 Pro</td>
+<td style="text-align:right"><div class="data-cell" style="justify-content:flex-end"><span class="data-bar" style="width:2px;background:#22c55e"></span>0 %</div></td>
+</tr><tr>
+<td><span class="icon online">✓</span></td>
+<td class="name">DESKTOP-BOOQ29O</td>
+<td class="loc">1963362145</td>
+<td class="loc">Windows 11 Pro</td>
+<td style="text-align:right"><div class="data-cell" style="justify-content:flex-end"><span class="data-bar" style="width:2px;background:#22c55e"></span>0 %</div></td>
+</tr><tr>
+<td><span class="icon online">✓</span></td>
+<td class="name">INSTOREPC</td>
+<td class="loc">1963371248</td>
+<td class="loc">Microsoft Windows 11 Pro</td>
+<td style="text-align:right"><div class="data-cell" style="justify-content:flex-end"><span class="data-bar" style="width:2px;background:#22c55e"></span>0 %</div></td>
+</tr><tr>
+<td><span class="icon online">✓</span></td>
+<td class="name">DESKTOP-HKSEIMA</td>
+<td class="loc">1963376793</td>
+<td class="loc">Microsoft Windows 11 Pro</td>
+<td style="text-align:right"><div class="data-cell" style="justify-content:flex-end"><span class="data-bar" style="width:2px;background:#22c55e"></span>0 %</div></td>
+</tr><tr>
+<td><span class="icon online">✓</span></td>
+<td class="name">DESKTOP-8F1QIQE</td>
+<td class="loc">1963362780</td>
+<td class="loc">Windows 11 Pro</td>
+<td style="text-align:right"><div class="data-cell" style="justify-content:flex-end"><span class="data-bar" style="width:2px;background:#22c55e"></span>0 %</div></td>
+</tr><tr>
+<td><span class="icon online">✓</span></td>
+<td class="name">DESKTOP-RETO7GM</td>
+<td class="loc">1963457821</td>
+<td class="loc">Windows 11 Pro</td>
+<td style="text-align:right"><div class="data-cell" style="justify-content:flex-end"><span class="data-bar" style="width:2px;background:#22c55e"></span>0 %</div></td>
+</tr><tr>
+<td><span class="icon online">✓</span></td>
+<td class="name">DESKTOP-0S30A3H</td>
+<td class="loc">1963457916</td>
+<td class="loc">Windows 11 Pro</td>
+<td style="text-align:right"><div class="data-cell" style="justify-content:flex-end"><span class="data-bar" style="width:2px;background:#22c55e"></span>0 %</div></td>
+</tr></tbody></table>
+<div class="top5-section" style="padding:6px 0 0">
+<h3>🔥 Top 5 Data Consumers — Al Wahda</h3>
+<div class="top5-grid"><div class="top5-card">
+<div class="rank">#1</div>
+<div><div class="tname">LULU-MSRF-P-2</div><div class="tloc">LULU MUSHRIF</div></div>
+<div class="tdata" style="color:#eab308">32.76 %</div>
+</div><div class="top5-card">
+<div class="rank">#2</div>
+<div><div class="tname">LULU-MSRF-ENTR1</div><div class="tloc">LULU MUSHRIF</div></div>
+<div class="tdata" style="color:#eab308">32.76 %</div>
+</div><div class="top5-card">
+<div class="rank">#3</div>
+<div><div class="tname">LULU-MSRF-RBBN</div><div class="tloc">LULU MUSHRIF</div></div>
+<div class="tdata" style="color:#eab308">32.76 %</div>
+</div><div class="top5-card">
+<div class="rank">#4</div>
+<div><div class="tname">LULU-KHLDY-P4-I</div><div class="tloc">LULU AL KHALIDIYA</div></div>
+<div class="tdata" style="color:#22c55e">15.12 %</div>
+</div><div class="top5-card">
+<div class="rank">#5</div>
+<div><div class="tname">LULU-KHLDY-P2-L</div><div class="tloc">LULU AL KHALIDIYA</div></div>
+<div class="tdata" style="color:#22c55e">15.1 %</div>
+</div></div></div></div></div>
+<div class="venue-group">
+<h2>🔥 OVERALL TOP 5 DATA CONSUMERS</h2>
+<div class="top5-grid"><div class="top5-card">
+<div class="rank">#1</div>
+<div><div class="tname">DESKTOP-D6J29GK</div><div class="tloc">Union Coop UMM SUQEIM</div></div>
+<div class="tdata" style="color:#ef4444">88.25 %</div>
+</div><div class="top5-card">
+<div class="rank">#2</div>
+<div><div class="tname">DESKTOP-VTM08H0</div><div class="tloc">Union Coop UMM SUQEIM</div></div>
+<div class="tdata" style="color:#ef4444">88.25 %</div>
+</div><div class="top5-card">
+<div class="rank">#3</div>
+<div><div class="tname">DESKTOP-C7OQU4Q</div><div class="tloc">Union Coop AL WARQA</div></div>
+<div class="tdata" style="color:#f59e0b">63.27 %</div>
+</div><div class="top5-card">
+<div class="rank">#4</div>
+<div><div class="tname">instore</div><div class="tloc">Union Coop AL WARQA</div></div>
+<div class="tdata" style="color:#f59e0b">63.27 %</div>
+</div><div class="top5-card">
+<div class="rank">#5</div>
+<div><div class="tname">DESKTOP-0QP9AB0</div><div class="tloc">Union Coop UMM SUQEIM</div></div>
+<div class="tdata" style="color:#f59e0b">62.29 %</div>
+</div></div></div>
+<div class="footer">
+NSOC PC Status Dashboard &middot; Updated 2026-06-15 04:38 UTC &middot; Data via GLPI
+</div>
+</body>
+</html>

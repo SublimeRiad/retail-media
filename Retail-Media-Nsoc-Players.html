@@ -6,594 +6,500 @@
 <title>Retail Media Nsoc Players</title>
 <style>
 *{margin:0;padding:0;box-sizing:border-box}
-body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;background:#0a0c10;color:#e0e2e6;font-size:13px;min-height:100vh;display:flex;flex-direction:column}
+body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;background:#080a0e;color:#e0e2e6;font-size:13px;height:100vh;display:flex;flex-direction:column;overflow:hidden}
 
-/* ── header bar ── */
-.header{background:linear-gradient(135deg,#111318,#1c212d);padding:8px 16px;border-bottom:1px solid #1e293b;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:4px}
-.header h1{font-size:15px;font-weight:700;background:linear-gradient(90deg,#3b82f6,#8b5cf6);-webkit-background-clip:text;-webkit-text-fill-color:transparent;letter-spacing:-.3px}
-.header .sub{color:#64748b;font-size:10px}
+.header{background:linear-gradient(135deg,#0f1117,#161b22);padding:8px 20px;border-bottom:1px solid #1c2330;display:flex;align-items:center;justify-content:space-between;flex-shrink:0}
+.header h1{font-size:15px;font-weight:700;background:linear-gradient(90deg,#3b82f6,#8b5cf6);-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+.header .sub{color:#5b677b;font-size:10px}
 
-/* ── summary chips ── */
-.summary{display:flex;gap:4px;padding:6px 16px;background:#0d0f14;border-bottom:1px solid #161b22;flex-wrap:wrap}
-.sc{background:#141820;border-radius:5px;padding:4px 10px;min-width:64px;flex:0 1 auto;border:1px solid #1c2330;text-align:center}
-.sc .l{font-size:8px;text-transform:uppercase;color:#5b677b;letter-spacing:.3px}
-.sc .v{font-size:14px;font-weight:700;margin-top:1px}
+/* ── donut row ── */
+.donut-row{display:flex;gap:12px;padding:10px 20px;background:#0d0f14;border-bottom:1px solid #161b22;flex-shrink:0;flex-wrap:wrap}
+.donut-card{display:flex;align-items:center;gap:10px;background:#141820;border:1px solid #1c2330;border-radius:8px;padding:8px 14px;flex:1;min-width:160px}
+.donut{width:44px;height:44px;border-radius:50%;position:relative;flex-shrink:0}
+.donut-inner{position:absolute;inset:6px;border-radius:50%;background:#141820;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700}
+.donut-info{}
+.donut-info .dl{font-size:10px;color:#5b677b;font-weight:500}
+.donut-info .dv{font-size:18px;font-weight:700}
+.donut-info .ds{font-size:10px;color:#64748b}
 
-/* ── section layout ── */
-.dash-body{flex:1;padding:6px 12px;display:flex;flex-direction:column;gap:6px;overflow:hidden}
-.venue-row{display:flex;gap:10px;flex-wrap:wrap;flex:1;min-height:0}
-.venue-card{flex:1;min-width:320px;min-height:0;background:#0f1117;border:1px solid #1c2330;border-radius:8px;display:flex;flex-direction:column;overflow:hidden}
-.venue-card-header{display:flex;align-items:center;justify-content:space-between;padding:5px 10px;background:#141820;border-bottom:1px solid #1c2330;flex-shrink:0}
-.venue-card-header h3{font-size:12px;font-weight:600}
-.venue-card-header .badge{font-size:10px;color:#94a3b8}
+/* ── main body scrollable ── */
+.main-body{flex:1;padding:8px 20px;overflow-y:auto;display:flex;flex-direction:column;gap:8px;min-height:0}
 
 /* ── table compact ── */
-.pc-table{width:100%;border-collapse:collapse;font-size:11px;display:flex;flex-direction:column;min-height:0}
-.scroll-wrap{overflow-y:auto;flex:1;min-height:0}
-.scroll-wrap::-webkit-scrollbar{width:4px}
-.scroll-wrap::-webkit-scrollbar-track{background:transparent}
-.scroll-wrap::-webkit-scrollbar-thumb{background:#1c2330;border-radius:2px}
-.pc-table thead,.pc-table tbody{display:table;width:100%;table-layout:fixed}
-.pc-table th{text-align:left;padding:4px 8px;background:#0d0f14;color:#5b677b;font-weight:500;font-size:9px;text-transform:uppercase;letter-spacing:.4px;border-bottom:1px solid #1c2330}
-.pc-table td{padding:2px 6px;border-bottom:1px solid #131820;white-space:nowrap}
-.pc-table tr:hover td{background:#141820}
-.pc-table .name-col{font-weight:500;font-family:'SF Mono',Consolas,monospace;font-size:10px;max-width:100px;overflow:hidden;text-overflow:ellipsis}
-.pc-table .meta{color:#6b7c93;font-size:9px}
-.pc-table .sn-col{color:#6b7c93;font-size:9px;max-width:120px;overflow:hidden;text-overflow:ellipsis}
-.pc-table .tr{text-align:right}
-
+.pc-list{width:100%;border-collapse:collapse;font-size:11px}
+.pc-list th{text-align:left;padding:3px 8px;background:#0d0f14;color:#5b677b;font-weight:500;font-size:9px;text-transform:uppercase;letter-spacing:.3px;border-bottom:1px solid #1c2330;position:sticky;top:0;z-index:1}
+.pc-list td{padding:2px 8px;border-bottom:1px solid #11151c;white-space:nowrap}
+.pc-list .name{font-weight:500;font-family:'SF Mono',Consolas,monospace;font-size:10px;max-width:130px;overflow:hidden;text-overflow:ellipsis}
+.pc-list .sn{color:#6b7c93;font-size:9px;max-width:140px;overflow:hidden;text-overflow:ellipsis}
+.pc-list .tr{text-align:right}
+.pc-list .alert-60{background:linear-gradient(90deg,rgba(239,68,68,0.08),transparent)}
+.pc-list .alert-80{background:linear-gradient(90deg,rgba(239,68,68,0.15),transparent)}
 .data-cell{display:inline-flex;align-items:center;gap:3px;font-family:'SF Mono',Consolas,monospace;font-size:10px}
 .data-bar{display:inline-block;height:5px;border-radius:2px;min-width:2px}
 .icon{display:inline-flex;align-items:center;justify-content:center;width:14px;height:14px;border-radius:50%;font-size:7px;font-weight:700;flex-shrink:0}
 .icon.online{background:#052e16;color:#4ade80;border:1px solid #166534}
 .icon.offline{background:#450a0a;color:#ef4444;border:1px solid #7f1d1d}
 
+/* ── alert banner ── */
+.alert-bar{background:linear-gradient(90deg,rgba(239,68,68,0.1),rgba(249,115,22,0.08));border:1px solid rgba(239,68,68,0.2);border-radius:6px;padding:6px 12px;display:flex;align-items:center;gap:8px;flex-shrink:0;font-size:11px}
+.alert-bar .dot{width:8px;height:8px;border-radius:50%;background:#ef4444;flex-shrink:0;animation:pulse 2s infinite}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.4}}
+.alert-bar .anum{font-weight:700;color:#ef4444;font-family:'SF Mono',Consolas,monospace}
+
 /* ── top5 ── */
-.top5-row{display:flex;gap:10px;flex-wrap:wrap}
-.top5-card{background:#141820;border:1px solid #1c2330;border-radius:6px;padding:4px 6px;display:flex;align-items:center;gap:6px;flex:1;min-width:180px}
-.top5-card .rank{font-size:12px;font-weight:700;color:#5b677b;min-width:16px}
+.top5-row{display:flex;gap:6px;flex-wrap:wrap;flex-shrink:0}
+.top5-card{background:#141820;border:1px solid #1c2330;border-radius:6px;padding:4px 8px;display:flex;align-items:center;gap:6px;flex:1;min-width:130px}
+.top5-card .rank{font-size:11px;font-weight:700;color:#5b677b;min-width:14px}
 .top5-card .tname{font-weight:500;font-size:9px;flex:1;overflow:hidden;text-overflow:ellipsis}
-.top5-card .tloc{font-size:8px;color:#5b677b}
-.top5-card .tdata{font-size:10px;font-weight:700;font-family:'SF Mono',Consolas,monospace;white-space:nowrap}
+.top5-card .tdata{font-size:10px;font-weight:700;font-family:'SF Mono',Consolas,monospace}
 
-.footer{text-align:center;padding:6px;color:#3b4557;font-size:9px;border-top:1px solid #131820;flex-shrink:0}
+.footer{text-align:center;padding:4px;color:#3b4557;font-size:9px;border-top:1px solid #131820;flex-shrink:0}
 
-
-
-/* ── fullscreen 1080p ── */
-@media(min-width:1800px){
- .dash-body{padding:10px 24px}
- .venue-card{min-width:380px}
-}
+::-webkit-scrollbar{width:4px}
+::-webkit-scrollbar-track{background:transparent}
+::-webkit-scrollbar-thumb{background:#1c2330;border-radius:2px}
 </style></head>
-<body>
-<div class="header">
+<body><div class="header">
 <div><h1>Retail Media Nsoc Players</h1></div>
-<div class="sub">2026-06-15 08:58 GST</div>
+<div class="sub">2026-06-15 09:03 GST</div>
+</div><div class="donut-row"><div class="donut-card">
+<div class="donut" style="background:conic-gradient(#22c55e 0% 100%)"><div class="donut-inner">100%</div></div>
+<div class="donut-info">
+<div class="dl" style="color:#3b82f6">Umm Suqeim</div>
+<div class="dv">15<span style="font-size:12px;color:#64748b;font-weight:400">/15</span></div>
+<div class="ds">0 offline</div>
 </div>
-
-<div class="summary">
-<div class="sc"><div class="l">Total</div><div class="v">78</div></div>
-<div class="sc"><div class="l">Online</div><div class="v" style="color:#4ade80">78</div></div>
-<div class="sc"><div class="l">Offline</div><div class="v" style="color:#ef4444">0</div></div>
-<div class="sc"><div class="l">Umm Suqeim</div><div class="v" style="color:#3b82f6">15</div></div>
-<div class="sc"><div class="l">Al Warqa</div><div class="v" style="color:#8b5cf6">16</div></div>
-<div class="sc"><div class="l">Lulu Market</div><div class="v" style="color:#f59e0b">47</div></div>
+</div><div class="donut-card">
+<div class="donut" style="background:conic-gradient(#22c55e 0% 100%)"><div class="donut-inner">100%</div></div>
+<div class="donut-info">
+<div class="dl" style="color:#8b5cf6">Al Warqa</div>
+<div class="dv">16<span style="font-size:12px;color:#64748b;font-weight:400">/16</span></div>
+<div class="ds">0 offline</div>
 </div>
-
-<div class="dash-body"><div class="venue-row"><div class="venue-card" style="border-top:2px solid #2563eb">
-<div class="venue-card-header" style="padding:4px 8px">
-<h3 style="color:#3b82f6;font-size:11px">Umm Suqeim</h3>
-<span class="badge" style="font-size:9px">15 PCs · 15 online · 0 offline</span>
+</div><div class="donut-card">
+<div class="donut" style="background:conic-gradient(#22c55e 0% 100%)"><div class="donut-inner">100%</div></div>
+<div class="donut-info">
+<div class="dl" style="color:#f59e0b">Lulu Market</div>
+<div class="dv">47<span style="font-size:12px;color:#64748b;font-weight:400">/47</span></div>
+<div class="ds">0 offline</div>
 </div>
-<div class="scroll-wrap">
-<table class="pc-table"><thead><tr><th style="width:16px">S</th><th>Name</th><th>Screen Name</th><th style="width:50px">Tag</th><th style="width:64px;text-align:right">Data</th></tr></thead><tbody><tr>
+</div><div class="donut-card" style="flex:0.6;min-width:100px">
+<div class="donut" style="width:36px;height:36px;background:conic-gradient(#22c55e 0% 100%)"><div class="donut-inner" style="inset:5px;font-size:10px">100%</div></div>
+<div class="donut-info">
+<div class="dl">Total</div>
+<div class="dv" style="font-size:15px">78<span style="font-size:11px;color:#64748b;font-weight:400">/78</span></div>
+</div>
+</div></div><div class="main-body"><div class="alert-bar"><span class="dot"></span><span class="anum">6</span> PC(s) dépassent 60% de consommation data</div><table class="pc-list"><thead><tr><th style="width:18px">S</th><th>Name</th><th>Screen Name</th><th style="width:68px;text-align:right">Data</th></tr></thead><tbody><tr class=" alert-80">
 <td><span class="icon online">✓</span></td>
-<td class="name-col" title="DESKTOP-D6J29GK">DESKTOP-D6J29GK</td>
-<td class="sn-col" title="UMM SUQEIM-LCD Hanging Screen 3B - In Store AISLE">UMM SUQEIM-LCD Hanging Screen 3B - In Store AISLE</td>
-<td class="meta">1941073020</td>
-<td class="tr"><div class="data-cell"><span class="data-bar" style="width:88.25px;background:#ef4444"></span>88.25 %</div></td>
-</tr><tr>
+<td class="name" title="DESKTOP-D6J29GK">DESKTOP-D6J29GK</td>
+<td class="sn" title="UMM SUQEIM-LCD Hanging Screen 3B - In Store AISLE">UMM SUQEIM-LCD Hanging Screen 3B - In Store AISLE</td>
+<td class="tr"><div class="data-cell"><span class="data-bar" style="width:96.97px;background:#ef4444"></span>96.97 %</div></td>
+</tr><tr class=" alert-80">
 <td><span class="icon online">✓</span></td>
-<td class="name-col" title="DESKTOP-VTM08H0">DESKTOP-VTM08H0</td>
-<td class="sn-col" title="UMM SUQEIM-LCD Hanging Screen 3A - In Store AISLE">UMM SUQEIM-LCD Hanging Screen 3A - In Store AISLE</td>
-<td class="meta">1941070099</td>
-<td class="tr"><div class="data-cell"><span class="data-bar" style="width:88.25px;background:#ef4444"></span>88.25 %</div></td>
-</tr><tr>
+<td class="name" title="DESKTOP-VTM08H0">DESKTOP-VTM08H0</td>
+<td class="sn" title="UMM SUQEIM-LCD Hanging Screen 3A - In Store AISLE">UMM SUQEIM-LCD Hanging Screen 3A - In Store AISLE</td>
+<td class="tr"><div class="data-cell"><span class="data-bar" style="width:96.96px;background:#ef4444"></span>96.96 %</div></td>
+</tr><tr class=" alert-60">
 <td><span class="icon online">✓</span></td>
-<td class="name-col" title="DESKTOP-0QP9AB0">DESKTOP-0QP9AB0</td>
-<td class="sn-col" title="UMM SUQEIM-LCD Hanging Screen 4B - In Store AISLE">UMM SUQEIM-LCD Hanging Screen 4B - In Store AISLE</td>
-<td class="meta">1941083848</td>
-<td class="tr"><div class="data-cell"><span class="data-bar" style="width:62.29px;background:#f59e0b"></span>62.29 %</div></td>
-</tr><tr>
+<td class="name" title="DESKTOP-0QP9AB0">DESKTOP-0QP9AB0</td>
+<td class="sn" title="UMM SUQEIM-LCD Hanging Screen 4B - In Store AISLE">UMM SUQEIM-LCD Hanging Screen 4B - In Store AISLE</td>
+<td class="tr"><div class="data-cell"><span class="data-bar" style="width:66.68px;background:#f97316"></span>66.68 %</div></td>
+</tr><tr class=" alert-60">
 <td><span class="icon online">✓</span></td>
-<td class="name-col" title="DESKTOP-V1VPUTR">DESKTOP-V1VPUTR</td>
-<td class="sn-col" title="UMM SUQEIM-LCD Hanging Screen 4A - In Store AISLE">UMM SUQEIM-LCD Hanging Screen 4A - In Store AISLE</td>
-<td class="meta">1941083797</td>
-<td class="tr"><div class="data-cell"><span class="data-bar" style="width:62.29px;background:#f59e0b"></span>62.29 %</div></td>
-</tr><tr>
+<td class="name" title="DESKTOP-V1VPUTR">DESKTOP-V1VPUTR</td>
+<td class="sn" title="UMM SUQEIM-LCD Hanging Screen 4A - In Store AISLE">UMM SUQEIM-LCD Hanging Screen 4A - In Store AISLE</td>
+<td class="tr"><div class="data-cell"><span class="data-bar" style="width:66.68px;background:#f97316"></span>66.68 %</div></td>
+</tr><tr class=" alert-60">
 <td><span class="icon online">✓</span></td>
-<td class="name-col" title="DESKTOP-QOJKQ58">DESKTOP-QOJKQ58</td>
-<td class="sn-col" title="UMM SUQEIM-LCD Hanging Screen 2B - In Store AISLE">UMM SUQEIM-LCD Hanging Screen 2B - In Store AISLE</td>
-<td class="meta">1941082177</td>
-<td class="tr"><div class="data-cell"><span class="data-bar" style="width:43.04px;background:#eab308"></span>43.04 %</div></td>
-</tr><tr>
+<td class="name" title="DESKTOP-C7OQU4Q">DESKTOP-C7OQU4Q</td>
+<td class="sn" title="AL WARQA-LCD Hanging Screen 4A - In Store AISLE">AL WARQA-LCD Hanging Screen 4A - In Store AISLE</td>
+<td class="tr"><div class="data-cell"><span class="data-bar" style="width:66.67px;background:#f97316"></span>66.67 %</div></td>
+</tr><tr class=" alert-60">
 <td><span class="icon online">✓</span></td>
-<td class="name-col" title="DESKTOP-A86104T">DESKTOP-A86104T</td>
-<td class="sn-col" title="UMM SUQEIM-LCD Hanging Screen 2A - In Store AISLE">UMM SUQEIM-LCD Hanging Screen 2A - In Store AISLE</td>
-<td class="meta">1941081308</td>
-<td class="tr"><div class="data-cell"><span class="data-bar" style="width:43.04px;background:#eab308"></span>43.04 %</div></td>
-</tr><tr>
+<td class="name" title="instore">instore</td>
+<td class="sn" title="AL WARQA-LCD Hanging Screen 4B - In Store AISLE">AL WARQA-LCD Hanging Screen 4B - In Store AISLE</td>
+<td class="tr"><div class="data-cell"><span class="data-bar" style="width:66.67px;background:#f97316"></span>66.67 %</div></td>
+</tr><tr class="">
 <td><span class="icon online">✓</span></td>
-<td class="name-col" title="PC-E43A6E5D6D59">PC-E43A6E5D6D59</td>
-<td class="sn-col" title="UMM SUQEIM-PILLAR 1D-b - In Store AISLE">UMM SUQEIM-PILLAR 1D-b - In Store AISLE</td>
-<td class="meta">845327402</td>
-<td class="tr"><div class="data-cell"><span class="data-bar" style="width:40.89px;background:#eab308"></span>40.89 %</div></td>
-</tr><tr>
+<td class="name" title="DESKTOP-0JBMRIA">DESKTOP-0JBMRIA</td>
+<td class="sn" title="AL WARQA-LCD Hanging Screen 2B - In Store AISLE">AL WARQA-LCD Hanging Screen 2B - In Store AISLE</td>
+<td class="tr"><div class="data-cell"><span class="data-bar" style="width:53.66px;background:#eab308"></span>53.66 %</div></td>
+</tr><tr class="">
 <td><span class="icon online">✓</span></td>
-<td class="name-col" title="UMM-SUQEIM-H-EN">UMM-SUQEIM-H-EN</td>
-<td class="sn-col" title="UMM SUQEIM-Entrance Screen - In Store Gates">UMM SUQEIM-Entrance Screen - In Store Gates</td>
-<td class="meta">846447206</td>
-<td class="tr"><div class="data-cell"><span class="data-bar" style="width:39.55px;background:#eab308"></span>39.55 %</div></td>
-</tr><tr>
+<td class="name" title="DESKTOP-LJ48QVN">DESKTOP-LJ48QVN</td>
+<td class="sn" title="AL WARQA-LCD Hanging Screen 2A - In Store AISLE">AL WARQA-LCD Hanging Screen 2A - In Store AISLE</td>
+<td class="tr"><div class="data-cell"><span class="data-bar" style="width:53.64px;background:#eab308"></span>53.64 %</div></td>
+</tr><tr class="">
 <td><span class="icon online">✓</span></td>
-<td class="name-col" title="DESKTOP-OT7TG9A">DESKTOP-OT7TG9A</td>
-<td class="sn-col" title="UMM SUQEIM-LCD Hanging Screen 1B - In Store AISLE">UMM SUQEIM-LCD Hanging Screen 1B - In Store AISLE</td>
-<td class="meta">1941725172</td>
-<td class="tr"><div class="data-cell"><span class="data-bar" style="width:39.14px;background:#eab308"></span>39.14 %</div></td>
-</tr><tr>
+<td class="name" title="DESKTOP-S82A2FD">DESKTOP-S82A2FD</td>
+<td class="sn" title="AL WARQA-LCD Hanging Screen 1A - In Store AISLE">AL WARQA-LCD Hanging Screen 1A - In Store AISLE</td>
+<td class="tr"><div class="data-cell"><span class="data-bar" style="width:53.57px;background:#eab308"></span>53.57 %</div></td>
+</tr><tr class="">
 <td><span class="icon online">✓</span></td>
-<td class="name-col" title="DESKTOP-C0U16E0">DESKTOP-C0U16E0</td>
-<td class="sn-col" title="UMM SUQEIM-LCD Hanging Screen 1A - In Store AISLE">UMM SUQEIM-LCD Hanging Screen 1A - In Store AISLE</td>
-<td class="meta">1941726206</td>
-<td class="tr"><div class="data-cell"><span class="data-bar" style="width:39.14px;background:#eab308"></span>39.14 %</div></td>
-</tr><tr>
+<td class="name" title="DESKTOP-P045QOV">DESKTOP-P045QOV</td>
+<td class="sn" title="AL WARQA-LCD Hanging Screen 1B - In Store AISLE">AL WARQA-LCD Hanging Screen 1B - In Store AISLE</td>
+<td class="tr"><div class="data-cell"><span class="data-bar" style="width:53.57px;background:#eab308"></span>53.57 %</div></td>
+</tr><tr class="">
 <td><span class="icon online">✓</span></td>
-<td class="name-col" title="uMM-SUQEIM-H-C">uMM-SUQEIM-H-C</td>
-<td class="sn-col" title="UMM SUQEIM-PILLAR 1C-b - In Store AISLE">UMM SUQEIM-PILLAR 1C-b - In Store AISLE</td>
-<td class="meta">845327152</td>
-<td class="tr"><div class="data-cell"><span class="data-bar" style="width:36.04px;background:#eab308"></span>36.04 %</div></td>
-</tr><tr>
+<td class="name" title="DESKTOP-B8KKPF0">DESKTOP-B8KKPF0</td>
+<td class="sn" title="AL WARQA-LCD Hanging Screen 3A - In Store AISLE">AL WARQA-LCD Hanging Screen 3A - In Store AISLE</td>
+<td class="tr"><div class="data-cell"><span class="data-bar" style="width:46.46px;background:#eab308"></span>46.46 %</div></td>
+</tr><tr class="">
 <td><span class="icon online">✓</span></td>
-<td class="name-col" title="UMM-SUQEIM-H-B">UMM-SUQEIM-H-B</td>
-<td class="sn-col" title="UMM SUQEIM-PILLAR 1B-b - In Store AISLE">UMM SUQEIM-PILLAR 1B-b - In Store AISLE</td>
-<td class="meta">845323473</td>
-<td class="tr"><div class="data-cell"><span class="data-bar" style="width:32.18px;background:#eab308"></span>32.18 %</div></td>
-</tr><tr>
+<td class="name" title="DESKTOP-B799TNL">DESKTOP-B799TNL</td>
+<td class="sn" title="AL WARQA-LCD Hanging Screen 3B - In Store AISLE">AL WARQA-LCD Hanging Screen 3B - In Store AISLE</td>
+<td class="tr"><div class="data-cell"><span class="data-bar" style="width:46.46px;background:#eab308"></span>46.46 %</div></td>
+</tr><tr class="">
 <td><span class="icon online">✓</span></td>
-<td class="name-col" title="UMM-SUQEIM-H-A">UMM-SUQEIM-H-A</td>
-<td class="sn-col" title="UMM SUQEIM-PILLAR 1A-b - In Store AISLE">UMM SUQEIM-PILLAR 1A-b - In Store AISLE</td>
-<td class="meta">845322532</td>
-<td class="tr"><div class="data-cell"><span class="data-bar" style="width:28.21px;background:#eab308"></span>28.21 %</div></td>
-</tr><tr>
+<td class="name" title="DESKTOP-QOJKQ58">DESKTOP-QOJKQ58</td>
+<td class="sn" title="UMM SUQEIM-LCD Hanging Screen 2B - In Store AISLE">UMM SUQEIM-LCD Hanging Screen 2B - In Store AISLE</td>
+<td class="tr"><div class="data-cell"><span class="data-bar" style="width:45.75px;background:#eab308"></span>45.75 %</div></td>
+</tr><tr class="">
 <td><span class="icon online">✓</span></td>
-<td class="name-col" title="UMM-SUQEIM-H-F">UMM-SUQEIM-H-F</td>
-<td class="sn-col" title="UMM SUQEIM-PILLAR 1F-b - In Store AISLE">UMM SUQEIM-PILLAR 1F-b - In Store AISLE</td>
-<td class="meta">845328240</td>
+<td class="name" title="DESKTOP-A86104T">DESKTOP-A86104T</td>
+<td class="sn" title="UMM SUQEIM-LCD Hanging Screen 2A - In Store AISLE">UMM SUQEIM-LCD Hanging Screen 2A - In Store AISLE</td>
+<td class="tr"><div class="data-cell"><span class="data-bar" style="width:45.75px;background:#eab308"></span>45.75 %</div></td>
+</tr><tr class="">
+<td><span class="icon online">✓</span></td>
+<td class="name" title="PC-E43A6E5D6D59">PC-E43A6E5D6D59</td>
+<td class="sn" title="UMM SUQEIM-PILLAR 1D-b - In Store AISLE">UMM SUQEIM-PILLAR 1D-b - In Store AISLE</td>
+<td class="tr"><div class="data-cell"><span class="data-bar" style="width:43.75px;background:#eab308"></span>43.75 %</div></td>
+</tr><tr class="">
+<td><span class="icon online">✓</span></td>
+<td class="name" title="DESKTOP-OT7TG9A">DESKTOP-OT7TG9A</td>
+<td class="sn" title="UMM SUQEIM-LCD Hanging Screen 1B - In Store AISLE">UMM SUQEIM-LCD Hanging Screen 1B - In Store AISLE</td>
+<td class="tr"><div class="data-cell"><span class="data-bar" style="width:41.25px;background:#eab308"></span>41.25 %</div></td>
+</tr><tr class="">
+<td><span class="icon online">✓</span></td>
+<td class="name" title="DESKTOP-C0U16E0">DESKTOP-C0U16E0</td>
+<td class="sn" title="UMM SUQEIM-LCD Hanging Screen 1A - In Store AISLE">UMM SUQEIM-LCD Hanging Screen 1A - In Store AISLE</td>
+<td class="tr"><div class="data-cell"><span class="data-bar" style="width:41.25px;background:#eab308"></span>41.25 %</div></td>
+</tr><tr class="">
+<td><span class="icon online">✓</span></td>
+<td class="name" title="uMM-SUQEIM-H-C">uMM-SUQEIM-H-C</td>
+<td class="sn" title="UMM SUQEIM-PILLAR 1C-b - In Store AISLE">UMM SUQEIM-PILLAR 1C-b - In Store AISLE</td>
+<td class="tr"><div class="data-cell"><span class="data-bar" style="width:38.04px;background:#eab308"></span>38.04 %</div></td>
+</tr><tr class="">
+<td><span class="icon online">✓</span></td>
+<td class="name" title="LULU-MSRF-ENTR2">LULU-MSRF-ENTR2</td>
+<td class="sn" title="MUSHRIF-ENTRANCE-PILLAR-04 - In Store AISLE">MUSHRIF-ENTRANCE-PILLAR-04 - In Store AISLE</td>
+<td class="tr"><div class="data-cell"><span class="data-bar" style="width:34.53px;background:#eab308"></span>34.53 %</div></td>
+</tr><tr class="">
+<td><span class="icon online">✓</span></td>
+<td class="name" title="LULU-MSRF-P-2">LULU-MSRF-P-2</td>
+<td class="sn" title="MUSHRIF-INSIDE-PILLAR-1f - In Store AISLE">MUSHRIF-INSIDE-PILLAR-1f - In Store AISLE</td>
+<td class="tr"><div class="data-cell"><span class="data-bar" style="width:34.53px;background:#eab308"></span>34.53 %</div></td>
+</tr><tr class="">
+<td><span class="icon online">✓</span></td>
+<td class="name" title="LULU-MSRF-ENTR1">LULU-MSRF-ENTR1</td>
+<td class="sn" title="MUSHRIF-ENTRANCE-PILLAR-03 - In Store AISLE">MUSHRIF-ENTRANCE-PILLAR-03 - In Store AISLE</td>
+<td class="tr"><div class="data-cell"><span class="data-bar" style="width:34.53px;background:#eab308"></span>34.53 %</div></td>
+</tr><tr class="">
+<td><span class="icon online">✓</span></td>
+<td class="name" title="LULU-MSRF-RBBN">LULU-MSRF-RBBN</td>
+<td class="sn" title="MUSHRIF-Long LED Banner-02 - In Store AISLE">MUSHRIF-Long LED Banner-02 - In Store AISLE</td>
+<td class="tr"><div class="data-cell"><span class="data-bar" style="width:34.53px;background:#eab308"></span>34.53 %</div></td>
+</tr><tr class="">
+<td><span class="icon online">✓</span></td>
+<td class="name" title="UMM-SUQEIM-H-B">UMM-SUQEIM-H-B</td>
+<td class="sn" title="UMM SUQEIM-PILLAR 1B-b - In Store AISLE">UMM SUQEIM-PILLAR 1B-b - In Store AISLE</td>
+<td class="tr"><div class="data-cell"><span class="data-bar" style="width:34.37px;background:#eab308"></span>34.37 %</div></td>
+</tr><tr class="">
+<td><span class="icon online">✓</span></td>
+<td class="name" title="UMM-SUQEIM-H-EN">UMM-SUQEIM-H-EN</td>
+<td class="sn" title="UMM SUQEIM-Entrance Screen - In Store Gates">UMM SUQEIM-Entrance Screen - In Store Gates</td>
+<td class="tr"><div class="data-cell"><span class="data-bar" style="width:32.68px;background:#eab308"></span>32.68 %</div></td>
+</tr><tr class="">
+<td><span class="icon online">✓</span></td>
+<td class="name" title="WARQA-H-G">WARQA-H-G</td>
+<td class="sn" title="AL WARQA-HANGING 1G-d - In Store AISLE">AL WARQA-HANGING 1G-d - In Store AISLE</td>
+<td class="tr"><div class="data-cell"><span class="data-bar" style="width:31.89px;background:#eab308"></span>31.89 %</div></td>
+</tr><tr class="">
+<td><span class="icon online">✓</span></td>
+<td class="name" title="WARQA-H-E">WARQA-H-E</td>
+<td class="sn" title="AL WARQA-HANGING 1E-d - In Store AISLE">AL WARQA-HANGING 1E-d - In Store AISLE</td>
+<td class="tr"><div class="data-cell"><span class="data-bar" style="width:31.1px;background:#eab308"></span>31.1 %</div></td>
+</tr><tr class="">
+<td><span class="icon online">✓</span></td>
+<td class="name" title="UMM-SUQEIM-H-A">UMM-SUQEIM-H-A</td>
+<td class="sn" title="UMM SUQEIM-PILLAR 1A-b - In Store AISLE">UMM SUQEIM-PILLAR 1A-b - In Store AISLE</td>
+<td class="tr"><div class="data-cell"><span class="data-bar" style="width:28.36px;background:#22c55e"></span>28.36 %</div></td>
+</tr><tr class="">
+<td><span class="icon online">✓</span></td>
+<td class="name" title="WARQA-H-F">WARQA-H-F</td>
+<td class="sn" title="AL WARQA-HANGING 1F-d - In Store AISLE">AL WARQA-HANGING 1F-d - In Store AISLE</td>
+<td class="tr"><div class="data-cell"><span class="data-bar" style="width:24.87px;background:#22c55e"></span>24.87 %</div></td>
+</tr><tr class="">
+<td><span class="icon online">✓</span></td>
+<td class="name" title="WARQA-H-D">WARQA-H-D</td>
+<td class="sn" title="AL WARQA-HANGING 1D-d - In Store AISLE">AL WARQA-HANGING 1D-d - In Store AISLE</td>
+<td class="tr"><div class="data-cell"><span class="data-bar" style="width:24.5px;background:#22c55e"></span>24.5 %</div></td>
+</tr><tr class="">
+<td><span class="icon online">✓</span></td>
+<td class="name" title="WARQA-H-A">WARQA-H-A</td>
+<td class="sn" title="AL WARQA-HANGING 1A-d - In Store AISLE">AL WARQA-HANGING 1A-d - In Store AISLE</td>
+<td class="tr"><div class="data-cell"><span class="data-bar" style="width:22.78px;background:#22c55e"></span>22.78 %</div></td>
+</tr><tr class="">
+<td><span class="icon online">✓</span></td>
+<td class="name" title="WARQA-H-B">WARQA-H-B</td>
+<td class="sn" title="AL WARQA-HANGING 1B-d - In Store AISLE">AL WARQA-HANGING 1B-d - In Store AISLE</td>
+<td class="tr"><div class="data-cell"><span class="data-bar" style="width:21.46px;background:#22c55e"></span>21.46 %</div></td>
+</tr><tr class="">
+<td><span class="icon online">✓</span></td>
+<td class="name" title="WARQA-H-C">WARQA-H-C</td>
+<td class="sn" title="AL WARQA-HANGING 1C-d - In Store AISLE">AL WARQA-HANGING 1C-d - In Store AISLE</td>
+<td class="tr"><div class="data-cell"><span class="data-bar" style="width:20.39px;background:#22c55e"></span>20.39 %</div></td>
+</tr><tr class="">
+<td><span class="icon online">✓</span></td>
+<td class="name" title="UMM-SUQEIM-H-F">UMM-SUQEIM-H-F</td>
+<td class="sn" title="UMM SUQEIM-PILLAR 1F-b - In Store AISLE">UMM SUQEIM-PILLAR 1F-b - In Store AISLE</td>
 <td class="tr"><div class="data-cell"><span class="data-bar" style="width:19.72px;background:#22c55e"></span>19.72 %</div></td>
-</tr><tr>
+</tr><tr class="">
 <td><span class="icon online">✓</span></td>
-<td class="name-col" title="UMM-SUQEIM-H-E">UMM-SUQEIM-H-E</td>
-<td class="sn-col" title="UMM SUQEIM-PILLAR 1E-b - In Store AISLE">UMM SUQEIM-PILLAR 1E-b - In Store AISLE</td>
-<td class="meta">845328088</td>
-<td class="tr"><div class="data-cell"><span class="data-bar" style="width:2px;background:#22c55e"></span>0 %</div></td>
-</tr></tbody></table>
-</div>
-</div><div class="venue-card" style="border-top:2px solid #7c3aed">
-<div class="venue-card-header" style="padding:4px 8px">
-<h3 style="color:#8b5cf6;font-size:11px">Al Warqa</h3>
-<span class="badge" style="font-size:9px">16 PCs · 16 online · 0 offline</span>
-</div>
-<div class="scroll-wrap">
-<table class="pc-table"><thead><tr><th style="width:16px">S</th><th>Name</th><th>Screen Name</th><th style="width:50px">Tag</th><th style="width:64px;text-align:right">Data</th></tr></thead><tbody><tr>
+<td class="name" title="LULU-KHLDY-P4-I">LULU-KHLDY-P4-I</td>
+<td class="sn" title="AL KHALIDIYA-PILLAR01H-c - In Store AISLE">AL KHALIDIYA-PILLAR01H-c - In Store AISLE</td>
+<td class="tr"><div class="data-cell"><span class="data-bar" style="width:15.98px;background:#22c55e"></span>15.98 %</div></td>
+</tr><tr class="">
 <td><span class="icon online">✓</span></td>
-<td class="name-col" title="DESKTOP-C7OQU4Q">DESKTOP-C7OQU4Q</td>
-<td class="sn-col" title="AL WARQA-LCD Hanging Screen 4A - In Store AISLE">AL WARQA-LCD Hanging Screen 4A - In Store AISLE</td>
-<td class="meta">1907489509</td>
-<td class="tr"><div class="data-cell"><span class="data-bar" style="width:63.27px;background:#f59e0b"></span>63.27 %</div></td>
-</tr><tr>
-<td><span class="icon online">✓</span></td>
-<td class="name-col" title="instore">instore</td>
-<td class="sn-col" title="AL WARQA-LCD Hanging Screen 4B - In Store AISLE">AL WARQA-LCD Hanging Screen 4B - In Store AISLE</td>
-<td class="meta">1912320709</td>
-<td class="tr"><div class="data-cell"><span class="data-bar" style="width:63.27px;background:#f59e0b"></span>63.27 %</div></td>
-</tr><tr>
-<td><span class="icon online">✓</span></td>
-<td class="name-col" title="DESKTOP-S82A2FD">DESKTOP-S82A2FD</td>
-<td class="sn-col" title="AL WARQA-LCD Hanging Screen 1A - In Store AISLE">AL WARQA-LCD Hanging Screen 1A - In Store AISLE</td>
-<td class="meta">1912321155</td>
-<td class="tr"><div class="data-cell"><span class="data-bar" style="width:50.46px;background:#f59e0b"></span>50.46 %</div></td>
-</tr><tr>
-<td><span class="icon online">✓</span></td>
-<td class="name-col" title="DESKTOP-LJ48QVN">DESKTOP-LJ48QVN</td>
-<td class="sn-col" title="AL WARQA-LCD Hanging Screen 2A - In Store AISLE">AL WARQA-LCD Hanging Screen 2A - In Store AISLE</td>
-<td class="meta">1912324356</td>
-<td class="tr"><div class="data-cell"><span class="data-bar" style="width:50.07px;background:#f59e0b"></span>50.07 %</div></td>
-</tr><tr>
-<td><span class="icon online">✓</span></td>
-<td class="name-col" title="DESKTOP-0JBMRIA">DESKTOP-0JBMRIA</td>
-<td class="sn-col" title="AL WARQA-LCD Hanging Screen 2B - In Store AISLE">AL WARQA-LCD Hanging Screen 2B - In Store AISLE</td>
-<td class="meta">1912950601</td>
-<td class="tr"><div class="data-cell"><span class="data-bar" style="width:50.06px;background:#f59e0b"></span>50.06 %</div></td>
-</tr><tr>
-<td><span class="icon online">✓</span></td>
-<td class="name-col" title="DESKTOP-P045QOV">DESKTOP-P045QOV</td>
-<td class="sn-col" title="AL WARQA-LCD Hanging Screen 1B - In Store AISLE">AL WARQA-LCD Hanging Screen 1B - In Store AISLE</td>
-<td class="meta">1912322297</td>
-<td class="tr"><div class="data-cell"><span class="data-bar" style="width:46.07px;background:#eab308"></span>46.07 %</div></td>
-</tr><tr>
-<td><span class="icon online">✓</span></td>
-<td class="name-col" title="DESKTOP-B8KKPF0">DESKTOP-B8KKPF0</td>
-<td class="sn-col" title="AL WARQA-LCD Hanging Screen 3A - In Store AISLE">AL WARQA-LCD Hanging Screen 3A - In Store AISLE</td>
-<td class="meta">1912325227</td>
-<td class="tr"><div class="data-cell"><span class="data-bar" style="width:44.04px;background:#eab308"></span>44.04 %</div></td>
-</tr><tr>
-<td><span class="icon online">✓</span></td>
-<td class="name-col" title="DESKTOP-B799TNL">DESKTOP-B799TNL</td>
-<td class="sn-col" title="AL WARQA-LCD Hanging Screen 3B - In Store AISLE">AL WARQA-LCD Hanging Screen 3B - In Store AISLE</td>
-<td class="meta">1912325628</td>
-<td class="tr"><div class="data-cell"><span class="data-bar" style="width:44.04px;background:#eab308"></span>44.04 %</div></td>
-</tr><tr>
-<td><span class="icon online">✓</span></td>
-<td class="name-col" title="WARQA-H-G">WARQA-H-G</td>
-<td class="sn-col" title="AL WARQA-HANGING 1G-d - In Store AISLE">AL WARQA-HANGING 1G-d - In Store AISLE</td>
-<td class="meta">842707388</td>
-<td class="tr"><div class="data-cell"><span class="data-bar" style="width:29.64px;background:#eab308"></span>29.64 %</div></td>
-</tr><tr>
-<td><span class="icon online">✓</span></td>
-<td class="name-col" title="WARQA-H-E">WARQA-H-E</td>
-<td class="sn-col" title="AL WARQA-HANGING 1E-d - In Store AISLE">AL WARQA-HANGING 1E-d - In Store AISLE</td>
-<td class="meta">844956739</td>
-<td class="tr"><div class="data-cell"><span class="data-bar" style="width:29.07px;background:#eab308"></span>29.07 %</div></td>
-</tr><tr>
-<td><span class="icon online">✓</span></td>
-<td class="name-col" title="WARQA-H-F">WARQA-H-F</td>
-<td class="sn-col" title="AL WARQA-HANGING 1F-d - In Store AISLE">AL WARQA-HANGING 1F-d - In Store AISLE</td>
-<td class="meta">842706573</td>
-<td class="tr"><div class="data-cell"><span class="data-bar" style="width:23.19px;background:#eab308"></span>23.19 %</div></td>
-</tr><tr>
-<td><span class="icon online">✓</span></td>
-<td class="name-col" title="WARQA-H-D">WARQA-H-D</td>
-<td class="sn-col" title="AL WARQA-HANGING 1D-d - In Store AISLE">AL WARQA-HANGING 1D-d - In Store AISLE</td>
-<td class="meta">844949819</td>
-<td class="tr"><div class="data-cell"><span class="data-bar" style="width:22.5px;background:#eab308"></span>22.5 %</div></td>
-</tr><tr>
-<td><span class="icon online">✓</span></td>
-<td class="name-col" title="WARQA-H-B">WARQA-H-B</td>
-<td class="sn-col" title="AL WARQA-HANGING 1B-d - In Store AISLE">AL WARQA-HANGING 1B-d - In Store AISLE</td>
-<td class="meta">842704839</td>
-<td class="tr"><div class="data-cell"><span class="data-bar" style="width:20.15px;background:#eab308"></span>20.15 %</div></td>
-</tr><tr>
-<td><span class="icon online">✓</span></td>
-<td class="name-col" title="WARQA-H-C">WARQA-H-C</td>
-<td class="sn-col" title="AL WARQA-HANGING 1C-d - In Store AISLE">AL WARQA-HANGING 1C-d - In Store AISLE</td>
-<td class="meta">844948791</td>
-<td class="tr"><div class="data-cell"><span class="data-bar" style="width:19.09px;background:#22c55e"></span>19.09 %</div></td>
-</tr><tr>
-<td><span class="icon online">✓</span></td>
-<td class="name-col" title="WARQA-H-A">WARQA-H-A</td>
-<td class="sn-col" title="AL WARQA-HANGING 1A-d - In Store AISLE">AL WARQA-HANGING 1A-d - In Store AISLE</td>
-<td class="meta">842703712</td>
-<td class="tr"><div class="data-cell"><span class="data-bar" style="width:2px;background:#22c55e"></span>0 %</div></td>
-</tr><tr>
-<td><span class="icon online">✓</span></td>
-<td class="name-col" title="COOP-WARQA-ARCH">COOP-WARQA-ARCH</td>
-<td class="sn-col" title="AL WARQA-UCS-Arch - In Store Gates">AL WARQA-UCS-Arch - In Store Gates</td>
-<td class="meta">675141853</td>
-<td class="tr"><div class="data-cell"><span class="data-bar" style="width:2px;background:#22c55e"></span>0 %</div></td>
-</tr></tbody></table>
-</div>
-</div><div class="venue-card" style="border-top:2px solid #d97706">
-<div class="venue-card-header" style="padding:4px 8px">
-<h3 style="color:#f59e0b;font-size:11px">Lulu Market</h3>
-<span class="badge" style="font-size:9px">47 PCs · 47 online · 0 offline</span>
-</div>
-<div class="scroll-wrap">
-<table class="pc-table"><thead><tr><th style="width:16px">S</th><th>Name</th><th>Screen Name</th><th style="width:50px">Tag</th><th style="width:64px;text-align:right">Data</th></tr></thead><tbody><tr>
-<td><span class="icon online">✓</span></td>
-<td class="name-col" title="LULU-MSRF-P-2">LULU-MSRF-P-2</td>
-<td class="sn-col" title="MUSHRIF-INSIDE-PILLAR-1f - In Store AISLE">MUSHRIF-INSIDE-PILLAR-1f - In Store AISLE</td>
-<td class="meta">814950478</td>
-<td class="tr"><div class="data-cell"><span class="data-bar" style="width:32.76px;background:#eab308"></span>32.76 %</div></td>
-</tr><tr>
-<td><span class="icon online">✓</span></td>
-<td class="name-col" title="LULU-MSRF-ENTR1">LULU-MSRF-ENTR1</td>
-<td class="sn-col" title="MUSHRIF-ENTRANCE-PILLAR-03 - In Store AISLE">MUSHRIF-ENTRANCE-PILLAR-03 - In Store AISLE</td>
-<td class="meta">884602823</td>
-<td class="tr"><div class="data-cell"><span class="data-bar" style="width:32.76px;background:#eab308"></span>32.76 %</div></td>
-</tr><tr>
-<td><span class="icon online">✓</span></td>
-<td class="name-col" title="LULU-MSRF-RBBN">LULU-MSRF-RBBN</td>
-<td class="sn-col" title="MUSHRIF-Long LED Banner-02 - In Store AISLE">MUSHRIF-Long LED Banner-02 - In Store AISLE</td>
-<td class="meta">814948102</td>
-<td class="tr"><div class="data-cell"><span class="data-bar" style="width:32.76px;background:#eab308"></span>32.76 %</div></td>
-</tr><tr>
-<td><span class="icon online">✓</span></td>
-<td class="name-col" title="LULU-KHLDY-P4-I">LULU-KHLDY-P4-I</td>
-<td class="sn-col" title="AL KHALIDIYA-PILLAR01H-c - In Store AISLE">AL KHALIDIYA-PILLAR01H-c - In Store AISLE</td>
-<td class="meta">873034696</td>
-<td class="tr"><div class="data-cell"><span class="data-bar" style="width:15.12px;background:#22c55e"></span>15.12 %</div></td>
-</tr><tr>
-<td><span class="icon online">✓</span></td>
-<td class="name-col" title="LULU-KHLDY-P2-L">LULU-KHLDY-P2-L</td>
-<td class="sn-col" title="AL KHALIDIYA-PILLAR02L-d - In Store AISLE">AL KHALIDIYA-PILLAR02L-d - In Store AISLE</td>
-<td class="meta">873042746</td>
+<td class="name" title="LULU-KHLDY-P2-L">LULU-KHLDY-P2-L</td>
+<td class="sn" title="AL KHALIDIYA-PILLAR02L-d - In Store AISLE">AL KHALIDIYA-PILLAR02L-d - In Store AISLE</td>
 <td class="tr"><div class="data-cell"><span class="data-bar" style="width:15.1px;background:#22c55e"></span>15.1 %</div></td>
-</tr><tr>
+</tr><tr class="">
 <td><span class="icon online">✓</span></td>
-<td class="name-col" title="LULU-KHLDY-P4-H">LULU-KHLDY-P4-H</td>
-<td class="sn-col" title="AL KHALIDIYA-PILLAR01F-d - In Store AISLE">AL KHALIDIYA-PILLAR01F-d - In Store AISLE</td>
-<td class="meta">873028346</td>
+<td class="name" title="LULU-KHLDY-P4-H">LULU-KHLDY-P4-H</td>
+<td class="sn" title="AL KHALIDIYA-PILLAR01F-d - In Store AISLE">AL KHALIDIYA-PILLAR01F-d - In Store AISLE</td>
 <td class="tr"><div class="data-cell"><span class="data-bar" style="width:14.04px;background:#22c55e"></span>14.04 %</div></td>
-</tr><tr>
+</tr><tr class="">
 <td><span class="icon online">✓</span></td>
-<td class="name-col" title="LULU-KHLFA-P4-K">LULU-KHLFA-P4-K</td>
-<td class="sn-col" title="KHALIFA CITY-PILLAR-01K-d - In Store AISLE">KHALIFA CITY-PILLAR-01K-d - In Store AISLE</td>
-<td class="meta">853819213</td>
-<td class="tr"><div class="data-cell"><span class="data-bar" style="width:13.08px;background:#22c55e"></span>13.08 %</div></td>
-</tr><tr>
+<td class="name" title="LULU-WTC-C-B">LULU-WTC-C-B</td>
+<td class="sn" title="WTC-PILLAR-01B-b - In Store AISLE">WTC-PILLAR-01B-b - In Store AISLE</td>
+<td class="tr"><div class="data-cell"><span class="data-bar" style="width:13.36px;background:#22c55e"></span>13.36 %</div></td>
+</tr><tr class="">
 <td><span class="icon online">✓</span></td>
-<td class="name-col" title="DESKTOP-1MHRQRB">DESKTOP-1MHRQRB</td>
-<td class="sn-col" title="AL KHALIDIYA-PILLAR02J-b - In Store AISLE">AL KHALIDIYA-PILLAR02J-b - In Store AISLE</td>
-<td class="meta">1162209914</td>
+<td class="name" title="DESKTOP-1MHRQRB">DESKTOP-1MHRQRB</td>
+<td class="sn" title="AL KHALIDIYA-PILLAR02J-b - In Store AISLE">AL KHALIDIYA-PILLAR02J-b - In Store AISLE</td>
 <td class="tr"><div class="data-cell"><span class="data-bar" style="width:13.07px;background:#22c55e"></span>13.07 %</div></td>
-</tr><tr>
+</tr><tr class="">
 <td><span class="icon online">✓</span></td>
-<td class="name-col" title="LULU-KHLDY-P2-M">LULU-KHLDY-P2-M</td>
-<td class="sn-col" title="AL KHALIDIYA-PILLAR02M-d - In Store AISLE">AL KHALIDIYA-PILLAR02M-d - In Store AISLE</td>
-<td class="meta">873044176</td>
+<td class="name" title="LULU-KHLDY-P2-M">LULU-KHLDY-P2-M</td>
+<td class="sn" title="AL KHALIDIYA-PILLAR02M-d - In Store AISLE">AL KHALIDIYA-PILLAR02M-d - In Store AISLE</td>
 <td class="tr"><div class="data-cell"><span class="data-bar" style="width:13.02px;background:#22c55e"></span>13.02 %</div></td>
-</tr><tr>
+</tr><tr class="">
 <td><span class="icon online">✓</span></td>
-<td class="name-col" title="LULU-KHLFA-P2-G">LULU-KHLFA-P2-G</td>
-<td class="sn-col" title="KHALIFA CITY-PILLAR-02G-b - In Store AISLE">KHALIFA CITY-PILLAR-02G-b - In Store AISLE</td>
-<td class="meta">853814630</td>
-<td class="tr"><div class="data-cell"><span class="data-bar" style="width:12.92px;background:#22c55e"></span>12.92 %</div></td>
-</tr><tr>
+<td class="name" title="LULU-KHLFA-P2-J">LULU-KHLFA-P2-J</td>
+<td class="sn" title="KHALIFA CITY-PILLAR-02J-b - In Store AISLE">KHALIFA CITY-PILLAR-02J-b - In Store AISLE</td>
+<td class="tr"><div class="data-cell"><span class="data-bar" style="width:12.8px;background:#22c55e"></span>12.8 %</div></td>
+</tr><tr class="">
 <td><span class="icon online">✓</span></td>
-<td class="name-col" title="LULU-WTC-C-B">LULU-WTC-C-B</td>
-<td class="sn-col" title="WTC-PILLAR-01B-b - In Store AISLE">WTC-PILLAR-01B-b - In Store AISLE</td>
-<td class="meta">801323854</td>
-<td class="tr"><div class="data-cell"><span class="data-bar" style="width:12.19px;background:#22c55e"></span>12.19 %</div></td>
-</tr><tr>
+<td class="name" title="LULU-KHLFA-P4-F">LULU-KHLFA-P4-F</td>
+<td class="sn" title="KHALIFA CITY-PILLAR-01F-d - In Store AISLE">KHALIFA CITY-PILLAR-01F-d - In Store AISLE</td>
+<td class="tr"><div class="data-cell"><span class="data-bar" style="width:12.26px;background:#22c55e"></span>12.26 %</div></td>
+</tr><tr class="">
 <td><span class="icon online">✓</span></td>
-<td class="name-col" title="LULU-KHLFA-P2-J">LULU-KHLFA-P2-J</td>
-<td class="sn-col" title="KHALIFA CITY-PILLAR-02J-b - In Store AISLE">KHALIFA CITY-PILLAR-02J-b - In Store AISLE</td>
-<td class="meta">853818541</td>
-<td class="tr"><div class="data-cell"><span class="data-bar" style="width:12.18px;background:#22c55e"></span>12.18 %</div></td>
-</tr><tr>
+<td class="name" title="LULU-KHLFA-P4-H">LULU-KHLFA-P4-H</td>
+<td class="sn" title="KHALIFA CITY-PILLAR-01H-d - In Store AISLE">KHALIFA CITY-PILLAR-01H-d - In Store AISLE</td>
+<td class="tr"><div class="data-cell"><span class="data-bar" style="width:11.33px;background:#22c55e"></span>11.33 %</div></td>
+</tr><tr class="">
 <td><span class="icon online">✓</span></td>
-<td class="name-col" title="LULU-KHLFA-P4-F">LULU-KHLFA-P4-F</td>
-<td class="sn-col" title="KHALIFA CITY-PILLAR-01F-d - In Store AISLE">KHALIFA CITY-PILLAR-01F-d - In Store AISLE</td>
-<td class="meta">853795603</td>
-<td class="tr"><div class="data-cell"><span class="data-bar" style="width:11.39px;background:#22c55e"></span>11.39 %</div></td>
-</tr><tr>
+<td class="name" title="LULU-KHLFA-P4-C">LULU-KHLFA-P4-C</td>
+<td class="sn" title="KHALIFA CITY-PILLAR-01C-b - In Store AISLE">KHALIFA CITY-PILLAR-01C-b - In Store AISLE</td>
+<td class="tr"><div class="data-cell"><span class="data-bar" style="width:11.09px;background:#22c55e"></span>11.09 %</div></td>
+</tr><tr class="">
 <td><span class="icon online">✓</span></td>
-<td class="name-col" title="LULU-KHLFA-P4-H">LULU-KHLFA-P4-H</td>
-<td class="sn-col" title="KHALIFA CITY-PILLAR-01H-d - In Store AISLE">KHALIFA CITY-PILLAR-01H-d - In Store AISLE</td>
-<td class="meta">853815468</td>
-<td class="tr"><div class="data-cell"><span class="data-bar" style="width:10.35px;background:#22c55e"></span>10.35 %</div></td>
-</tr><tr>
+<td class="name" title="LULU-KHLFA-P4-B">LULU-KHLFA-P4-B</td>
+<td class="sn" title="KHALIFA CITY-PILLAR-01B-b - In Store AISLE">KHALIFA CITY-PILLAR-01B-b - In Store AISLE</td>
+<td class="tr"><div class="data-cell"><span class="data-bar" style="width:10.76px;background:#22c55e"></span>10.76 %</div></td>
+</tr><tr class="">
 <td><span class="icon online">✓</span></td>
-<td class="name-col" title="LULU-WTC-C-D">LULU-WTC-C-D</td>
-<td class="sn-col" title="WTC-PILLAR-01D-b - In Store AISLE">WTC-PILLAR-01D-b - In Store AISLE</td>
-<td class="meta">801298771</td>
-<td class="tr"><div class="data-cell"><span class="data-bar" style="width:9.72px;background:#22c55e"></span>9.72 %</div></td>
-</tr><tr>
+<td class="name" title="LULU-WHDA-C-E">LULU-WHDA-C-E</td>
+<td class="sn" title="AL WAHDA-PILLAR-01E-d - In Store AISLE">AL WAHDA-PILLAR-01E-d - In Store AISLE</td>
+<td class="tr"><div class="data-cell"><span class="data-bar" style="width:7.58px;background:#22c55e"></span>7.58 %</div></td>
+</tr><tr class="">
 <td><span class="icon online">✓</span></td>
-<td class="name-col" title="LULU-WHDA-C-E">LULU-WHDA-C-E</td>
-<td class="sn-col" title="AL WAHDA-PILLAR-01E-d - In Store AISLE">AL WAHDA-PILLAR-01E-d - In Store AISLE</td>
-<td class="meta">817775683</td>
-<td class="tr"><div class="data-cell"><span class="data-bar" style="width:7.13px;background:#22c55e"></span>7.13 %</div></td>
-</tr><tr>
+<td class="name" title="LULU-WHDA-C-F">LULU-WHDA-C-F</td>
+<td class="sn" title="AL WAHDA-PILLAR-01F-d - In Store AISLE">AL WAHDA-PILLAR-01F-d - In Store AISLE</td>
+<td class="tr"><div class="data-cell"><span class="data-bar" style="width:6.84px;background:#22c55e"></span>6.84 %</div></td>
+</tr><tr class="">
 <td><span class="icon online">✓</span></td>
-<td class="name-col" title="LULU-WHDA-C-F">LULU-WHDA-C-F</td>
-<td class="sn-col" title="AL WAHDA-PILLAR-01F-d - In Store AISLE">AL WAHDA-PILLAR-01F-d - In Store AISLE</td>
-<td class="meta">817773042</td>
-<td class="tr"><div class="data-cell"><span class="data-bar" style="width:6.64px;background:#22c55e"></span>6.64 %</div></td>
-</tr><tr>
+<td class="name" title="LULU-WHDA-C-G">LULU-WHDA-C-G</td>
+<td class="sn" title="AL WAHDA-PILLAR-01G-d - In Store AISLE">AL WAHDA-PILLAR-01G-d - In Store AISLE</td>
+<td class="tr"><div class="data-cell"><span class="data-bar" style="width:6.26px;background:#22c55e"></span>6.26 %</div></td>
+</tr><tr class="">
 <td><span class="icon online">✓</span></td>
-<td class="name-col" title="LULU-WHDA-C-G">LULU-WHDA-C-G</td>
-<td class="sn-col" title="AL WAHDA-PILLAR-01G-d - In Store AISLE">AL WAHDA-PILLAR-01G-d - In Store AISLE</td>
-<td class="meta">632047105</td>
-<td class="tr"><div class="data-cell"><span class="data-bar" style="width:6.04px;background:#22c55e"></span>6.04 %</div></td>
-</tr><tr>
-<td><span class="icon online">✓</span></td>
-<td class="name-col" title="LULU-KHLDY-ARCH">LULU-KHLDY-ARCH</td>
-<td class="sn-col" title="AL KHALIDIYA-LULU-ARCH - In Store Gates">AL KHALIDIYA-LULU-ARCH - In Store Gates</td>
-<td class="meta">771914686</td>
+<td class="name" title="UMM-SUQEIM-H-E">UMM-SUQEIM-H-E</td>
+<td class="sn" title="UMM SUQEIM-PILLAR 1E-b - In Store AISLE">UMM SUQEIM-PILLAR 1E-b - In Store AISLE</td>
 <td class="tr"><div class="data-cell"><span class="data-bar" style="width:2px;background:#22c55e"></span>0 %</div></td>
-</tr><tr>
+</tr><tr class="">
 <td><span class="icon online">✓</span></td>
-<td class="name-col" title="LULU-KHLFA-P4-B">LULU-KHLFA-P4-B</td>
-<td class="sn-col" title="KHALIFA CITY-PILLAR-01B-b - In Store AISLE">KHALIFA CITY-PILLAR-01B-b - In Store AISLE</td>
-<td class="meta">853750242</td>
+<td class="name" title="COOP-WARQA-ARCH">COOP-WARQA-ARCH</td>
+<td class="sn" title="AL WARQA-UCS-Arch - In Store Gates">AL WARQA-UCS-Arch - In Store Gates</td>
 <td class="tr"><div class="data-cell"><span class="data-bar" style="width:2px;background:#22c55e"></span>0 %</div></td>
-</tr><tr>
+</tr><tr class="">
 <td><span class="icon online">✓</span></td>
-<td class="name-col" title="LULU-MSRF-P-1">LULU-MSRF-P-1</td>
-<td class="sn-col" title="MUSHRIF-INSIDE-PILLAR-2b - In Store AISLE">MUSHRIF-INSIDE-PILLAR-2b - In Store AISLE</td>
-<td class="meta">889119735</td>
+<td class="name" title="LULU-KHLDY-ARCH">LULU-KHLDY-ARCH</td>
+<td class="sn" title="AL KHALIDIYA-LULU-ARCH - In Store Gates">AL KHALIDIYA-LULU-ARCH - In Store Gates</td>
 <td class="tr"><div class="data-cell"><span class="data-bar" style="width:2px;background:#22c55e"></span>0 %</div></td>
-</tr><tr>
+</tr><tr class="">
 <td><span class="icon online">✓</span></td>
-<td class="name-col" title="LULU-MSRF-ENTR2">LULU-MSRF-ENTR2</td>
-<td class="sn-col" title="MUSHRIF-ENTRANCE-PILLAR-04 - In Store AISLE">MUSHRIF-ENTRANCE-PILLAR-04 - In Store AISLE</td>
-<td class="meta">814956371</td>
+<td class="name" title="LULU-MSRF-P-1">LULU-MSRF-P-1</td>
+<td class="sn" title="MUSHRIF-INSIDE-PILLAR-2b - In Store AISLE">MUSHRIF-INSIDE-PILLAR-2b - In Store AISLE</td>
 <td class="tr"><div class="data-cell"><span class="data-bar" style="width:2px;background:#22c55e"></span>0 %</div></td>
-</tr><tr>
+</tr><tr class="">
 <td><span class="icon online">✓</span></td>
-<td class="name-col" title="LULU-WHDA-ARCH">LULU-WHDA-ARCH</td>
-<td class="sn-col" title="AL WAHDA-LULU-ARCH - In Store Gates">AL WAHDA-LULU-ARCH - In Store Gates</td>
-<td class="meta">632940959</td>
+<td class="name" title="LULU-WHDA-ARCH">LULU-WHDA-ARCH</td>
+<td class="sn" title="AL WAHDA-LULU-ARCH - In Store Gates">AL WAHDA-LULU-ARCH - In Store Gates</td>
 <td class="tr"><div class="data-cell"><span class="data-bar" style="width:2px;background:#22c55e"></span>0 %</div></td>
-</tr><tr>
+</tr><tr class="">
 <td><span class="icon online">✓</span></td>
-<td class="name-col" title="LULU-KHLFA-ARCH">LULU-KHLFA-ARCH</td>
-<td class="sn-col" title="KHALIFA CITY-LULU-ARCH - In Store Gates">KHALIFA CITY-LULU-ARCH - In Store Gates</td>
-<td class="meta">772103807</td>
+<td class="name" title="LULU-KHLFA-ARCH">LULU-KHLFA-ARCH</td>
+<td class="sn" title="KHALIFA CITY-LULU-ARCH - In Store Gates">KHALIFA CITY-LULU-ARCH - In Store Gates</td>
 <td class="tr"><div class="data-cell"><span class="data-bar" style="width:2px;background:#22c55e"></span>0 %</div></td>
-</tr><tr>
+</tr><tr class="">
 <td><span class="icon online">✓</span></td>
-<td class="name-col" title="LULU-WTC-C-C">LULU-WTC-C-C</td>
-<td class="sn-col" title="WTC-PILLAR-01C-b - In Store AISLE">WTC-PILLAR-01C-b - In Store AISLE</td>
-<td class="meta">800902243</td>
+<td class="name" title="LULU-WTC-C-C">LULU-WTC-C-C</td>
+<td class="sn" title="WTC-PILLAR-01C-b - In Store AISLE">WTC-PILLAR-01C-b - In Store AISLE</td>
 <td class="tr"><div class="data-cell"><span class="data-bar" style="width:2px;background:#22c55e"></span>%</div></td>
-</tr><tr>
+</tr><tr class="">
 <td><span class="icon online">✓</span></td>
-<td class="name-col" title="LULU-MSHRF-ARCH">LULU-MSHRF-ARCH</td>
-<td class="sn-col" title="MUSHRIF-LULU-ARCH - In Store Gates">MUSHRIF-LULU-ARCH - In Store Gates</td>
-<td class="meta">771936909</td>
+<td class="name" title="LULU-MSHRF-ARCH">LULU-MSHRF-ARCH</td>
+<td class="sn" title="MUSHRIF-LULU-ARCH - In Store Gates">MUSHRIF-LULU-ARCH - In Store Gates</td>
 <td class="tr"><div class="data-cell"><span class="data-bar" style="width:2px;background:#22c55e"></span>0 %</div></td>
-</tr><tr>
+</tr><tr class="">
 <td><span class="icon online">✓</span></td>
-<td class="name-col" title="LULU-KHLFA-P4-C">LULU-KHLFA-P4-C</td>
-<td class="sn-col" title="KHALIFA CITY-PILLAR-01C-b - In Store AISLE">KHALIFA CITY-PILLAR-01C-b - In Store AISLE</td>
-<td class="meta">853776928</td>
+<td class="name" title="LULU-KHLFA-P2-G">LULU-KHLFA-P2-G</td>
+<td class="sn" title="KHALIFA CITY-PILLAR-02G-b - In Store AISLE">KHALIFA CITY-PILLAR-02G-b - In Store AISLE</td>
 <td class="tr"><div class="data-cell"><span class="data-bar" style="width:2px;background:#22c55e"></span>0 %</div></td>
-</tr><tr>
+</tr><tr class="">
 <td><span class="icon online">✓</span></td>
-<td class="name-col" title="LULU-WTC-C-A">LULU-WTC-C-A</td>
-<td class="sn-col" title="WTC-PILLAR-01A-b - In Store AISLE">WTC-PILLAR-01A-b - In Store AISLE</td>
-<td class="meta">801325418</td>
+<td class="name" title="LULU-WTC-C-A">LULU-WTC-C-A</td>
+<td class="sn" title="WTC-PILLAR-01A-b - In Store AISLE">WTC-PILLAR-01A-b - In Store AISLE</td>
 <td class="tr"><div class="data-cell"><span class="data-bar" style="width:2px;background:#22c55e"></span>0 %</div></td>
-</tr><tr>
+</tr><tr class="">
 <td><span class="icon online">✓</span></td>
-<td class="name-col" title="LULU-KHLDY-P2-J">LULU-KHLDY-P2-J</td>
-<td class="sn-col" title="AL KHALIDIYA-PILLAR02K-d - In Store AISLE">AL KHALIDIYA-PILLAR02K-d - In Store AISLE</td>
-<td class="meta">873040961</td>
+<td class="name" title="LULU-KHLDY-P2-J">LULU-KHLDY-P2-J</td>
+<td class="sn" title="AL KHALIDIYA-PILLAR02K-d - In Store AISLE">AL KHALIDIYA-PILLAR02K-d - In Store AISLE</td>
 <td class="tr"><div class="data-cell"><span class="data-bar" style="width:2px;background:#22c55e"></span>0 %</div></td>
-</tr><tr>
+</tr><tr class="">
 <td><span class="icon online">✓</span></td>
-<td class="name-col" title="LULU-KHLFA-P4-A">LULU-KHLFA-P4-A</td>
-<td class="sn-col" title="KHALIFA CITY-PILLAR-01A-b - In Store AISLE">KHALIFA CITY-PILLAR-01A-b - In Store AISLE</td>
-<td class="meta">853745482</td>
+<td class="name" title="LULU-KHLFA-P4-K">LULU-KHLFA-P4-K</td>
+<td class="sn" title="KHALIFA CITY-PILLAR-01K-d - In Store AISLE">KHALIFA CITY-PILLAR-01K-d - In Store AISLE</td>
 <td class="tr"><div class="data-cell"><span class="data-bar" style="width:2px;background:#22c55e"></span>0 %</div></td>
-</tr><tr>
+</tr><tr class="">
 <td><span class="icon online">✓</span></td>
-<td class="name-col" title="LULU-WHDA-C-C">LULU-WHDA-C-C</td>
-<td class="sn-col" title="AL WAHDA-PILLAR-03C-a - In Store AISLE">AL WAHDA-PILLAR-03C-a - In Store AISLE</td>
-<td class="meta">817151406</td>
+<td class="name" title="LULU-KHLFA-P4-A">LULU-KHLFA-P4-A</td>
+<td class="sn" title="KHALIFA CITY-PILLAR-01A-b - In Store AISLE">KHALIFA CITY-PILLAR-01A-b - In Store AISLE</td>
 <td class="tr"><div class="data-cell"><span class="data-bar" style="width:2px;background:#22c55e"></span>0 %</div></td>
-</tr><tr>
+</tr><tr class="">
 <td><span class="icon online">✓</span></td>
-<td class="name-col" title="LULU-KHLDY-P4-F">LULU-KHLDY-P4-F</td>
-<td class="sn-col" title="AL KHALIDIYA-PILLAR01I-d - In Store AISLE">AL KHALIDIYA-PILLAR01I-d - In Store AISLE</td>
-<td class="meta">872942568</td>
+<td class="name" title="LULU-WHDA-C-C">LULU-WHDA-C-C</td>
+<td class="sn" title="AL WAHDA-PILLAR-03C-a - In Store AISLE">AL WAHDA-PILLAR-03C-a - In Store AISLE</td>
 <td class="tr"><div class="data-cell"><span class="data-bar" style="width:2px;background:#22c55e"></span>0 %</div></td>
-</tr><tr>
+</tr><tr class="">
 <td><span class="icon online">✓</span></td>
-<td class="name-col" title="LULU-WTC-C-E">LULU-WTC-C-E</td>
-<td class="sn-col" title="WTC-PILLAR-01E-b - In Store AISLE">WTC-PILLAR-01E-b - In Store AISLE</td>
-<td class="meta">801320828</td>
+<td class="name" title="LULU-KHLDY-P4-F">LULU-KHLDY-P4-F</td>
+<td class="sn" title="AL KHALIDIYA-PILLAR01I-d - In Store AISLE">AL KHALIDIYA-PILLAR01I-d - In Store AISLE</td>
 <td class="tr"><div class="data-cell"><span class="data-bar" style="width:2px;background:#22c55e"></span>0 %</div></td>
-</tr><tr>
+</tr><tr class="">
 <td><span class="icon online">✓</span></td>
-<td class="name-col" title="LULU-WHDA-C-A">LULU-WHDA-C-A</td>
-<td class="sn-col" title="AL WAHDA-PILLAR-01A-d - In Store AISLE">AL WAHDA-PILLAR-01A-d - In Store AISLE</td>
-<td class="meta">819531269</td>
+<td class="name" title="LULU-WTC-C-E">LULU-WTC-C-E</td>
+<td class="sn" title="WTC-PILLAR-01E-b - In Store AISLE">WTC-PILLAR-01E-b - In Store AISLE</td>
 <td class="tr"><div class="data-cell"><span class="data-bar" style="width:2px;background:#22c55e"></span>0 %</div></td>
-</tr><tr>
+</tr><tr class="">
 <td><span class="icon online">✓</span></td>
-<td class="name-col" title="LULU-WHDA-C-D">LULU-WHDA-C-D</td>
-<td class="sn-col" title="AL WAHDA-PILLAR-02D-c - In Store AISLE">AL WAHDA-PILLAR-02D-c - In Store AISLE</td>
-<td class="meta">817153882</td>
+<td class="name" title="LULU-WHDA-C-A">LULU-WHDA-C-A</td>
+<td class="sn" title="AL WAHDA-PILLAR-01A-d - In Store AISLE">AL WAHDA-PILLAR-01A-d - In Store AISLE</td>
 <td class="tr"><div class="data-cell"><span class="data-bar" style="width:2px;background:#22c55e"></span>0 %</div></td>
-</tr><tr>
+</tr><tr class="">
 <td><span class="icon online">✓</span></td>
-<td class="name-col" title="LULU-WHDA-C-B">LULU-WHDA-C-B</td>
-<td class="sn-col" title="AL WAHDA-PILLAR-02B-c - In Store AISLE">AL WAHDA-PILLAR-02B-c - In Store AISLE</td>
-<td class="meta">817770413</td>
+<td class="name" title="LULU-WHDA-C-D">LULU-WHDA-C-D</td>
+<td class="sn" title="AL WAHDA-PILLAR-02D-c - In Store AISLE">AL WAHDA-PILLAR-02D-c - In Store AISLE</td>
 <td class="tr"><div class="data-cell"><span class="data-bar" style="width:2px;background:#22c55e"></span>0 %</div></td>
-</tr><tr>
+</tr><tr class="">
 <td><span class="icon online">✓</span></td>
-<td class="name-col" title="LULU-KHLDY-P4-G">LULU-KHLDY-P4-G</td>
-<td class="sn-col" title="AL KHALIDIYA-PILLAR01G-b - In Store AISLE">AL KHALIDIYA-PILLAR01G-b - In Store AISLE</td>
-<td class="meta">872995287</td>
+<td class="name" title="LULU-WHDA-C-B">LULU-WHDA-C-B</td>
+<td class="sn" title="AL WAHDA-PILLAR-02B-c - In Store AISLE">AL WAHDA-PILLAR-02B-c - In Store AISLE</td>
 <td class="tr"><div class="data-cell"><span class="data-bar" style="width:2px;background:#22c55e"></span>0 %</div></td>
-</tr><tr>
+</tr><tr class="">
 <td><span class="icon online">✓</span></td>
-<td class="name-col" title="LULU-WTC-ARCH">LULU-WTC-ARCH</td>
-<td class="sn-col" title="WTC AUH-LULU-ARCH - In Store Gates">WTC AUH-LULU-ARCH - In Store Gates</td>
-<td class="meta">771944269</td>
+<td class="name" title="LULU-WTC-C-D">LULU-WTC-C-D</td>
+<td class="sn" title="WTC-PILLAR-01D-b - In Store AISLE">WTC-PILLAR-01D-b - In Store AISLE</td>
 <td class="tr"><div class="data-cell"><span class="data-bar" style="width:2px;background:#22c55e"></span>0 %</div></td>
-</tr><tr>
+</tr><tr class="">
 <td><span class="icon online">✓</span></td>
-<td class="name-col" title="LULU-KHLFA-P4-I">LULU-KHLFA-P4-I</td>
-<td class="sn-col" title="KHALIFA CITY-PILLAR-01I-d - In Store AISLE">KHALIFA CITY-PILLAR-01I-d - In Store AISLE</td>
-<td class="meta">853817875</td>
+<td class="name" title="LULU-KHLDY-P4-G">LULU-KHLDY-P4-G</td>
+<td class="sn" title="AL KHALIDIYA-PILLAR01G-b - In Store AISLE">AL KHALIDIYA-PILLAR01G-b - In Store AISLE</td>
 <td class="tr"><div class="data-cell"><span class="data-bar" style="width:2px;background:#22c55e"></span>0 %</div></td>
-</tr><tr>
+</tr><tr class="">
 <td><span class="icon online">✓</span></td>
-<td class="name-col" title="DESKTOP-J8GL4CP">DESKTOP-J8GL4CP</td>
-<td class="sn-col" title="AL WAHDA-LCD Hanging Screen 1A - In Store AISLE">AL WAHDA-LCD Hanging Screen 1A - In Store AISLE</td>
-<td class="meta">1963214783</td>
+<td class="name" title="LULU-WTC-ARCH">LULU-WTC-ARCH</td>
+<td class="sn" title="WTC AUH-LULU-ARCH - In Store Gates">WTC AUH-LULU-ARCH - In Store Gates</td>
 <td class="tr"><div class="data-cell"><span class="data-bar" style="width:2px;background:#22c55e"></span>0 %</div></td>
-</tr><tr>
+</tr><tr class="">
 <td><span class="icon online">✓</span></td>
-<td class="name-col" title="DESKTOP-VLBITIU">DESKTOP-VLBITIU</td>
-<td class="sn-col" title="AL WAHDA-LCD Hanging Screen 1B - In Store AISLE">AL WAHDA-LCD Hanging Screen 1B - In Store AISLE</td>
-<td class="meta">1963244479</td>
+<td class="name" title="LULU-KHLFA-P4-I">LULU-KHLFA-P4-I</td>
+<td class="sn" title="KHALIFA CITY-PILLAR-01I-d - In Store AISLE">KHALIFA CITY-PILLAR-01I-d - In Store AISLE</td>
 <td class="tr"><div class="data-cell"><span class="data-bar" style="width:2px;background:#22c55e"></span>0 %</div></td>
-</tr><tr>
+</tr><tr class="">
 <td><span class="icon online">✓</span></td>
-<td class="name-col" title="DESKTOP-BOOQ29O">DESKTOP-BOOQ29O</td>
-<td class="sn-col" title="AL WAHDA-LCD Hanging Screen 2A - In Store AISLE">AL WAHDA-LCD Hanging Screen 2A - In Store AISLE</td>
-<td class="meta">1963362145</td>
+<td class="name" title="DESKTOP-J8GL4CP">DESKTOP-J8GL4CP</td>
+<td class="sn" title="AL WAHDA-LCD Hanging Screen 1A - In Store AISLE">AL WAHDA-LCD Hanging Screen 1A - In Store AISLE</td>
 <td class="tr"><div class="data-cell"><span class="data-bar" style="width:2px;background:#22c55e"></span>0 %</div></td>
-</tr><tr>
+</tr><tr class="">
 <td><span class="icon online">✓</span></td>
-<td class="name-col" title="INSTOREPC">INSTOREPC</td>
-<td class="sn-col" title="AL WAHDA-LCD Hanging Screen 3A - In Store AISLE">AL WAHDA-LCD Hanging Screen 3A - In Store AISLE</td>
-<td class="meta">1963371248</td>
+<td class="name" title="DESKTOP-VLBITIU">DESKTOP-VLBITIU</td>
+<td class="sn" title="AL WAHDA-LCD Hanging Screen 1B - In Store AISLE">AL WAHDA-LCD Hanging Screen 1B - In Store AISLE</td>
 <td class="tr"><div class="data-cell"><span class="data-bar" style="width:2px;background:#22c55e"></span>0 %</div></td>
-</tr><tr>
+</tr><tr class="">
 <td><span class="icon online">✓</span></td>
-<td class="name-col" title="DESKTOP-HKSEIMA">DESKTOP-HKSEIMA</td>
-<td class="sn-col" title="AL WAHDA-LCD Hanging Screen 3B - In Store AISLE">AL WAHDA-LCD Hanging Screen 3B - In Store AISLE</td>
-<td class="meta">1963376793</td>
+<td class="name" title="DESKTOP-BOOQ29O">DESKTOP-BOOQ29O</td>
+<td class="sn" title="AL WAHDA-LCD Hanging Screen 2A - In Store AISLE">AL WAHDA-LCD Hanging Screen 2A - In Store AISLE</td>
 <td class="tr"><div class="data-cell"><span class="data-bar" style="width:2px;background:#22c55e"></span>0 %</div></td>
-</tr><tr>
+</tr><tr class="">
 <td><span class="icon online">✓</span></td>
-<td class="name-col" title="DESKTOP-8F1QIQE">DESKTOP-8F1QIQE</td>
-<td class="sn-col" title="AL WAHDA-LCD Hanging Screen 2B - In Store AISLE">AL WAHDA-LCD Hanging Screen 2B - In Store AISLE</td>
-<td class="meta">1963362780</td>
+<td class="name" title="INSTOREPC">INSTOREPC</td>
+<td class="sn" title="AL WAHDA-LCD Hanging Screen 3A - In Store AISLE">AL WAHDA-LCD Hanging Screen 3A - In Store AISLE</td>
 <td class="tr"><div class="data-cell"><span class="data-bar" style="width:2px;background:#22c55e"></span>0 %</div></td>
-</tr><tr>
+</tr><tr class="">
 <td><span class="icon online">✓</span></td>
-<td class="name-col" title="DESKTOP-RETO7GM">DESKTOP-RETO7GM</td>
-<td class="sn-col" title="AL WAHDA-LCD Hanging Screen 4A - In Store AISLE">AL WAHDA-LCD Hanging Screen 4A - In Store AISLE</td>
-<td class="meta">1963457821</td>
+<td class="name" title="DESKTOP-HKSEIMA">DESKTOP-HKSEIMA</td>
+<td class="sn" title="AL WAHDA-LCD Hanging Screen 3B - In Store AISLE">AL WAHDA-LCD Hanging Screen 3B - In Store AISLE</td>
 <td class="tr"><div class="data-cell"><span class="data-bar" style="width:2px;background:#22c55e"></span>0 %</div></td>
-</tr><tr>
+</tr><tr class="">
 <td><span class="icon online">✓</span></td>
-<td class="name-col" title="DESKTOP-0S30A3H">DESKTOP-0S30A3H</td>
-<td class="sn-col" title="AL WAHDA-LCD Hanging Screen 4B - In Store AISLE">AL WAHDA-LCD Hanging Screen 4B - In Store AISLE</td>
-<td class="meta">1963457916</td>
+<td class="name" title="DESKTOP-8F1QIQE">DESKTOP-8F1QIQE</td>
+<td class="sn" title="AL WAHDA-LCD Hanging Screen 2B - In Store AISLE">AL WAHDA-LCD Hanging Screen 2B - In Store AISLE</td>
 <td class="tr"><div class="data-cell"><span class="data-bar" style="width:2px;background:#22c55e"></span>0 %</div></td>
-</tr></tbody></table>
-</div>
-</div></div><div class="venue-card" style="border-top:2px solid #6366f1;flex-shrink:0"><div class="venue-card-header" style="padding:4px 10px"><h3 style="color:#818cf8;font-size:11px">🔥 Overall Top 5 Data Consumers</h3></div><div class="top5-row" style="padding:4px 6px"><div class="top5-card">
+</tr><tr class="">
+<td><span class="icon online">✓</span></td>
+<td class="name" title="DESKTOP-RETO7GM">DESKTOP-RETO7GM</td>
+<td class="sn" title="AL WAHDA-LCD Hanging Screen 4A - In Store AISLE">AL WAHDA-LCD Hanging Screen 4A - In Store AISLE</td>
+<td class="tr"><div class="data-cell"><span class="data-bar" style="width:2px;background:#22c55e"></span>0 %</div></td>
+</tr><tr class="">
+<td><span class="icon online">✓</span></td>
+<td class="name" title="DESKTOP-0S30A3H">DESKTOP-0S30A3H</td>
+<td class="sn" title="AL WAHDA-LCD Hanging Screen 4B - In Store AISLE">AL WAHDA-LCD Hanging Screen 4B - In Store AISLE</td>
+<td class="tr"><div class="data-cell"><span class="data-bar" style="width:2px;background:#22c55e"></span>0 %</div></td>
+</tr></tbody></table><div class="top5-row"><div class="top5-card">
 <div class="rank">#1</div>
-<div style="flex:1;overflow:hidden"><div class="tname">DESKTOP-D6J29GK</div><div class="tloc">Union Coop UMM SUQEIM</div></div>
-<div class="tdata" style="color:#ef4444">88.25 %</div>
+<div style="flex:1;overflow:hidden"><div class="tname">DESKTOP-D6J29GK</div></div>
+<div class="tdata" style="color:#ef4444">96.97 %</div>
 </div><div class="top5-card">
 <div class="rank">#2</div>
-<div style="flex:1;overflow:hidden"><div class="tname">DESKTOP-VTM08H0</div><div class="tloc">Union Coop UMM SUQEIM</div></div>
-<div class="tdata" style="color:#ef4444">88.25 %</div>
+<div style="flex:1;overflow:hidden"><div class="tname">DESKTOP-VTM08H0</div></div>
+<div class="tdata" style="color:#ef4444">96.96 %</div>
 </div><div class="top5-card">
 <div class="rank">#3</div>
-<div style="flex:1;overflow:hidden"><div class="tname">DESKTOP-C7OQU4Q</div><div class="tloc">Union Coop AL WARQA</div></div>
-<div class="tdata" style="color:#f59e0b">63.27 %</div>
+<div style="flex:1;overflow:hidden"><div class="tname">DESKTOP-0QP9AB0</div></div>
+<div class="tdata" style="color:#f97316">66.68 %</div>
 </div><div class="top5-card">
 <div class="rank">#4</div>
-<div style="flex:1;overflow:hidden"><div class="tname">instore</div><div class="tloc">Union Coop AL WARQA</div></div>
-<div class="tdata" style="color:#f59e0b">63.27 %</div>
+<div style="flex:1;overflow:hidden"><div class="tname">DESKTOP-V1VPUTR</div></div>
+<div class="tdata" style="color:#f97316">66.68 %</div>
 </div><div class="top5-card">
 <div class="rank">#5</div>
-<div style="flex:1;overflow:hidden"><div class="tname">DESKTOP-0QP9AB0</div><div class="tloc">Union Coop UMM SUQEIM</div></div>
-<div class="tdata" style="color:#f59e0b">62.29 %</div>
-</div></div></div></div>
-<div class="footer">Retail Media Nsoc Players · Updated 2026-06-15 08:58 GST · Data via GLPI</div>
+<div style="flex:1;overflow:hidden"><div class="tname">DESKTOP-C7OQU4Q</div></div>
+<div class="tdata" style="color:#f97316">66.67 %</div>
+</div></div></div>
+<div class="footer">Retail Media Nsoc Players · Updated 2026-06-15 09:03 GST</div>
 </body>
 </html>

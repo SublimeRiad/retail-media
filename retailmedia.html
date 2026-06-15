@@ -124,13 +124,12 @@ const VENUES = {
   'Union Coop UMM SUQEIM': {group:'uc', label:'Umm Suqeim'},
   'Union Coop AL WARQA': {group:'uc', label:'Al Warqa'},
   'Union Coop AL BARSHA': {group:'uc', label:'Al Barsha'},
+  'Union Coop AL BARSHA SOUTH': {group:'uc', label:'Al Barsha South'},
   'Union Coop MIRDIF': {group:'uc', label:'Mirdif'},
   'Union Coop JUMEIRAH': {group:'uc', label:'Jumeirah'},
+  'Union Coop JUMEIRAH-1': {group:'uc', label:'Jumeirah-1'},
   'Union Coop AL WASL': {group:'uc', label:'Al Wasl'},
-  'UNION COOP UMM SUQEIM-RM': {group:'uc', label:'Umm Suqeim RM'},
-  'UNION COOP AL WARQA-RM': {group:'uc', label:'Al Warqa RM'},
-  'LULU AL WAHDA': {group:'lulu', label:'Lulu Al Wahda'},
-  'LULU AL WAHDA-RM': {group:'lulu', label:'Lulu Al Wahda RM'},
+  'LULU AL WAHDA': {group:'lulu', label:'Al Wahda'},
   'LULU AL KHALIDIYA': {group:'lulu', label:'Al Khalidiya'},
   'LULU AL KHALIFA': {group:'lulu', label:'Al Khalifa'},
   'LULU MUSHRIF': {group:'lulu', label:'Mushrif'},
@@ -227,7 +226,7 @@ function render() {
 
 async function fetchData() {
   try {
-    const v = await gq("SELECT comp.name, loc.completename, gc.states_id FROM glpi_computers comp LEFT JOIN glpi_locations loc ON comp.locations_id=loc.id WHERE loc.completename IS NOT NULL AND comp.is_deleted=0");
+    const v = await gq("SELECT comp.name, loc.completename, comp.states_id FROM glpi_computers comp LEFT JOIN glpi_locations loc ON comp.locations_id=loc.id WHERE loc.completename IS NOT NULL AND comp.is_deleted=0");
     if (v && v[0]) {
       deviceData = v[0].map((_,i) => ({
         name: v[0][i],

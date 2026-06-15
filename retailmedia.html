@@ -3,245 +3,218 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1.0">
-<title>Retail Media · IoT Status</title>
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+<title>Retail Media — IoT Status</title>
 <style>
 *{margin:0;padding:0;box-sizing:border-box}
-body{font-family:'Inter',-apple-system,sans-serif;background:#08080e;color:#f1f5f9;padding:0 0 40px}
-#app{max-width:1000px;margin:0 auto;padding:24px}
+body{font-family:Inter,-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;background:#08080e;color:#f1f5f9;padding:0 0 40px}
 
-/* Header */
-.hd{display:flex;align-items:center;justify-content:space-between;margin-bottom:28px}
-.hd h1{font-size:20px;font-weight:700;letter-spacing:-0.3px}
-.hd h1 span{color:#64748b;font-weight:400}
-.hd .ts{font-size:11px;color:#52525b;font-family:monospace}
+.header{background:linear-gradient(135deg,#0a0a1a 0%,#0f172a 50%,#1a1a2e 100%);padding:32px 24px 24px;border-bottom:1px solid #1e293b;position:relative;overflow:hidden}
+.header::before{content:'';position:absolute;top:-50%;right:-20%;width:400px;height:400px;background:radial-gradient(circle,rgba(96,165,250,.06) 0%,transparent 70%);border-radius:50%}
+.header::after{content:'';position:absolute;bottom:-30%;left:30%;width:300px;height:300px;background:radial-gradient(circle,rgba(167,139,250,.04) 0%,transparent 70%);border-radius:50%}
+.header h1{font-size:32px;font-weight:800;background:linear-gradient(135deg,#60a5fa,#a78bfa,#f472b6);-webkit-background-clip:text;-webkit-text-fill-color:transparent;letter-spacing:-.5px;position:relative;z-index:1}
+.header .sub{color:#64748b;font-size:13px;margin-top:8px;display:flex;gap:20px;align-items:center;flex-wrap:wrap;position:relative;z-index:1}
+.header .sub .live{display:inline-flex;align-items:center;gap:6px;background:#052e16;color:#4ade80;padding:2px 14px;border-radius:20px;font-size:11px;font-weight:700}
+.header .sub .live::before{content:'';width:7px;height:7px;background:#4ade80;border-radius:50%;animation:pulse 2s infinite}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.2}}
 
-/* Metrics row */
-.mr{display:flex;gap:8px;margin-bottom:32px;flex-wrap:wrap}
-.mi{background:#111827;border:1px solid #1e293b;border-radius:8px;padding:14px 18px;min-width:110px;flex:1}
-.mi .mv{font-size:28px;font-weight:800;line-height:1.1}
-.mi .ml{font-size:10px;color:#64748b;text-transform:uppercase;letter-spacing:.5px;margin-top:6px;font-weight:500}
-.mi .mv.blue{color:#60a5fa}.mi .mv.green{color:#4ade80}.mi .mv.orange{color:#facc15}.mi .mv.red{color:#f87171}.mi .mv.purple{color:#a78bfa}
+.metrics{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:12px;padding:28px 24px 8px}
+.mc{background:linear-gradient(135deg,#1a1d29,#222533);border-radius:16px;padding:20px;border:1px solid #2d3748;text-align:center;position:relative;overflow:hidden;transition:transform .2s,border-color .2s}
+.mc:hover{transform:translateY(-3px);border-color:#475569}
+.mc .icon{font-size:24px;margin-bottom:6px}
+.mc .ml{font-size:10px;text-transform:uppercase;color:#64748b;letter-spacing:1px;font-weight:600}
+.mc .mv{font-size:52px;font-weight:900;margin-top:2px;line-height:1;letter-spacing:-2px}
+.mc .ms{font-size:11px;color:#64748b;margin-top:6px;font-weight:500}
+.mc.blue .mv{color:#60a5fa}.mc.green .mv{color:#4ade80}.mc.orange .mv{color:#facc15}.mc.red .mv{color:#f87171}.mc.purple .mv{color:#a78bfa}.mc.pink .mv{color:#f472b6}
 
-/* Brand section */
-.brand{margin-bottom:20px;background:#111827;border-radius:12px;border:1px solid #1e293b;overflow:hidden}
-.brand-hdr{display:flex;align-items:center;padding:16px 20px;border-bottom:1px solid #1e293b;gap:12px}
-.brand-hdr .logo{width:32px;height:32px;border-radius:6px;display:flex;align-items:center;justify-content:center;font-weight:800;font-size:16px;color:#fff;flex-shrink:0}
-.brand-hdr .logo.uc{background:#2563eb}.brand-hdr .logo.lulu{background:#dc2626}
-.brand-hdr h2{font-size:16px;font-weight:700}
-.brand-hdr .bs{display:flex;gap:12px;margin-left:auto;font-size:11px;color:#64748b}
-.brand-hdr .bs .bv{font-weight:700;color:#e2e8f0;font-size:13px}
-.brand-hdr .bs .bv.gr{color:#4ade80}
-.brand-body{padding:14px 20px 18px}
+.venues{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:16px;padding:16px 24px}
+.vc{border-radius:16px;overflow:hidden;transition:transform .25s,border-color .2s}
+.vc:hover{transform:translateY(-4px)}
+.vc.green{background:linear-gradient(135deg,#0a2e1a 0%,#0a1f12 100%);border:1px solid #166534;box-shadow:0 4px 24px rgba(34,197,94,.08)}
+.vc.green .vh{border-bottom:1px solid #1a3a22}
+.vc.green .vtag{background:#166534;color:#4ade80}
+.vc.green .kmb{background:#0a2e1a}
+.vc.yellow{background:linear-gradient(135deg,#2a2000 0%,#1a1500 100%);border:1px solid #5c4a00;box-shadow:0 4px 24px rgba(234,179,8,.08)}
+.vc.yellow .vh{border-bottom:1px solid #3d2e00}
+.vc.yellow .vtag{background:#5c4a00;color:#facc15}
+.vc.yellow .kmb{background:#2a2000}
+.vc.red{background:linear-gradient(135deg,#2a0a0a 0%,#1a0808 100%);border:1px solid #7f1d1d;box-shadow:0 4px 24px rgba(239,68,68,.08)}
+.vc.red .vh{border-bottom:1px solid #3d1414}
+.vc.red .vtag{background:#7f1d1d;color:#f87171}
+.vc.red .kmb{background:#2a0a0a}
+.vc.blue{background:linear-gradient(135deg,#0a1a2e 0%,#0a121f 100%);border:1px solid #1e3a5f;box-shadow:0 4px 24px rgba(59,130,246,.08)}
+.vc.blue .vh{border-bottom:1px solid #14223a}
+.vc.blue .vtag{background:#1e3a5f;color:#60a5fa}
+.vc.blue .kmb{background:#0a1a2e}
 
-/* Venue sub-cards */
-.venue{margin-bottom:12px}
-.venue:last-child{margin-bottom:0}
-.vh{display:flex;align-items:center;justify-content:space-between;margin-bottom:8px}
-.vh .vn{font-size:13px;font-weight:600;color:#e2e8f0}
-.vh .vn .loc{display:block;font-size:10px;color:#52525b;font-weight:400;margin-top:1px}
-.vh .vcount{font-size:14px;font-weight:700;color:#94a3b8}
-.vg{display:flex;gap:6px}
-.vi{flex:1;background:#0f1117;border:1px solid #1a1d29;border-radius:6px;padding:10px 0;text-align:center}
-.vi .il{font-size:9px;text-transform:uppercase;color:#52525b;letter-spacing:.8px;font-weight:500}
-.vi .iv{font-size:22px;font-weight:800;margin-top:2px}
-.vi .iv.gr{color:#4ade80}.vi .iv.ye{color:#facc15}.vi .iv.re{color:#f87171}
+.vh{padding:18px 20px 14px;display:flex;justify-content:space-between;align-items:center}
+.vh .vn{font-size:18px;font-weight:700}
+.vh .vn .loc{color:#94a3b8;font-size:10px;font-weight:400;display:block;margin-top:2px;opacity:.7}
+.vh .vtag{padding:3px 14px;border-radius:20px;font-size:13px;font-weight:700}
+.vb{padding:16px 20px 22px}
+.vg{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;margin-bottom:14px}
+.vs{text-align:center;padding:12px 4px;border-radius:10px;background:rgba(15,17,23,.5);border:1px solid rgba(45,55,72,.5)}
+.vs .vl{font-size:9px;text-transform:uppercase;color:#64748b;letter-spacing:1px;font-weight:600}
+.vs .vv{font-size:30px;font-weight:900;margin-top:2px;line-height:1}
+.vs .vv.gr{color:#4ade80}.vs .vv.ye{color:#facc15}.vs .vv.re{color:#f87171}
 
-/* Alerts */
-.al{margin-top:8px;padding:10px 14px 8px;background:#1a1a2e;border-radius:8px;border:1px solid #2d1b1b}
-.al .ah{display:flex;align-items:center;gap:8px;margin-bottom:6px;font-size:12px;font-weight:600;color:#fca5a5}
-.al .ah .ac{background:#450a0a;color:#f87171;padding:0 8px;border-radius:10px;font-size:10px;margin-left:auto}
-.at{width:100%;border-collapse:collapse;font-size:11px}
-.at th{padding:6px 8px;color:#52525b;font-weight:500;text-align:left;border-bottom:1px solid #1e293b;font-size:10px;text-transform:uppercase;letter-spacing:.3px}
-.at td{padding:5px 8px;border-bottom:1px solid rgba(255,255,255,.04);color:#94a3b8}
-.at .stt{color:#4ade80;font-weight:600}
-.at .er{color:#f87171;font-weight:600}
-.at .wr{color:#facc15;font-weight:600}
+.km{display:flex;align-items:center;gap:8px;margin-top:4px}
+.km .kml{font-size:10px;color:#64748b;width:50px;text-align:right;font-weight:600}
+.km .kmb{flex:1;height:18px;border-radius:6px;overflow:hidden}
+.km .kmb .kf{height:100%;border-radius:6px;min-width:4px}
+.km .kmb .kf.g{background:linear-gradient(90deg,#22c55e,#4ade80)}
+.km .kmb .kf.y{background:linear-gradient(90deg,#eab308,#facc15)}
+.km .kmb .kf.r{background:linear-gradient(90deg,#ef4444,#f87171)}
+.km .kml2{font-size:12px;font-weight:800;width:30px;color:#94a3b8}
 
-.ft{text-align:center;padding:16px;color:#1e293b;font-size:10px}
+.alerts{padding:8px 24px 0}
+.ac{background:linear-gradient(135deg,#1a1d29,#222533);border-radius:14px;overflow:hidden;border:1px solid #2d3748}
+.ah{background:linear-gradient(90deg,#2a1000,#3d1c00);padding:16px 20px;display:flex;justify-content:space-between;align-items:center;border-bottom:1px solid #5c2a00}
+.ah h3{font-size:14px;color:#fca5a5;font-weight:700;display:flex;align-items:center;gap:8px}
+.ah .acount{background:#5c2a00;color:#fca5a5;padding:2px 14px;border-radius:20px;font-size:13px;font-weight:800}
+
+.at{width:100%;border-collapse:collapse}
+.at th{padding:12px 20px;background:rgba(30,41,59,.5);color:#94a3b8;font-size:10px;text-transform:uppercase;letter-spacing:.5px;text-align:left;font-weight:600}
+.at td{padding:12px 20px;border-bottom:1px solid rgba(30,41,59,.5);font-size:13px}
+.at tr:last-child td{border-bottom:none}
+.at tr{transition:background .15s}
+.at tr:hover{background:rgba(30,41,59,.4)}
+.at .mac{font-family:'SF Mono',Consolas,monospace;color:#94a3b8;font-size:12px}
+.at .er{color:#f87171;font-weight:700}
+.at .wr{color:#facc15;font-weight:700}
+.at .state-t{color:#60a5fa;font-weight:600}
+
+.footer{text-align:center;padding:28px;color:#1e293b;font-size:11px;letter-spacing:.5px}
+
+@media(max-width:600px){
+  .metrics{gap:10px;padding:20px 12px 4px}
+  .mc .mv{font-size:38px}
+  .venues{padding:10px 12px}
+  .vs .vv{font-size:24px}
+  .header h1{font-size:26px}
+}
 </style>
 </head>
 <body>
-<div id="app">
 
-<div class="hd">
-  <h1>Retail Media <span>· IoT Status</span></h1>
-  <div class="ts" id="ts">—</div>
-</div>
-
-<div class="mr" id="metrics"></div>
-
-<div class="brand" id="unionCoop">
-  <div class="brand-hdr">
-    <div class="logo uc">U</div>
-    <h2>Union Coop</h2>
-    <div class="bs"></div>
+<div class="header">
+  <h1>Retail Media · IoT Status</h1>
+  <div class="sub">
+    <span>12/06/2026 — 17:23:48 GMT</span>
+    <span class="live">Live</span>
   </div>
-  <div class="brand-body" id="ucBody"></div>
 </div>
 
-<div class="brand" id="luluMarket">
-  <div class="brand-hdr">
-    <div class="logo lulu">L</div>
-    <h2>Lulu Market</h2>
-    <div class="bs"></div>
-  </div>
-  <div class="brand-body" id="luluBody"></div>
+<div class="metrics">
+  <div class="mc blue"><div class="icon">📡</div><div class="ml">Total Devices</div><div class="mv">97</div><div class="ms">3 venues</div></div>
+  <div class="mc green"><div class="icon">✅</div><div class="ml">Tracking OK</div><div class="mv">96</div><div class="ms">Normal operation</div></div>
+  <div class="mc orange"><div class="icon">⚡</div><div class="ml">Warnings</div><div class="mv">2</div><div class="ms">IOT_4 · IOT_7</div></div>
+  <div class="mc red"><div class="icon">🔴</div><div class="ml">Errors</div><div class="mv">1</div><div class="ms">IOT_18</div></div>
+  <div class="mc purple"><div class="icon">⏱️</div><div class="ml">Avg Uptime</div><div class="mv">~13h</div><div class="ms">All connected</div></div>
+  <div class="mc pink"><div class="icon">📊</div><div class="ml">Platform</div><div class="mv">J30</div><div class="ms">All devices</div></div>
 </div>
 
-<div class="al" id="alerts" style="display:none">
-  <div class="ah">
-    <span>Devices needing attention</span>
-    <span class="ac" id="alertCount">0</span>
-  </div>
-  <table class="at"><thead><tr><th>Device</th><th>Venue</th><th>State</th><th>Errors</th><th>Warnings</th></tr></thead>
-    <tbody id="alertBody"></tbody>
-  </table>
-</div>
-
-<div class="ft">AiOO Tech Dubai · IoT Admin Console</div>
-</div>
-
-<script>
-// ===== GRAFANA API =====
-const BASE = 'https://nsoc.aiootech.com/grafana';
-const TOKEN = 'glsa_X5Mt58Yj2tF4xVLn502CHh6SODGm56Vz_76545fb7';
-const DS = 'afgjq2q0g0000c';
-
-async function gq(sql) {
-  const r = await fetch(BASE+'/api/ds/query', {
-    method:'POST',
-    headers:{'Authorization':'Bearer '+TOKEN,'Content-Type':'application/json'},
-    body:JSON.stringify({queries:[{refId:'A',datasource:{uid:DS,type:'mysql'},rawSql:sql,format:'table',rawQuery:true,editorMode:'code'}]})
-  });
-  const d = await r.json();
-  return d?.results?.A?.frames?.[0]?.data?.values;
-}
-
-// ===== STATE =====
-let deviceData = [];
-const VENUES = {
-  'Union Coop UMM SUQEIM': {group:'uc', label:'Umm Suqeim'},
-  'Union Coop AL WARQA': {group:'uc', label:'Al Warqa'},
-  'Union Coop AL BARSHA': {group:'uc', label:'Al Barsha'},
-  'Union Coop AL BARSHA SOUTH': {group:'uc', label:'Al Barsha South'},
-  'Union Coop MIRDIF': {group:'uc', label:'Mirdif'},
-  'Union Coop JUMEIRAH': {group:'uc', label:'Jumeirah'},
-  'Union Coop JUMEIRAH-1': {group:'uc', label:'Jumeirah-1'},
-  'Union Coop AL WASL': {group:'uc', label:'Al Wasl'},
-  'LULU AL WAHDA': {group:'lulu', label:'Al Wahda'},
-  'LULU AL KHALIDIYA': {group:'lulu', label:'Al Khalidiya'},
-  'LULU AL KHALIFA': {group:'lulu', label:'Al Khalifa'},
-  'LULU MUSHRIF': {group:'lulu', label:'Mushrif'},
-  'LULU WTC AUH': {group:'lulu', label:'WTC AUH'},
-};
-
-function fmtTime(){return new Date().toLocaleString('en-GB',{hour12:false})}
-
-function venueData(devices, group) {
-  const venues = {};
-  devices.forEach(d => {
-    const v = VENUES[d.venue];
-    if (!v || v.group !== group) return;
-    const key = d.venue;
-    if (!venues[key]) venues[key] = {label:v.label, devices:[], tracking:0, warn:0, err:0};
-    venues[key].devices.push(d);
-    const state = (d.state||'').toUpperCase();
-    if (state.includes('TRACK')) venues[key].tracking++;
-    else if (state.includes('WARN')) venues[key].warn++;
-    else venues[key].err++;
-  });
-  return Object.values(venues).sort((a,b)=>b.devices.length - a.devices.length);
-}
-
-function render() {
-  document.getElementById('ts').textContent = fmtTime();
-
-  // Metrics
-  const total = deviceData.length;
-  const tracking = deviceData.filter(d => (d.state||'').toUpperCase().includes('TRACK')).length;
-  const warn = deviceData.filter(d => (d.state||'').toUpperCase().includes('WARN')).length;
-  const errs = deviceData.filter(d => {
-    const s = (d.state||'').toUpperCase();
-    return !s.includes('TRACK') && !s.includes('WARN');
-  }).length;
-
-  document.getElementById('metrics').innerHTML = `
-    <div class="mi"><div class="mv blue">${total}</div><div class="ml">Total Devices</div></div>
-    <div class="mi"><div class="mv green">${tracking}</div><div class="ml">Tracking OK</div></div>
-    <div class="mi"><div class="mv orange">${warn}</div><div class="ml">Warnings</div></div>
-    <div class="mi"><div class="mv red">${errs}</div><div class="ml">Errors</div></div>
-  `;
-
-  // Union Coop
-  const uc = venueData(deviceData, 'uc');
-  const ucTotal = uc.reduce((s,v) => s+v.devices.length, 0);
-  const ucOk = uc.reduce((s,v) => s+v.tracking, 0);
-  document.getElementById('unionCoop').querySelector('.bs').innerHTML =
-    `<span><span class="bv">${ucTotal}</span> devices</span><span><span class="bv gr">${ucOk}</span> ok</span>`;
-  document.getElementById('ucBody').innerHTML = uc.map(v => `
-    <div class="venue">
-      <div class="vh"><span class="vn">${v.label}</span><span class="vcount">${v.devices.length}</span></div>
+<div class="venues">
+  <div class="vc yellow">
+    <div class="vh">
+      <div class="vn">📍 Umm Suqeim <span class="loc">In-Store · Union Coop</span></div>
+      <div class="vtag">27</div>
+    </div>
+    <div class="vb">
       <div class="vg">
-        <div class="vi"><div class="il">Tracking</div><div class="iv gr">${v.tracking}</div></div>
-        <div class="vi"><div class="il">Warnings</div><div class="iv ye">${v.warn}</div></div>
-        <div class="vi"><div class="il">Errors</div><div class="iv re">${v.err||'0'}</div></div>
+        <div class="vs"><div class="vl">Tracking</div><div class="vv gr">27</div></div>
+        <div class="vs"><div class="vl">Warnings</div><div class="vv ye">2</div></div>
+        <div class="vs"><div class="vl">Errors</div><div class="vv gr">0</div></div>
       </div>
-    </div>`).join('');
+      <div class="km">
+        <span class="kml">OK</span>
+        <div class="kmb"><div class="kf g" style="width:93%"></div></div>
+        <span class="kml2">25</span>
+      </div>
+      <div class="km">
+        <span class="kml">Warn</span>
+        <div class="kmb"><div class="kf y" style="width:7%"></div></div>
+        <span class="kml2">2</span>
+      </div>
+    </div>
+  </div>
 
-  // Lulu Market
-  const lu = venueData(deviceData, 'lulu');
-  const luTotal = lu.reduce((s,v) => s+v.devices.length, 0);
-  const luOk = lu.reduce((s,v) => s+v.tracking, 0);
-  document.getElementById('luluMarket').querySelector('.bs').innerHTML =
-    `<span><span class="bv">${luTotal}</span> devices</span><span><span class="bv gr">${luOk}</span> ok</span>`;
-  document.getElementById('luluBody').innerHTML = lu.map(v => `
-    <div class="venue">
-      <div class="vh"><span class="vn">${v.label}</span><span class="vcount">${v.devices.length}</span></div>
+  <div class="vc red">
+    <div class="vh">
+      <div class="vn">📍 Al Warqa <span class="loc">Union Coop</span></div>
+      <div class="vtag">33</div>
+    </div>
+    <div class="vb">
       <div class="vg">
-        <div class="vi"><div class="il">Tracking</div><div class="iv gr">${v.tracking}</div></div>
-        <div class="vi"><div class="il">Warnings</div><div class="iv ye">${v.warn}</div></div>
-        <div class="vi"><div class="il">Errors</div><div class="iv re">${v.err||'0'}</div></div>
+        <div class="vs"><div class="vl">Tracking</div><div class="vv gr">33</div></div>
+        <div class="vs"><div class="vl">Warnings</div><div class="vv gr">0</div></div>
+        <div class="vs"><div class="vl">Errors</div><div class="vv re">1</div></div>
       </div>
-    </div>`).join('');
+      <div class="km">
+        <span class="kml">OK</span>
+        <div class="kmb"><div class="kf g" style="width:97%"></div></div>
+        <span class="kml2">32</span>
+      </div>
+      <div class="km">
+        <span class="kml">Error</span>
+        <div class="kmb"><div class="kf r" style="width:3%"></div></div>
+        <span class="kml2">1</span>
+      </div>
+    </div>
+  </div>
 
-  // Alerts
-  const alerts = deviceData.filter(d => {
-    const s = (d.state||'').toUpperCase();
-    return s.includes('WARN') || (!s.includes('TRACK') && !s.includes('WARN') && !s.includes('ONLINE'));
-  });
-  const alertEl = document.getElementById('alerts');
-  if (alerts.length > 0) {
-    alertEl.style.display = 'block';
-    document.getElementById('alertCount').textContent = alerts.length;
-    document.getElementById('alertBody').innerHTML = alerts.slice(0,10).map(d => `
-      <tr><td>${d.name||'-'}</td><td>${d.venue||'-'}</td>
-      <td class="stt">${d.state||'UNKNOWN'}</td>
-      <td class="er">${d.errors||'0'}</td>
-      <td class="wr">${d.warnings||'0'}</td></tr>`).join('');
-  } else {
-    alertEl.style.display = 'none';
-  }
-}
+  <div class="vc blue">
+    <div class="vh">
+      <div class="vn">📍 Lulu Al Wahda <span class="loc">Pending capture setup</span></div>
+      <div class="vtag">37</div>
+    </div>
+    <div class="vb">
+      <div class="vg">
+        <div class="vs"><div class="vl">Tracking</div><div class="vv gr">37</div></div>
+        <div class="vs"><div class="vl">Warnings</div><div class="vv gr">0</div></div>
+        <div class="vs"><div class="vl">Errors</div><div class="vv gr">0</div></div>
+      </div>
+      <div class="km">
+        <span class="kml">OK</span>
+        <div class="kmb"><div class="kf g" style="width:100%"></div></div>
+        <span class="kml2">37</span>
+      </div>
+    </div>
+  </div>
+</div>
 
-async function fetchData() {
-  try {
-    const v = await gq("SELECT comp.name, loc.completename, comp.states_id FROM glpi_computers comp LEFT JOIN glpi_locations loc ON comp.locations_id=loc.id WHERE loc.completename IS NOT NULL AND comp.is_deleted=0");
-    if (v && v[0]) {
-      deviceData = v[0].map((_,i) => ({
-        name: v[0][i],
-        venue: v[1][i],
-        state: v[2][i] === '1' ? 'TRACKING' : v[2][i] === '7' ? 'OFFLINE' : 'UNKNOWN',
-        errors: '0',
-        warnings: '0'
-      }));
-    }
-  } catch(e) { console.log('API error:', e.message); }
-  render();
-}
+<div class="alerts">
+  <div class="ac">
+    <div class="ah">
+      <h3>⚠️ Devices needing attention</h3>
+      <span class="acount">3</span>
+    </div>
+    <table class="at">
+      <tr><th>Device</th><th>Venue</th><th>State</th><th>Errors</th><th>Warnings</th></tr>
+      <tr>
+        <td><span class="mac">a1:00:5e:ed:02:bb</span></td>
+        <td>🇦🇪 Al Warqa · IOT_18</td>
+        <td><span class="state-t">TRACKING</span></td>
+        <td><span class="er">575</span></td>
+        <td><span class="wr">383</span></td>
+      </tr>
+      <tr>
+        <td><span class="mac">a1:00:5e:ed:02:b7</span></td>
+        <td>🇦🇪 Umm Suqeim · IOT_4</td>
+        <td><span class="state-t">TRACKING</span></td>
+        <td><span class="er">52</span></td>
+        <td><span class="wr">30</span></td>
+      </tr>
+      <tr>
+        <td><span class="mac">a1:00:5e:ed:02:b5</span></td>
+        <td>🇦🇪 Umm Suqeim · IOT_7</td>
+        <td><span class="state-t">TRACKING</span></td>
+        <td><span class="er">43</span></td>
+        <td><span class="wr">25</span></td>
+      </tr>
+    </table>
+  </div>
+</div>
 
-fetchData();
-setInterval(fetchData, 300000);
-</script>
+<div class="footer">AiOO Tech Dubai · IoT Admin Console</div>
 </body>
 </html>

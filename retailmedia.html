@@ -7,65 +7,78 @@
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
 <style>
 *{margin:0;padding:0;box-sizing:border-box}
-body{font-family:'Inter',-apple-system,sans-serif;background:#08080e;color:#f1f5f9;padding:0 0 30px}
+html,body{height:100%;overflow:hidden}
+body{font-family:'Inter',-apple-system,sans-serif;background:#08080e;color:#f1f5f9;display:flex;flex-direction:column;font-size:clamp(12px,1.1vw,16px)}
+.d{display:flex;flex-direction:column;padding:clamp(10px,1.2vh,20px) clamp(16px,2vw,32px);gap:clamp(6px,0.8vh,14px);max-width:1920px;margin:0 auto;width:100%;height:100vh}
 
-/* Header minimal */
-.hd{display:flex;align-items:center;justify-content:space-between;padding:24px 24px 20px;border-bottom:1px solid #1e293b}
-.hd h1{font-size:22px;font-weight:700;color:#e2e8f0;letter-spacing:-.3px}
+/* Header */
+.hd{display:flex;align-items:center;justify-content:space-between;flex-shrink:0}
+.hd h1{font-size:clamp(16px,1.8vw,26px);font-weight:700;color:#e2e8f0;letter-spacing:-.3px}
 .hd h1 span{color:#52525b;font-weight:400}
-.hd .ts{font-size:11px;color:#52525b;font-family:monospace}
+.hd .ts{font-size:clamp(9px,0.8vw,12px);color:#52525b;font-family:monospace}
 
 /* Metrics */
-.mr{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;padding:20px 24px 12px}
-.mi{background:#111827;border:1px solid #1e293b;border-radius:10px;padding:16px 18px}
-.mi .mv{font-size:32px;font-weight:800;line-height:1}
-.mi .ml{font-size:10px;color:#64748b;text-transform:uppercase;letter-spacing:.6px;margin-top:6px;font-weight:500}
-.mi .mv{color:#60a5fa}
+.mr{display:grid;grid-template-columns:repeat(6,1fr);gap:clamp(4px,0.5vw,10px);flex-shrink:0}
+.mi{background:#111827;border:1px solid #1e293b;border-radius:8px;padding:clamp(8px,1vh,16px) clamp(10px,1vw,18px)}
+.mi .mv{font-size:clamp(20px,2.5vw,36px);font-weight:800;line-height:1}
+.mi .ml{font-size:clamp(8px,0.7vw,10px);color:#64748b;text-transform:uppercase;letter-spacing:.5px;margin-top:4px;font-weight:500}
+.mi:nth-child(1) .mv{color:#60a5fa}
 .mi:nth-child(2) .mv{color:#4ade80}
 .mi:nth-child(3) .mv{color:#facc15}
 .mi:nth-child(4) .mv{color:#f87171}
 .mi:nth-child(5) .mv{color:#a78bfa}
 .mi:nth-child(6) .mv{color:#f472b6}
 
-/* Brand cards */
-.bc{margin:12px 24px;border-radius:12px;overflow:hidden;border:1px solid #1e293b}
-.bc .bh{display:flex;align-items:center;padding:14px 18px;background:#111827;gap:10px}
-.bc .bh .bl{width:28px;height:28px;border-radius:6px;display:flex;align-items:center;justify-content:center;font-weight:800;font-size:13px;color:#fff;flex-shrink:0}
+/* Brand cards row */
+.br{display:grid;grid-template-columns:1fr 1fr;gap:clamp(4px,0.5vw,10px);flex:1;min-height:0}
+.bc{border-radius:10px;overflow:hidden;border:1px solid #1e293b;display:flex;flex-direction:column}
+.bc .bh{display:flex;align-items:center;padding:clamp(8px,0.8vh,14px) clamp(12px,1.2vw,18px);background:#111827;gap:8px;flex-shrink:0}
+.bc .bh .bl{width:clamp(22px,1.8vw,30px);height:clamp(22px,1.8vw,30px);border-radius:5px;display:flex;align-items:center;justify-content:center;font-weight:800;font-size:clamp(11px,0.9vw,14px);color:#fff;flex-shrink:0}
 .bc .bh .uc{background:#2563eb}.bc .bh .lm{background:#dc2626}
-.bc .bh h2{font-size:14px;font-weight:700;color:#e2e8f0}
-.bc .bh .bs{margin-left:auto;font-size:11px;color:#64748b}
-.bc .bh .bs .bv{font-weight:700;color:#e2e8f0}
+.bc .bh h2{font-size:clamp(12px,1vw,16px);font-weight:700;color:#e2e8f0}
+.bc .bh .bs{margin-left:auto;font-size:clamp(9px,0.7vw,11px);color:#64748b}
+.bc .bh .bs b{color:#e2e8f0;font-weight:700}
 .bc .bh .bs .gr{color:#4ade80}
 
-.bc .bb{padding:12px 18px 16px;background:#0f1117}
+.bc .bb{flex:1;overflow-y:auto;padding:clamp(8px,0.6vh,12px) clamp(12px,1.2vw,18px);background:#0f1117;display:flex;flex-direction:column;gap:clamp(6px,0.5vh,10px)}
 
-/* Sub-venue */
-.sv{margin-bottom:10px;padding:10px 0;border-bottom:1px solid rgba(255,255,255,.04)}
-.sv:last-child{border:none;margin-bottom:0}
-.sv .svh{display:flex;align-items:center;justify-content:space-between;margin-bottom:6px}
-.sv .svh .sn{font-size:13px;font-weight:600;color:#e2e8f0}
-.sv .svh .sc{font-size:13px;font-weight:700;color:#64748b}
-.sv .sg{display:flex;gap:5px}
-.sv .si{flex:1;background:#1a1d29;border:1px solid #2d3748;border-radius:6px;padding:8px 0;text-align:center}
-.sv .si .il{font-size:8px;text-transform:uppercase;color:#52525b;letter-spacing:.6px;font-weight:500}
-.sv .si .iv{font-size:18px;font-weight:800;margin-top:1px}
+/* Sub-venue card */
+.sv{border-radius:8px;padding:clamp(8px,0.6vh,12px) clamp(10px,0.8vw,14px);border:1px solid #1e293b}
+.sv.ye{border-color:#5c4a00;background:linear-gradient(135deg,#2a2000 0%,#1a1500 100%)}
+.sv.re{border-color:#7f1d1d;background:linear-gradient(135deg,#2a0a0a 0%,#1a0808 100%)}
+.sv.gr{border-color:#166534;background:linear-gradient(135deg,#0a2e1a 0%,#0a1f12 100%)}
+.sv .svh{display:flex;align-items:center;justify-content:space-between;margin-bottom:clamp(4px,0.3vh,6px)}
+.sv .svh .sn{font-size:clamp(11px,0.9vw,14px);font-weight:600;color:#e2e8f0}
+.sv .svh .sn .loc{display:block;font-size:clamp(8px,0.6vw,10px);color:#64748b;font-weight:400;margin-top:1px}
+.sv .svh .sc{font-size:clamp(11px,0.9vw,14px);font-weight:700;color:#94a3b8}
+.sv .sg{display:grid;grid-template-columns:1fr 1fr 1fr;gap:4px}
+.sv .si{background:rgba(15,17,23,.5);border-radius:6px;padding:clamp(5px,0.4vh,8px) 0;text-align:center;border:1px solid rgba(45,55,72,.4)}
+.sv .si .il{font-size:clamp(7px,0.55vw,9px);text-transform:uppercase;color:#64748b;letter-spacing:.5px}
+.sv .si .iv{font-size:clamp(16px,1.4vw,22px);font-weight:800;margin-top:1px;line-height:1}
 .sv .si .iv.gr{color:#4ade80}.sv .si .iv.ye{color:#facc15}.sv .si .iv.re{color:#f87171}
 
-/* Alerts */
-.al{padding:12px 18px;border-top:1px solid #1e293b}
-.al .ah{display:flex;align-items:center;gap:6px;font-size:12px;font-weight:600;color:#f87171;margin-bottom:6px}
-.al .ah .ac{margin-left:auto;background:#1a0a0a;color:#f87171;padding:0 8px;border-radius:10px;font-size:10px}
-.al table{width:100%;border-collapse:collapse;font-size:11px}
-.al th{padding:5px 6px;color:#52525b;font-weight:500;text-align:left;font-size:9px;text-transform:uppercase;letter-spacing:.3px;border-bottom:1px solid #1e293b}
-.al td{padding:4px 6px;border-bottom:1px solid rgba(255,255,255,.03);color:#94a3b8}
+/* Alerts bar */
+.al{flex-shrink:0;border-top:1px solid #1e293b;padding:clamp(6px,0.5vh,10px) 0 0}
+.al .ah{display:flex;align-items:center;gap:6px;font-size:clamp(10px,0.8vw,12px);font-weight:600;color:#f87171;margin-bottom:clamp(4px,0.3vh,6px)}
+.al .ah .ac{margin-left:auto;background:#1a0a0a;color:#f87171;padding:0 10px;border-radius:10px;font-size:clamp(8px,0.65vw,10px)}
+.al table{width:100%;border-collapse:collapse;font-size:clamp(9px,0.7vw,11px)}
+.al th{padding:clamp(3px,0.2vh,5px) clamp(6px,0.5vw,10px);color:#52525b;font-weight:500;text-align:left;font-size:clamp(7px,0.55vw,9px);text-transform:uppercase;letter-spacing:.3px;border-bottom:1px solid #1e293b}
+.al td{padding:clamp(3px,0.2vh,5px) clamp(6px,0.5vw,10px);border-bottom:1px solid rgba(255,255,255,.03);color:#94a3b8}
 .al .st{color:#4ade80;font-weight:600}
-.al .ec{color:#f87171}.al .wc{color:#facc15}
+.al .ec{color:#f87171;font-weight:600}.al .wc{color:#facc15;font-weight:600}
 
-.ft{text-align:center;padding:14px;color:#1e293b;font-size:10px}
+@media(max-width:900px){
+  .mr{grid-template-columns:repeat(3,1fr)}
+  .br{grid-template-columns:1fr}
+}
+@media(min-width:1800px){
+  .br{grid-template-columns:1fr 1fr}
+}
 </style></head>
 <body>
+<div class="d">
 
-<div class="hd"><h1>Retail Media <span>· IoT Status</span></h1><div class="ts">12/06/2026 — 17:23</div></div>
+<div class="hd"><h1>Retail Media <span>· IoT Status</span></h1><div class="ts" id="ts">15/06/2026, 04:13</div></div>
 
 <div class="mr">
   <div class="mi"><div class="mv">97</div><div class="ml">Total Devices · 3 venues</div></div>
@@ -76,44 +89,45 @@ body{font-family:'Inter',-apple-system,sans-serif;background:#08080e;color:#f1f5
   <div class="mi"><div class="mv">J30</div><div class="ml">Platform</div></div>
 </div>
 
-<div class="bc">
-  <div class="bh"><div class="bl uc">U</div><h2>Union Coop</h2><div class="bs"><span class="bv">60</span> devices · <span class="bv gr">58</span> ok</div></div>
-  <div class="bb">
-    <div class="sv">
-      <div class="svh"><span class="sn">Umm Suqeim</span><span class="sc">27</span></div>
-      <div class="sg">
-        <div class="si"><div class="il">Tracking</div><div class="iv gr">25</div></div>
-        <div class="si"><div class="il">Warnings</div><div class="iv ye">2</div></div>
-        <div class="si"><div class="il">Errors</div><div class="iv gr">0</div></div>
+<div class="br">
+  <div class="bc">
+    <div class="bh"><div class="bl uc">U</div><h2>Union Coop</h2><div class="bs"><b>60</b> devices · <b class="gr">58</b> ok</div></div>
+    <div class="bb">
+      <div class="sv ye">
+        <div class="svh"><span class="sn">Umm Suqeim <span class="loc">Union Coop</span></span><span class="sc">27</span></div>
+        <div class="sg">
+          <div class="si"><div class="il">Tracking</div><div class="iv gr">25</div></div>
+          <div class="si"><div class="il">Warnings</div><div class="iv ye">2</div></div>
+          <div class="si"><div class="il">Errors</div><div class="iv gr">0</div></div>
+        </div>
       </div>
-    </div>
-    <div class="sv">
-      <div class="svh"><span class="sn">Al Warqa</span><span class="sc">33</span></div>
-      <div class="sg">
-        <div class="si"><div class="il">Tracking</div><div class="iv gr">33</div></div>
-        <div class="si"><div class="il">Warnings</div><div class="iv gr">0</div></div>
-        <div class="si"><div class="il">Errors</div><div class="iv re">1</div></div>
+      <div class="sv re">
+        <div class="svh"><span class="sn">Al Warqa <span class="loc">Union Coop</span></span><span class="sc">33</span></div>
+        <div class="sg">
+          <div class="si"><div class="il">Tracking</div><div class="iv gr">33</div></div>
+          <div class="si"><div class="il">Warnings</div><div class="iv gr">0</div></div>
+          <div class="si"><div class="il">Errors</div><div class="iv re">1</div></div>
+        </div>
       </div>
     </div>
   </div>
-</div>
-
-<div class="bc">
-  <div class="bh"><div class="bl lm">L</div><h2>Lulu Market</h2><div class="bs"><span class="bv">37</span> devices · <span class="bv gr">37</span> ok</div></div>
-  <div class="bb">
-    <div class="sv">
-      <div class="svh"><span class="sn">Lulu Al Wahda</span><span class="sc">37</span></div>
-      <div class="sg">
-        <div class="si"><div class="il">Tracking</div><div class="iv gr">37</div></div>
-        <div class="si"><div class="il">Warnings</div><div class="iv gr">0</div></div>
-        <div class="si"><div class="il">Errors</div><div class="iv gr">0</div></div>
+  <div class="bc">
+    <div class="bh"><div class="bl lm">L</div><h2>Lulu Market</h2><div class="bs"><b>37</b> devices · <b class="gr">37</b> ok</div></div>
+    <div class="bb">
+      <div class="sv gr">
+        <div class="svh"><span class="sn">Lulu Al Wahda <span class="loc">Lulu Market</span></span><span class="sc">37</span></div>
+        <div class="sg">
+          <div class="si"><div class="il">Tracking</div><div class="iv gr">37</div></div>
+          <div class="si"><div class="il">Warnings</div><div class="iv gr">0</div></div>
+          <div class="si"><div class="il">Errors</div><div class="iv gr">0</div></div>
+        </div>
       </div>
     </div>
   </div>
 </div>
 
 <div class="al">
-  <div class="ah"><span>Devices needing attention</span><span class="ac">3</span></div>
+  <div class="ah"><span>⚡ Devices needing attention</span><span class="ac">3</span></div>
   <table><thead><tr><th>Device</th><th>Venue</th><th>State</th><th>Errors</th><th>Warnings</th></tr></thead>
   <tbody>
     <tr><td>a1:00:5e:ed:02:bb</td><td>Al Warqa · IOT_18</td><td class="st">TRACKING</td><td class="ec">575</td><td class="wc">383</td></tr>
@@ -122,5 +136,13 @@ body{font-family:'Inter',-apple-system,sans-serif;background:#08080e;color:#f1f5
   </tbody></table>
 </div>
 
-<div class="ft">AiOO Tech Dubai · IoT Admin Console</div>
-</body></html>
+</div>
+
+<script>
+const t = new Date();
+const d = t.toLocaleDateString('en-GB', {day:'2-digit',month:'2-digit',year:'numeric'});
+const h = t.toLocaleTimeString('en-GB', {hour12:false});
+document.getElementById('ts').textContent = d + ', ' + h;
+</script>
+</body>
+</html>

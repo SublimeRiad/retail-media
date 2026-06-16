@@ -32,9 +32,7 @@ echo "[3/3] Building wall-dashboard.html..."
 node /home/iots/.openclaw/workspace/iot-camera/scripts/build-wall-dash.js || { notify "❌ RM Dashboard" "build-wall-dash FAILED" 8; exit 1; }
 cp /tmp/rmstatus-light/wall-dashboard.html /tmp/rm-push/
 
-# 4. Copy rmstatus as retailmedia (same data, grouped by venue)
-echo "[4/4] Copying retailmedia.html..."
-cp /tmp/rm-push/rmstatus.html /tmp/rm-push/retailmedia.html
+# ⚠️ retailmedia.html is now static (no-camera version) — not overwritten
 
 # 5. Push all to GitHub
 cd /tmp/rm-push

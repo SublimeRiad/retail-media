@@ -33,6 +33,13 @@ body{background:#0b1120;color:#e2e8f0;font-family:'Inter',-apple-system,sans-ser
 .mp .ph h3{font-size:clamp(9px,0.7vw,11px);font-weight:600;color:#94a3b8;text-transform:uppercase;letter-spacing:.4px}
 .mp .mc{flex:1;min-height:0;width:100%}
 .mp .leaflet-container{background:#0b1120}
+.ot-wrap{overflow-y:auto;flex:1;min-height:0}
+.ot-wrap::-webkit-scrollbar{width:4px}.ot-wrap::-webkit-scrollbar-track{background:transparent}.ot-wrap::-webkit-scrollbar-thumb{background:#1a2332;border-radius:2px}
+.ot{width:100%;border-collapse:collapse;font-size:10px}
+.ot th{text-align:left;padding:3px 6px;background:#0d0f14;color:#5b677b;font-weight:500;font-size:8px;text-transform:uppercase;border-bottom:1px solid #1f2b3e;position:sticky;top:0}
+.ot td{padding:2px 6px;border-bottom:1px solid rgba(255,255,255,.03);white-space:nowrap}
+.otn{font-weight:500;font-family:'SF Mono',Consolas,monospace;font-size:9px;max-width:120px;overflow:hidden;text-overflow:ellipsis}
+.otl{color:#64748b;font-size:9px;max-width:100px;overflow:hidden;text-overflow:ellipsis}
 .leaflet-tooltip.tt-dark{background:#111827;color:#e2e8f0;border:1px solid #1f2b3e;border-radius:6px;padding:4px 8px;font-size:11px;font-family:Inter,sans-serif;box-shadow:0 2px 8px rgba(0,0,0,.4)}
 .ct{flex:1;display:flex;flex-direction:column;gap:clamp(4px,0.6vh,10px);min-height:0}
 .ct .row{display:flex;gap:clamp(4px,0.6vw,10px);flex:1;min-height:0}
@@ -51,7 +58,7 @@ body{background:#0b1120;color:#e2e8f0;font-family:'Inter',-apple-system,sans-ser
 .gr .fl.o{background:linear-gradient(90deg,#f59e0b,#f97316)}
 .gr .fl.r{background:linear-gradient(90deg,#ef4444,#dc2626)}
 .gr .pc{min-width:32px;text-align:right;font-size:clamp(8px,0.6vw,10px);font-weight:600;color:#64748b}
-@media(max-width:1200px){.ct .row{flex-direction:column}.mr{flex-direction:column;height:auto}.mr .mc{height:150px}}
+@media(max-width:1400px){.mr{flex-wrap:wrap;height:auto}.mr .mc{height:200px}.mp[style*="flex:0.6"]{max-width:none!important;flex:1!important}}
 </style>
 </head>
 <body>
@@ -60,7 +67,7 @@ body{background:#0b1120;color:#e2e8f0;font-family:'Inter',-apple-system,sans-ser
     <div class="l">N</div>
     <h1>NSOC Operations</h1>
     <div class="sub">NSOC Media Player Dashboard</div>
-    <div class="ts">2026-06-16 07:02 GST</div>
+    <div class="ts">2026-06-16 07:06 GST</div>
   </div>
 
   <div class="st">
@@ -73,6 +80,7 @@ body{background:#0b1120;color:#e2e8f0;font-family:'Inter',-apple-system,sans-ser
   <div class="mr">
     <div class="mp"><div class="ph"><h3>Dubai — Device Map</h3></div><div id="dMap" class="mc"></div></div>
     <div class="mp"><div class="ph"><h3>Abu Dhabi — Device Map</h3></div><div id="aMap" class="mc"></div></div>
+    <div class="mp" style="flex:0.6;min-width:200px"><div class="ph"><h3>Offline PCs</h3></div><div class="ot-wrap"><table class="ot"><thead><tr><th>Name</th><th>Location</th></tr></thead><tbody><tr><td class="otn">DESKTOP-BTJJF2S</td><td class="otl">ADCB</td></tr><tr><td class="otn">Alfurjan-concourse3D</td><td class="otl">Al Furjan</td></tr><tr><td class="otn">AlQusais-concourseleft</td><td class="otl">Al Qusais</td></tr><tr><td class="otn">Rigga-concourseleft2</td><td class="otl">Al Rigga</td></tr><tr><td class="otn">Rigga-concourseright1</td><td class="otl">Al Rigga</td></tr><tr><td class="otn">Burjman-exit1left</td><td class="otl">BURJUMAN STATION</td></tr><tr><td class="otn">NEW-PC-5</td><td class="otl">Dragon Mart-2</td></tr><tr><td class="otn">PC-1C697A6B4970</td><td class="otl">ENOC ABU DHABI</td></tr><tr><td class="otn">PC-0007326261A3</td><td class="otl">ENOC ABU DHABI</td></tr><tr><td class="otn">PC-1C697A6EE166</td><td class="otl">ENOC ABU DHABI</td></tr><tr><td class="otn">PC-1C697A6F4AD9</td><td class="otl">ENOC ABU DHABI</td></tr><tr><td class="otn">COLUMN-LED</td><td class="otl">ENOC Al Ain</td></tr><tr><td class="otn">PC-00018085F9D8</td><td class="otl">ENOC Dubai</td></tr><tr><td class="otn">DESKTOP-NTHFA1Q</td><td class="otl">ENOC Ras Al Khaimah</td></tr><tr><td class="otn">PC-A4BB6DD5620C</td><td class="otl">ENOC Sharjah</td></tr><tr><td class="otn">PC-1C697A03CEA3</td><td class="otl">ENOC Sharjah</td></tr><tr><td class="otn">PC-0001808CC824</td><td class="otl">ENOC Sharjah</td></tr><tr><td class="otn">PC-0001808CC97C</td><td class="otl">ENOC Sharjah</td></tr><tr><td class="otn">PC-94C691A8C3EE</td><td class="otl">ENOC Sharjah</td></tr><tr><td class="otn">ENOC-1161-PELMET</td><td class="otl">ENOC Sharjah</td></tr><tr><td class="otn">DESKTOP-3UO7C5P</td><td class="otl">ENOC Sharjah</td></tr><tr><td class="otn">PC-1C697A60FF0C</td><td class="otl">EXPO 2020</td></tr><tr><td class="otn">PC-E43A6E387302</td><td class="otl">EXPOCITY</td></tr><tr><td class="otn">PC-E43A6E387423</td><td class="otl">EXPOCITY</td></tr><tr><td class="otn">PC-E43A6E37EAE4</td><td class="otl">EXPOCITY</td></tr><tr><td class="otn">DESKTOP-A8DJF8E</td><td class="otl">EXPOCITY</td></tr><tr><td class="otn">MONGROVE-TOTEM7A-EXPCT</td><td class="otl">EXPOCITY</td></tr><tr><td class="otn">DESKTOP-765KVEH</td><td class="otl">EXPOCITY</td></tr><tr><td class="otn">DESKTOP-I3V5AN1</td><td class="otl">EXPOCITY</td></tr><tr><td class="otn">PC-88AEDD61EEC0</td><td class="otl">IBN BATTUTA Mall</td></tr><tr><td class="otn">MASHREQ-JALI-CON</td><td class="otl">Insurance Market</td></tr><tr><td class="otn">DM-SZRB-JAB-DXB</td><td class="otl">JABEL ALI DXB</td></tr><tr><td class="otn">DESKTOP-8F1QIQE</td><td class="otl">LULU AL WAHDA</td></tr><tr><td class="otn">MODON-ENTRANCE</td><td class="otl">MODON - HUDAIRIYAT</td></tr><tr><td class="otn">PC-00E269342B55</td><td class="otl">NAKHEEL MALL</td></tr><tr><td class="otn">DESKTOP-8S3G9M2</td><td class="otl">PALM-DUBAI ZUMUROD</td></tr><tr><td class="otn">PC-E43A6E5D6E6D</td><td class="otl">REEM MALL</td></tr><tr><td class="otn">PC-E43A6E5D6CE7</td><td class="otl">REEM MALL</td></tr><tr><td class="otn">PC-E43A6E5D6C85</td><td class="otl">REEM MALL</td></tr><tr><td class="otn">PC-E43A6E5D6CD5</td><td class="otl">REEM MALL</td></tr><tr><td class="otn">PC-E43A6E5D6C79</td><td class="otl">REEM MALL</td></tr><tr><td class="otn">REEM-SM-2F-21A</td><td class="otl">REEM MALL</td></tr><tr><td class="otn">SOBHA-INTERACTIVE</td><td class="otl">Sobha</td></tr><tr><td class="otn">PC-1C697A606AE6</td><td class="otl">The Gardens</td></tr><tr><td class="otn">DESKTOP-FHI85OM</td><td class="otl">The Gardens</td></tr><tr><td class="otn">DESKTOP-D6J29GK</td><td class="otl">Union Coop UMM SUQEIM</td></tr><tr><td class="otn">DESKTOP-VTM08H0</td><td class="otl">Union Coop UMM SUQEIM</td></tr><tr><td class="otn">DESKTOP-IBKORG0</td><td class="otl">Union Metro Station</td></tr><tr><td class="otn">Union-platform1</td><td class="otl">Union Metro Station</td></tr><tr><td class="otn">DESKTOP-05E81SO</td><td class="otl">YAS Mall</td></tr><tr><td class="otn">PC-C8A362202AAA</td><td class="otl">YAS Mall</td></tr><tr><td class="otn">PC-E43A6E4578D4</td><td class="otl">YAS Mall</td></tr><tr><td class="otn">PC-E43A6E4576F1</td><td class="otl">YAS Mall</td></tr><tr><td class="otn">PC-E43A6E4577D9</td><td class="otl">YAS Mall</td></tr><tr><td class="otn">PC-C8A362202A38</td><td class="otl">YAS Mall</td></tr><tr><td class="otn">PC-E43A6E4576B5</td><td class="otl">YAS Mall</td></tr><tr><td class="otn">DESKTOP-L9IBTOR</td><td class="otl">YAS Mall</td></tr></tbody></table></div></div>
   </div>
 
   <div class="ct">
@@ -577,7 +585,7 @@ const DATA = {
       "tag": "905949404"
     },
     {
-      "n": "REEM-SM-2F-21A",
+      "n": "SM-WAY-17A",
       "loc": "REEM MALL",
       "lat": 24.4883731,
       "lng": 54.397811,
@@ -585,7 +593,7 @@ const DATA = {
       "ds": "0 %",
       "dv": 0.0,
       "sn": "WAY FINDING MUPI-21B - LEVEL-21  - B",
-      "tag": "972568460"
+      "tag": "983415796"
     },
     {
       "n": "PC-E43A6E3872BD",

@@ -18,13 +18,13 @@ body{background:#0b1120;color:#e2e8f0;font-family:'Inter',-apple-system,sans-ser
 .hd h1{font-size:clamp(14px,1.6vw,22px);font-weight:700;background:linear-gradient(90deg,#38bdf8,#a78bfa);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;letter-spacing:-0.3px;white-space:nowrap}
 .hd .sub{font-size:clamp(10px,1vw,14px);color:#64748b;padding-left:clamp(8px,1vw,14px);border-left:1px solid #1f2b3e;margin-left:clamp(8px,1vw,14px);white-space:nowrap}
 .hd .ts{margin-left:auto;font-size:clamp(10px,0.9vw,13px);color:#64748b;font-family:monospace;white-space:nowrap}
-.st{display:grid;grid-template-columns:repeat(3,1fr);gap:clamp(4px,0.6vw,10px);flex-shrink:0}
+.st{display:grid;grid-template-columns:repeat(4,1fr);gap:clamp(4px,0.6vw,10px);flex-shrink:0}
 .sc{background:#111827;border-radius:8px;padding:clamp(8px,1.2vh,18px) clamp(10px,1.5vw,20px);border:1px solid #1f2b3e;position:relative;overflow:hidden}
 .sc::before{content:'';position:absolute;top:0;left:0;right:0;height:3px}
-.sc-r::before{background:#ef4444}.sc-g::before{background:#22c55e}.sc-b::before{background:#3b82f6}.sc-p::before{background:#a78bfa}
+.sc-r::before{background:#ef4444}.sc-g::before{background:#22c55e}.sc-b::before{background:#3b82f6}
 .sc .l{font-size:clamp(9px,0.8vw,11px);font-weight:500;text-transform:uppercase;letter-spacing:.6px;color:#64748b;margin-bottom:2px}
 .sc .v{font-size:clamp(22px,3vw,36px);font-weight:700;letter-spacing:-1px;line-height:1.1}
-.sc-r .v{color:#ef4444}.sc-g .v{color:#22c55e}.sc-b .v{color:#3b82f6}.sc-p .v{color:#a78bfa}
+.sc-r .v{color:#ef4444}.sc-g .v{color:#22c55e}.sc-b .v{color:#3b82f6}
 .sc .m{font-size:clamp(9px,0.75vw,11px);color:#64748b;margin-top:2px}
 .sc .m .s{font-size:clamp(11px,1.2vw,16px);font-weight:400;color:#64748b}
 .mr{display:flex;gap:clamp(4px,0.6vw,10px);flex-shrink:0;height:clamp(320px,40vh,480px)}
@@ -60,13 +60,14 @@ body{background:#0b1120;color:#e2e8f0;font-family:'Inter',-apple-system,sans-ser
     <div class="l">N</div>
     <h1>NSOC Operations</h1>
     <div class="sub">NSOC Media Player Dashboard</div>
-    <div class="ts">2026-06-16 06:47 GST</div>
+    <div class="ts">2026-06-16 06:53 GST</div>
   </div>
 
   <div class="st">
     <div class="sc sc-r"><div class="l">Offline</div><div class="v">75</div><div class="m">Computers</div></div>
     <div class="sc sc-g"><div class="l">Online</div><div class="v">1261</div><div class="m">Computers</div></div>
-    <div class="sc sc-b" style="grid-column:span 2"><div class="l">Total</div><div class="v">1336</div><div class="m">Devices monitored</div></div>
+    <div class="sc sc-b"><div class="l">Total</div><div class="v">1336</div><div class="m">Devices monitored</div></div>
+    <div class="sc sc-r"><div class="l">Offline (5h)</div><div class="v">75</div><div class="m">PCs currently offline</div></div>
   </div>
 
   <div class="mr">
@@ -3114,7 +3115,7 @@ const DATA = {
       "ds": "0.57 %",
       "dv": 0.57,
       "sn": "AL WASL-HANGING-01D-b - In Store AISLE",
-      "tag": "839328272"
+      "tag": "839323652"
     },
     {
       "n": "PC-E43A6E39A1F0",
@@ -5042,7 +5043,7 @@ const DATA = {
       "tag": "1274231358"
     },
     {
-      "n": "DESKTOP-6EELHCK",
+      "n": "LED02TGILED",
       "loc": "",
       "lat": 0,
       "lng": 0,
@@ -5050,7 +5051,7 @@ const DATA = {
       "ds": "0 %",
       "dv": 0.0,
       "sn": "DFC-FCF-1A - FOODCOURT-02-TGI",
-      "tag": "1384824976"
+      "tag": "1368692477"
     },
     {
       "n": "DFCFC6A",
@@ -14801,22 +14802,24 @@ const DATA = {
   ],
   "tags": {
     "labels": [
-      "Metro/Station",
-      "Malls",
-      "Expo",
-      "Lulu",
-      "Other",
-      "Union Coop",
-      "WORLD"
+      "ENOC DUBAI",
+      "Undefined",
+      "REEM MALL",
+      "ENOC SHARJAH",
+      "UNION COOP",
+      "EXPOCITY",
+      "YAS MALL",
+      "DALMA MALL"
     ],
     "data": [
-      87,
-      443,
-      138,
-      47,
+      133,
       132,
-      14,
-      5
+      105,
+      82,
+      76,
+      70,
+      58,
+      47
     ]
   },
   "types": {
@@ -14962,21 +14965,25 @@ function initMaps(){
 }
 
 function loadMaps(pcs) {
-  const dubaiPcs = pcs.filter(p => p.lat > 25);
-  const abuPcs = pcs.filter(p => p.lat > 0 && p.lat <= 25);
+  const dubaiPcs = pcs.filter(p => p.lat > 25.1);
+  const abuPcs = pcs.filter(p => p.lat > 24.0 && p.lat <= 25.1);
+  let dubaiRed = 0, abuRed = 0;
   
   dubaiPcs.forEach(p => {
     if(!p.lat||!p.lng)return;
+    if(!p.on) dubaiRed++;
     L.circleMarker([p.lat,p.lng],{radius:4,fillColor:p.on?'#22c55e':'#ef4444',color:p.on?'#22c55e':'#ff6666',weight:2,opacity:1,fillOpacity:0.7})
       .addTo(window.dMap)
       .bindTooltip('<b>'+p.n+'</b><br>'+(p.on?'✅ Online':'❌ Offline')+'<br>'+p.loc,{direction:'top',className:'tt-dark'});
   });
   abuPcs.forEach(p => {
     if(!p.lat||!p.lng)return;
+    if(!p.on) abuRed++;
     L.circleMarker([p.lat,p.lng],{radius:4,fillColor:p.on?'#22c55e':'#ef4444',color:p.on?'#22c55e':'#ff6666',weight:2,opacity:1,fillOpacity:0.7})
       .addTo(window.aMap)
       .bindTooltip('<b>'+p.n+'</b><br>'+(p.on?'✅ Online':'❌ Offline')+'<br>'+p.loc,{direction:'top',className:'tt-dark'});
   });
+  console.log('NSOC Maps: Dubai '+dubaiPcs.length+' dots ('+dubaiRed+' red), Abu '+abuPcs.length+' dots ('+abuRed+' red)');
 }
 
 // ── Init ──

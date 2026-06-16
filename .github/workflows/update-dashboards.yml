@@ -1,0 +1,38 @@
+name: Update Dashboards
+
+on:
+  schedule:
+    # Every 2 hours
+    - cron: '0 */2 * * *'
+  workflow_dispatch:  # Allow manual trigger
+
+jobs:
+  update-nsoc-dashboard:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Build NSOC PC Status Dashboard
+        env:
+          GLPI_API_URL: ${{ secrets.GLPI_API_URL }}
+          GLPI_APP_TOKEN: ${{ secrets.GLPI_APP_TOKEN }}
+          GLPI_USER_TOKEN: ${{ secrets.GLPI_USER_TOKEN }}
+        run: |
+          python3 iot-camera/scripts/build-nsoc-dash.py
+
+      - name: Commit & push updates
+        run: |
+          git config user.name "nsoc-bot"
+          git config user.email "nsoc-bot@retailmedia"
+          git add Retail-Media-Nsoc-Players.html
+          git diff --staged --quiet || git commit -m "Auto-update dashboard $(date '+%Y-%m-%d %H:%M UTC')"
+          git push

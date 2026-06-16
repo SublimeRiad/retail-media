@@ -5,16 +5,17 @@ import json, os, urllib.request, datetime
 # ── Auth (env vars first, then creds file) ───────────────────
 def _load_creds():
     env = {}
-    f = os.path.expanduser('~/.openclaw/workspace/.nsoc_creds')
-    if os.path.exists(f):
-        with open(f) as fh:
-            for line in fh:
-                line = line.strip()
-                if line.startswith('export '):
-                    line = line[7:]
-                if '=' in line and not line.startswith('#'):
-                    k, v = line.split('=', 1)
-                    env[k.strip()] = v.strip().strip('"').strip("'")
+    for path in ['~/.openclaw/workspace/.nsoc_creds', '~/.nsoc_creds']:
+        f = os.path.expanduser(path)
+        if os.path.exists(f):
+            with open(f) as fh:
+                for line in fh:
+                    line = line.strip()
+                    if line.startswith('export '):
+                        line = line[7:]
+                    if '=' in line and not line.startswith('#'):
+                        k, v = line.split('=', 1)
+                        env[k.strip()] = v.strip().strip('"').strip("'")
     return env
 
 _creds = _load_creds()

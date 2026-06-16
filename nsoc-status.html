@@ -60,14 +60,14 @@ body{background:#0b1120;color:#e2e8f0;font-family:'Inter',-apple-system,sans-ser
     <div class="l">N</div>
     <h1>NSOC Operations</h1>
     <div class="sub">NSOC Media Player Dashboard</div>
-    <div class="ts">2026-06-16 06:53 GST</div>
+    <div class="ts">2026-06-16 06:58 GST</div>
   </div>
 
   <div class="st">
     <div class="sc sc-r"><div class="l">Offline</div><div class="v">75</div><div class="m">Computers</div></div>
     <div class="sc sc-g"><div class="l">Online</div><div class="v">1261</div><div class="m">Computers</div></div>
     <div class="sc sc-b"><div class="l">Total</div><div class="v">1336</div><div class="m">Devices monitored</div></div>
-    <div class="sc sc-r"><div class="l">Offline (5h)</div><div class="v">75</div><div class="m">PCs currently offline</div></div>
+    <div class="sc sc-r"><div class="l">Data >60%</div><div class="v">14</div><div class="m">PCs exceeding 60%</div></div>
   </div>
 
   <div class="mr">
@@ -577,7 +577,7 @@ const DATA = {
       "tag": "905949404"
     },
     {
-      "n": "DESKTOP-0ER8DB9",
+      "n": "REEM-SM-2F-21A",
       "loc": "REEM MALL",
       "lat": 24.4883731,
       "lng": 54.397811,
@@ -585,7 +585,7 @@ const DATA = {
       "ds": "0 %",
       "dv": 0.0,
       "sn": "WAY FINDING MUPI-21B - LEVEL-21  - B",
-      "tag": "1121867072"
+      "tag": "972568460"
     },
     {
       "n": "PC-E43A6E3872BD",
@@ -14802,24 +14802,22 @@ const DATA = {
   ],
   "tags": {
     "labels": [
-      "ENOC DUBAI",
+      "Malls",
+      "Convenience Stores",
+      "Metro",
+      "In-Store",
+      "Outdoor",
       "Undefined",
-      "REEM MALL",
-      "ENOC SHARJAH",
-      "UNION COOP",
-      "EXPOCITY",
-      "YAS MALL",
-      "DALMA MALL"
+      "Outdoor + Convenience Stores"
     ],
     "data": [
-      133,
-      132,
-      105,
-      82,
-      76,
-      70,
-      58,
-      47
+      499,
+      277,
+      272,
+      129,
+      114,
+      43,
+      2
     ]
   },
   "types": {
@@ -14969,21 +14967,25 @@ function loadMaps(pcs) {
   const abuPcs = pcs.filter(p => p.lat > 24.0 && p.lat <= 25.1);
   let dubaiRed = 0, abuRed = 0;
   
-  dubaiPcs.forEach(p => {
-    if(!p.lat||!p.lng)return;
-    if(!p.on) dubaiRed++;
-    L.circleMarker([p.lat,p.lng],{radius:4,fillColor:p.on?'#22c55e':'#ef4444',color:p.on?'#22c55e':'#ff6666',weight:2,opacity:1,fillOpacity:0.7})
-      .addTo(window.dMap)
-      .bindTooltip('<b>'+p.n+'</b><br>'+(p.on?'✅ Online':'❌ Offline')+'<br>'+p.loc,{direction:'top',className:'tt-dark'});
-  });
-  abuPcs.forEach(p => {
-    if(!p.lat||!p.lng)return;
-    if(!p.on) abuRed++;
-    L.circleMarker([p.lat,p.lng],{radius:4,fillColor:p.on?'#22c55e':'#ef4444',color:p.on?'#22c55e':'#ff6666',weight:2,opacity:1,fillOpacity:0.7})
-      .addTo(window.aMap)
-      .bindTooltip('<b>'+p.n+'</b><br>'+(p.on?'✅ Online':'❌ Offline')+'<br>'+p.loc,{direction:'top',className:'tt-dark'});
-  });
-  console.log('NSOC Maps: Dubai '+dubaiPcs.length+' dots ('+dubaiRed+' red), Abu '+abuPcs.length+' dots ('+abuRed+' red)');
+  setTimeout(function(){
+    window.dMap.invalidateSize();
+    window.aMap.invalidateSize();
+    dubaiPcs.forEach(p => {
+      if(!p.lat||!p.lng)return;
+      if(!p.on) dubaiRed++;
+      L.circleMarker([p.lat,p.lng],{radius:4,fillColor:p.on?'#22c55e':'#ef4444',color:p.on?'#22c55e':'#ff6666',weight:2,opacity:1,fillOpacity:0.7})
+        .addTo(window.dMap)
+        .bindTooltip('<b>'+p.n+'</b><br>'+(p.on?'✅ Online':'❌ Offline')+'<br>'+p.loc,{direction:'top',className:'tt-dark'});
+    });
+    abuPcs.forEach(p => {
+      if(!p.lat||!p.lng)return;
+      if(!p.on) abuRed++;
+      L.circleMarker([p.lat,p.lng],{radius:4,fillColor:p.on?'#22c55e':'#ef4444',color:p.on?'#22c55e':'#ff6666',weight:2,opacity:1,fillOpacity:0.7})
+        .addTo(window.aMap)
+        .bindTooltip('<b>'+p.n+'</b><br>'+(p.on?'✅ Online':'❌ Offline')+'<br>'+p.loc,{direction:'top',className:'tt-dark'});
+    });
+    console.log('NSOC Maps: Dubai '+dubaiPcs.length+' dots ('+dubaiRed+' red), Abu '+abuPcs.length+' dots ('+abuRed+' red)');
+  }, 300);
 }
 
 // ── Init ──

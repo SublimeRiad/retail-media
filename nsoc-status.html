@@ -60,7 +60,7 @@ body{background:#0b1120;color:#e2e8f0;font-family:'Inter',-apple-system,sans-ser
     <div class="l">N</div>
     <h1>NSOC Operations</h1>
     <div class="sub">NSOC Media Player Dashboard</div>
-    <div class="ts">2026-06-16 06:58 GST</div>
+    <div class="ts">2026-06-16 07:02 GST</div>
   </div>
 
   <div class="st">
@@ -14963,8 +14963,10 @@ function initMaps(){
 }
 
 function loadMaps(pcs) {
-  const dubaiPcs = pcs.filter(p => p.lat > 25.1);
-  const abuPcs = pcs.filter(p => p.lat > 24.0 && p.lat <= 25.1);
+  // Only show offline PCs (red dots) — green dots overwhelm the map
+  const offline = pcs.filter(p => !p.on);
+  const dubaiPcs = offline.filter(p => p.lat > 25.1);
+  const abuPcs = offline.filter(p => p.lat > 24.0 && p.lat <= 25.1);
   let dubaiRed = 0, abuRed = 0;
   
   setTimeout(function(){
@@ -14973,16 +14975,16 @@ function loadMaps(pcs) {
     dubaiPcs.forEach(p => {
       if(!p.lat||!p.lng)return;
       if(!p.on) dubaiRed++;
-      L.circleMarker([p.lat,p.lng],{radius:4,fillColor:p.on?'#22c55e':'#ef4444',color:p.on?'#22c55e':'#ff6666',weight:2,opacity:1,fillOpacity:0.7})
+      L.circleMarker([p.lat,p.lng],{radius:5,fillColor:'#ef4444',color:'#ff6666',weight:2,opacity:1,fillOpacity:0.7})
         .addTo(window.dMap)
-        .bindTooltip('<b>'+p.n+'</b><br>'+(p.on?'✅ Online':'❌ Offline')+'<br>'+p.loc,{direction:'top',className:'tt-dark'});
+        .bindTooltip('<b>'+p.n+'</b><br>❌ Offline<br>'+p.loc,{direction:'top',className:'tt-dark'});
     });
     abuPcs.forEach(p => {
       if(!p.lat||!p.lng)return;
       if(!p.on) abuRed++;
-      L.circleMarker([p.lat,p.lng],{radius:4,fillColor:p.on?'#22c55e':'#ef4444',color:p.on?'#22c55e':'#ff6666',weight:2,opacity:1,fillOpacity:0.7})
+      L.circleMarker([p.lat,p.lng],{radius:5,fillColor:'#ef4444',color:'#ff6666',weight:2,opacity:1,fillOpacity:0.7})
         .addTo(window.aMap)
-        .bindTooltip('<b>'+p.n+'</b><br>'+(p.on?'✅ Online':'❌ Offline')+'<br>'+p.loc,{direction:'top',className:'tt-dark'});
+        .bindTooltip('<b>'+p.n+'</b><br>❌ Offline<br>'+p.loc,{direction:'top',className:'tt-dark'});
     });
     console.log('NSOC Maps: Dubai '+dubaiPcs.length+' dots ('+dubaiRed+' red), Abu '+abuPcs.length+' dots ('+abuRed+' red)');
   }, 300);

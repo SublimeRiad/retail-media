@@ -112,7 +112,7 @@ function loadMaps(){
   }, 300);
 }
 initMaps(); loadMaps();
-setTimeout(function(){var t=document.querySelector(".pa .pb");if(t){var s=1;setInterval(function(){t.scrollTop+=s;if(t.scrollTop>=t.scrollHeight-t.clientHeight){t.scrollTop=0}},80)}},1000);
+setTimeout(function(){var t=document.querySelector(".pa .pb");if(t){var s=1;setInterval(function(){t.scrollTop+=s;if(t.scrollTop>=t.scrollHeight-t.clientHeight){t.scrollTop=0}},80)};var g=document.getElementById('dataGauge');if(g){var s2=1;setInterval(function(){g.scrollTop+=s2;if(g.scrollTop>=g.scrollHeight-g.clientHeight){g.scrollTop=0}},80)}},1000);
 </script>
 </body>
 </html>

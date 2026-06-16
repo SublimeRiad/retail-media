@@ -18,7 +18,7 @@ body{background:#0b1120;color:#e2e8f0;font-family:'Inter',-apple-system,sans-ser
 .hd h1{font-size:clamp(14px,1.6vw,22px);font-weight:700;background:linear-gradient(90deg,#38bdf8,#a78bfa);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;letter-spacing:-0.3px;white-space:nowrap}
 .hd .sub{font-size:clamp(10px,1vw,14px);color:#64748b;padding-left:clamp(8px,1vw,14px);border-left:1px solid #1f2b3e;margin-left:clamp(8px,1vw,14px);white-space:nowrap}
 .hd .ts{margin-left:auto;font-size:clamp(10px,0.9vw,13px);color:#64748b;font-family:monospace;white-space:nowrap}
-.st{display:grid;grid-template-columns:repeat(4,1fr);gap:clamp(4px,0.6vw,10px);flex-shrink:0}
+.st{display:grid;grid-template-columns:repeat(3,1fr);gap:clamp(4px,0.6vw,10px);flex-shrink:0}
 .sc{background:#111827;border-radius:8px;padding:clamp(8px,1.2vh,18px) clamp(10px,1.5vw,20px);border:1px solid #1f2b3e;position:relative;overflow:hidden}
 .sc::before{content:'';position:absolute;top:0;left:0;right:0;height:3px}
 .sc-r::before{background:#ef4444}.sc-g::before{background:#22c55e}.sc-b::before{background:#3b82f6}.sc-p::before{background:#a78bfa}
@@ -60,14 +60,13 @@ body{background:#0b1120;color:#e2e8f0;font-family:'Inter',-apple-system,sans-ser
     <div class="l">N</div>
     <h1>NSOC Operations</h1>
     <div class="sub">NSOC Media Player Dashboard</div>
-    <div class="ts">2026-06-16 06:40 GST</div>
+    <div class="ts">2026-06-16 06:43 GST</div>
   </div>
 
   <div class="st">
     <div class="sc sc-r"><div class="l">Offline</div><div class="v">75</div><div class="m">Computers</div></div>
     <div class="sc sc-g"><div class="l">Online</div><div class="v">1261</div><div class="m">Computers</div></div>
-    <div class="sc sc-b"><div class="l">Total</div><div class="v">1336</div><div class="m">Devices monitored</div></div>
-    <div class="sc sc-p"><div class="l">Uptime</div><div class="v">94.4<span class="s">%</span></div><div class="m">Online rate</div></div>
+    <div class="sc sc-b" style="grid-column:span 2"><div class="l">Total</div><div class="v">1336</div><div class="m">Devices monitored</div></div>
   </div>
 
   <div class="mr">
@@ -3390,7 +3389,7 @@ const DATA = {
       "ds": "43.5 %",
       "dv": 43.5,
       "sn": "RUBY 4 - TOTEM",
-      "tag": "1229163763"
+      "tag": "1229152901"
     },
     {
       "n": "PC-48210B335B7D",

@@ -3,163 +3,115 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>NSOC Status · Operations</title>
+<title>NSOC Status</title>
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.7/dist/chart.umd.min.js"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
 <style>
 *{margin:0;padding:0;box-sizing:border-box}
-body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;background:#080a0e;color:#e0e2e6;font-size:13px;height:100vh;display:flex;flex-direction:column;overflow:hidden}
-
-.header{background:linear-gradient(135deg,#111318,#1c212d);padding:8px 20px;border-bottom:1px solid #1e293b;display:flex;align-items:center;justify-content:space-between;flex-shrink:0}
-.header h1{font-size:15px;font-weight:700;color:#f1f5f9}
-.header h1 span{color:#64748b;font-weight:400}
-.header .sub{color:#5b677b;font-size:10px}
-
-.summary{display:flex;gap:6px;padding:6px 20px;background:#0d0f14;border-bottom:1px solid #161b22;flex-shrink:0;flex-wrap:wrap}
-.sc{background:#141820;border-radius:6px;padding:5px 12px;min-width:80px;flex:1;text-align:center;border:1px solid #1c2330}
-.sc .l{font-size:9px;text-transform:uppercase;color:#5b677b;letter-spacing:.4px}
-.sc .v{font-size:16px;font-weight:700;margin-top:1px}
-
-.body{flex:1;padding:8px 20px;overflow-y:auto;display:flex;flex-direction:column;gap:10px;min-height:0}
-
-.section-title{font-size:12px;font-weight:600;color:#94a3b8;text-transform:uppercase;letter-spacing:.6px;flex-shrink:0}
-
-/* ── Offline cards ── */
-.offline-row{display:flex;gap:6px;flex-wrap:wrap}
-.off-card{background:linear-gradient(135deg,rgba(239,68,68,0.1),rgba(239,68,68,0.04));border:1px solid rgba(239,68,68,0.2);border-radius:8px;padding:8px 12px;min-width:180px;flex:1}
-.off-card .oc-hdr{display:flex;align-items:center;gap:6px;margin-bottom:3px}
-.off-card .oc-hdr .oc-nm{font-weight:600;font-size:11px;font-family:'SF Mono',Consolas,monospace;flex:1;overflow:hidden;text-overflow:ellipsis;color:#ef4444}
-.off-card .oc-sn{font-size:9px;color:#6b7c93;overflow:hidden;text-overflow:ellipsis}
-
-.offline-empty{display:flex;align-items:center;justify-content:center;flex:1;color:#22c55e;font-size:14px;gap:8px;background:rgba(34,197,94,0.05);border:1px solid rgba(34,197,94,0.15);border-radius:8px;padding:12px}
-
-/* ── Venue cards ── */
-.venue-row{display:flex;gap:8px;flex-wrap:wrap}
-.vc{flex:1;min-width:180px;background:#0f1117;border:1px solid #1c2330;border-radius:8px;overflow:hidden}
-.vc-hdr{display:flex;align-items:center;justify-content:space-between;padding:5px 10px;background:#141820;border-bottom:1px solid #1c2330}
-.vc-hdr h3{font-size:11px;font-weight:600}
-.vc-hdr .vb{font-size:9px;color:#64748b}
-.vc-body{padding:4px 10px 8px}
-.vc-stat{display:flex;gap:10px;font-size:11px;margin-bottom:4px}
-.vc-stat span{display:flex;align-items:center;gap:3px}
-.vc-dot{width:7px;height:7px;border-radius:50%;display:inline-block}
-
-.vc-alert{font-size:9px;color:#64748b;display:flex;align-items:center;gap:4px;margin-top:2px}
-.vc-alert .ad{width:5px;height:5px;border-radius:50%;background:#ef4444;display:inline-block}
-
-/* ── Data alert table ── */
-.alert-table{width:100%;border-collapse:collapse;font-size:10px}
-.alert-table th{text-align:left;padding:3px 6px;background:#0d0f14;color:#5b677b;font-weight:500;font-size:8px;text-transform:uppercase;letter-spacing:.3px;border-bottom:1px solid #1c2330;position:sticky;top:0}
-.alert-table td{padding:2px 6px;border-bottom:1px solid #11151c;white-space:nowrap}
-.alert-table .nm{font-weight:500;font-family:'SF Mono',Consolas,monospace;font-size:9px}
-.alert-table .sn{color:#6b7c93;font-size:9px}
-.alert-table .tr{text-align:right}
-.alert-table .r80{background:rgba(239,68,68,0.1)}
-.alert-table .r60{background:rgba(249,115,22,0.08)}
-.db{display:inline-block;height:4px;border-radius:2px;min-width:2px}
-
-.footer{text-align:center;padding:4px;color:#3b4557;font-size:9px;border-top:1px solid #131820;flex-shrink:0}
-
-::-webkit-scrollbar{width:4px}
-::-webkit-scrollbar-track{background:transparent}
-::-webkit-scrollbar-thumb{background:#1c2330;border-radius:2px}
+html,body{height:100%;overflow:hidden}
+body{background:#0b1120;color:#e2e8f0;font-family:'Inter',-apple-system,sans-serif;font-size:clamp(12px,1.1vw,16px)}
+.d{flex:1;display:flex;flex-direction:column;padding:clamp(6px,0.8vh,12px) clamp(10px,1.2vw,18px);gap:clamp(3px,0.4vh,8px);max-width:1920px;margin:0 auto;width:100%;height:100vh}
+.hd{display:flex;align-items:center;gap:clamp(8px,1vw,14px);padding:clamp(4px,0.6vh,10px) clamp(10px,1.2vw,18px);background:#111827;border-radius:8px;border:1px solid #1f2b3e;flex-shrink:0}
+.hd .l{width:30px;height:30px;border-radius:6px;background:linear-gradient(135deg,#38bdf8,#a78bfa);display:flex;flex-direction:column;font-weight:800;font-size:12px;color:#fff;flex-shrink:0}
+.hd h1{font-size:clamp(13px,1.4vw,18px);font-weight:700;color:#e2e8f0}
+.hd .sub{font-size:clamp(9px,0.8vw,12px);color:#64748b;margin-left:auto}
+.st{display:grid;grid-template-columns:repeat(4,1fr);gap:clamp(3px,0.4vw,8px);flex-shrink:0}
+.sc{background:#111827;border-radius:6px;padding:clamp(5px,0.8vh,12px) clamp(8px,1vw,14px);border:1px solid #1f2b3e;position:relative;overflow:hidden}
+.sc::before{content:'';position:absolute;top:0;left:0;right:0;height:2px}
+.sc-r::before{background:#ef4444}.sc-g::before{background:#22c55e}.sc-b::before{background:#3b82f6}.sc-p::before{background:#a78bfa}
+.sc .l{font-size:clamp(8px,0.7vw,10px);font-weight:500;text-transform:uppercase;letter-spacing:.4px;color:#64748b;margin-bottom:1px}
+.sc .v{font-size:clamp(18px,2.2vw,28px);font-weight:700;letter-spacing:-1px;line-height:1.1}
+.sc-r .v{color:#ef4444}.sc-g .v{color:#22c55e}.sc-b .v{color:#3b82f6}.sc-p .v{color:#a78bfa}
+.sc .m{font-size:clamp(8px,0.6vw,10px);color:#64748b;margin-top:1px}
+.sc .m .s{font-size:clamp(10px,1vw,14px)}
+.sc .ts{margin-top:3px;display:flex;gap:4px;flex-wrap:wrap}
+.maps-row{display:flex;gap:clamp(3px,0.4vw,8px);flex-shrink:0;height:clamp(250px,35vh,500px)}
+.mp{flex:1;display:flex;flex-direction:column;background:#111827;border-radius:6px;border:1px solid #1f2b3e;overflow:hidden}
+.mp .ph{padding:clamp(2px,0.3vh,4px) clamp(6px,0.8vw,10px);border-bottom:1px solid #1f2b3e;flex-shrink:0}
+.mp .ph h3{font-size:clamp(8px,0.6vw,10px);font-weight:600;color:#94a3b8;text-transform:uppercase;letter-spacing:.3px}
+.mp .mc{flex:1;min-height:0;width:100%}
+.mp .leaflet-container{background:#0b1120}
+.leaflet-tooltip.tt-dark{background:#111827;color:#e2e8f0;border:1px solid #1f2b3e;border-radius:4px;padding:3px 6px;font-size:10px;font-family:Inter,sans-serif}
+.mid-row{display:flex;gap:clamp(3px,0.4vw,8px);flex:1;min-height:0}
+.mid-row .col{flex:1;display:flex;flex-direction:column;min-width:0}
+.pa{background:#111827;border-radius:6px;border:1px solid #1f2b3e;display:flex;flex-direction:column;overflow:hidden;flex:1}
+.pa .ph{padding:clamp(2px,0.3vh,4px) clamp(6px,0.8vw,10px);border-bottom:1px solid #1f2b3e;flex-shrink:0}
+.pa .ph h3{font-size:clamp(8px,0.6vw,10px);font-weight:600;color:#94a3b8;text-transform:uppercase;letter-spacing:.3px}
+.pa .pb{flex:1;overflow-y:auto;min-height:0}
+.ot{width:100%;border-collapse:collapse;table-layout:auto;font-size:9px}
+.ot th{text-align:left;padding:2px 4px;background:#0d0f14;color:#5b677b;font-weight:500;font-size:7px;text-transform:uppercase;border-bottom:1px solid #1f2b3e;position:sticky;top:0}
+.ot td{padding:2px 4px;border-bottom:1px solid rgba(255,255,255,.03);white-space:nowrap}
+.otsn{font-family:'SF Mono',Consolas,monospace;font-size:8px}
+.otpid{color:#6b7c93;font-size:7px}
+.otloc{color:#5b677b;font-size:7px;max-width:70px;overflow:hidden;text-overflow:ellipsis}
+.otnm{font-weight:500;font-family:'SF Mono',Consolas,monospace;font-size:8px;max-width:80px;overflow:hidden;text-overflow:ellipsis}
+.ic{display:inline-flex;flex-direction:column;width:12px;height:12px;border-radius:50%;font-size:6px;font-weight:700;flex-shrink:0;background:#450a0a;color:#ef4444;border:1px solid #7f1d1d}
+.r60 td{background:rgba(249,115,22,0.06)}
+.r80 td{background:rgba(239,68,68,0.1)}
+.gr .tk{flex:2;height:8px;background:#1a2332;border-radius:6px;overflow:hidden}
+.gr .fl{height:100%;border-radius:6px;transition:width .6s;background:linear-gradient(90deg,#3b82f6,#38bdf8)}
+.gr .fl.o{background:linear-gradient(90deg,#f59e0b,#f97316)}
+.gr .fl.r{background:linear-gradient(90deg,#ef4444,#dc2626)}
+.gr .pc{min-width:28px;text-align:right;font-size:clamp(7px,0.5vw,9px);font-weight:600;color:#64748b}
+.footer{text-align:center;padding:3px;color:#3b4557;font-size:8px;border-top:1px solid #131820;flex-shrink:0}
 </style></head>
-<body><div class="header">
-<div><h1>NSOC <span>Operations</span></h1></div>
-<div class="sub">2026-06-19 02:20 GST</div>
-</div><div class="summary">
-<div class="sc"><div class="l">Total PCs</div><div class="v">1336</div></div>
-<div class="sc"><div class="l">Online</div><div class="v" style="color:#4ade80">1264</div></div>
-<div class="sc"><div class="l">Offline</div><div class="v" style="color:#ef4444">72</div></div>
-<div class="sc"><div class="l">Data >80%</div><div class="v" style="color:#ef4444">9</div></div>
-<div class="sc"><div class="l">Data >60%</div><div class="v" style="color:#f97316">20</div></div>
-<div class="sc"><div class="l">Data >30%</div><div class="v" style="color:#eab308">66</div></div>
-</div><div class="body"><div class="section-title">⚠️ Offline PCs</div><div class="offline-row"><div class="off-card">
-<div class="oc-hdr"><span class="oc-nm">PC-E43A6E5D6E6D</span></div>
-<div class="oc-sn">DIRECTIONAL SIGNAGES-1B - Ground floor-Near Danube · </div>
-</div><div class="off-card">
-<div class="oc-hdr"><span class="oc-nm">PC-7085C2B8EF7B</span></div>
-<div class="oc-sn">ENOC PELMET 1444 · </div>
-</div><div class="off-card">
-<div class="oc-hdr"><span class="oc-nm">DESKTOP-PKT8SGP</span></div>
-<div class="oc-sn">DFC-SM-3A - SMART MUPI · </div>
-</div><div class="off-card">
-<div class="oc-hdr"><span class="oc-nm">PC-88AEDD61E2C6</span></div>
-<div class="oc-sn">IBM-GF-MPI-5A - Life Pharmacy · </div>
-</div><div class="off-card">
-<div class="oc-hdr"><span class="oc-nm">DESKTOP-05E81SO</span></div>
-<div class="oc-sn">DIGITAL TOTEM - TOTEM 6-B · </div>
-</div><div class="off-card">
-<div class="oc-hdr"><span class="oc-nm">PC-04D9F5888D55</span></div>
-<div class="oc-sn"> · </div>
-</div><div class="off-card">
-<div class="oc-hdr"><span class="oc-nm">PC-1C697A60FF0C</span></div>
-<div class="oc-sn">R76-LC-C-WM14 - CONCOURSE SCREEN 14 · </div>
-</div><div class="off-card">
-<div class="oc-hdr"><span class="oc-nm">DESKTOP-11K02LQ</span></div>
-<div class="oc-sn">DFC-WFM-12A - WAY FINDING MUPI · </div>
-</div><div class="off-card">
-<div class="oc-hdr"><span class="oc-nm">PC-E43A6E3FBC81</span></div>
-<div class="oc-sn">DR1-EXT-LED-2A - EB-01-ENTRANCE · </div>
-</div><div class="off-card">
-<div class="oc-hdr"><span class="oc-nm">DESKTOP-NTHFA1Q</span></div>
-<div class="oc-sn">ENOC-412-Poster-Right - ENOC-412 - Al Hisn Rd. · </div>
-</div><div class="off-card">
-<div class="oc-hdr"><span class="oc-nm">PC-00018085F9D8</span></div>
-<div class="oc-sn">ENOC-1604-Poster-Left - ENOC-1604 - Nad Al Sheba · </div>
-</div><div class="off-card">
-<div class="oc-hdr"><span class="oc-nm">MODON-ENTRANCE</span></div>
-<div class="oc-sn">MODON ENTRANCE POLE-1 B - Al Hudayriat extension P · </div>
-</div><div class="off-card">
-<div class="oc-hdr"><span class="oc-nm">AlQusais-concourseleft</span></div>
-<div class="oc-sn">G12-12SP-C-FM04 - CONCOURSE LEFT · </div>
-</div><div class="off-card">
-<div class="oc-hdr"><span class="oc-nm">PC-1C697A606AE6</span></div>
-<div class="oc-sn">R70-POR-GF-WM01 - GROUND LEVEL SCREEN 1 · </div>
-</div><div class="off-card">
-<div class="oc-hdr"><span class="oc-nm">PC-E43A6E387302</span></div>
-<div class="oc-sn">MUPI - VES - EXPO VES-2 · </div>
-</div><div class="off-card">
-<div class="oc-hdr"><span class="oc-nm">DESKTOP-0RFNBNH</span></div>
-<div class="oc-sn">DFC-WFM-4A - WAY FINDING MUPI · </div>
-</div><div class="off-card">
-<div class="oc-hdr"><span class="oc-nm">PC-E43A6E5D6CE7</span></div>
-<div class="oc-sn">DIRECTIONAL SIGNAGES-4B - Ground floor Near caribo · </div>
-</div><div class="off-card">
-<div class="oc-hdr"><span class="oc-nm">PC-C8A362202AAA</span></div>
-<div class="oc-sn">DIGITAL TOTEM - TOTEM 18-A · </div>
-</div><div class="off-card">
-<div class="oc-hdr"><span class="oc-nm">DESKTOP-FHI85OM</span></div>
-<div class="oc-sn">R70-POR-GF-WM02 - GROUND LEVEL SCREEN 2 · </div>
-</div><div class="off-card">
-<div class="oc-hdr"><span class="oc-nm">DESKTOP-SKBIMUL</span></div>
-<div class="oc-sn">SHZ-LED BRIDGES - AL FARDAN STATION TOWARDS AUH · </div>
-</div></div><div style="font-size:10px;color:#5b677b;text-align:center">...and 52 more</div><div class="section-title" style="margin-top:6px">📍 Venues</div><div class="venue-row"><div class="vc" style="border-top:2px solid #3b82f6">
-<div class="vc-hdr"><h3 style="color:#3b82f6">Umm Suqeim</h3><span class="vb">15 PCs</span></div>
-<div class="vc-body">
-<div class="vc-stat">
-<span><span class="vc-dot" style="background:#4ade80"></span>15 online</span>
-<span><span class="vc-dot" style="background:#ef4444"></span>0 offline</span>
+<body>
+<div class="d">
+  <div class="hd">
+    <div class="l">N</div>
+    <h1>NSOC Status</h1>
+    <div style="margin-left:10px;background:rgba(239,68,68,0.15);color:#ef4444;font-weight:700;font-size:clamp(10px,0.9vw,13px);padding:2px 8px;border-radius:4px;white-space:nowrap">20 >60%</div>
+    <div class="sub">2026-06-19 04:00 GST</div>
+  </div>
+  <div class="st">
+    <div class="sc sc-r"><div class="l">Offline</div><div class="v">74</div><div class="m">Computers</div></div>
+    <div class="sc sc-g"><div class="l">Online</div><div class="v">1262</div><div class="m">Computers</div></div>
+    <div class="sc sc-b"><div class="l">Total</div><div class="v">1336</div><div class="m">Devices</div></div>
+    <div class="sc sc-p"><div class="l">By Tag</div><div class="v" style="font-size:clamp(11px,1vw,14px);letter-spacing:0">7</div><div class="m ts"><span style="font-size:9px;color:#3b82f6">Malls: 499</span> · <span style="font-size:9px;color:#f59e0b">Convenience Stores: 277</span> · <span style="font-size:9px;color:#8b5cf6">Metro: 272</span> · <span style="font-size:9px;color:#22c55e">In-Store: 129</span> · <span style="font-size:9px;color:#f97316">Outdoor: 114</span></div></div>
+  </div>
+  <div class="maps-row">
+    <div class="mp"><div class="ph"><h3>Dubai</h3></div><div id="dMap" class="mc"></div></div>
+    <div class="mp"><div class="ph"><h3>Abu Dhabi</h3></div><div id="aMap" class="mc"></div></div>
+  </div>
+  <div class="mid-row">
+    <div class="col" style="flex:1.2">
+      <div class="pa" style="border-top:2px solid #ef4444"><div class="ph" style="background:linear-gradient(90deg,rgba(239,68,68,0.1),transparent)"><h3 style="color:#ef4444">Offline PCs (74)</h3></div><div class="pb"><table class="ot"><thead><tr><th style="width:16px">S</th><th>Name</th><th>Screen Name</th><th>Location</th><th style="width:40px">ID</th></tr></thead><tbody><tr><td><span class="ic ko">✗</span></td><td class="otnm">PC-E43A6E5D6E6D</td><td class="otsn">DIRECTIONAL SIGNAGES-1B - Ground floor-Near Danube Homes-B</td><td class="otloc">REEM MALL</td><td class="otpid">879892426</td></tr><tr><td><span class="ic ko">✗</span></td><td class="otnm">PC-7085C2B8EF7B</td><td class="otsn">ENOC PELMET 1444</td><td class="otloc"></td><td class="otpid">PC-7085C2B8EF7B</td></tr><tr><td><span class="ic ko">✗</span></td><td class="otnm">DESKTOP-PKT8SGP</td><td class="otsn">DFC-SM-3A - SMART MUPI</td><td class="otloc"></td><td class="otpid">1373237926</td></tr><tr><td><span class="ic ko">✗</span></td><td class="otnm">PC-88AEDD61E2C6</td><td class="otsn">IBM-GF-MPI-5A - Life Pharmacy</td><td class="otloc">IBN BATTUTA Mall</td><td class="otpid">1260822628</td></tr><tr><td><span class="ic ko">✗</span></td><td class="otnm">DESKTOP-05E81SO</td><td class="otsn">DIGITAL TOTEM - TOTEM 6-B</td><td class="otloc">YAS Mall</td><td class="otpid">587479136</td></tr><tr><td><span class="ic ko">✗</span></td><td class="otnm">PC-04D9F5888D55</td><td class="otsn"></td><td class="otloc"></td><td class="otpid">PC-04D9F5888D55</td></tr><tr><td><span class="ic ko">✗</span></td><td class="otnm">PC-1C697A60FF0C</td><td class="otsn">R76-LC-C-WM14 - CONCOURSE SCREEN 14</td><td class="otloc">EXPO 2020</td><td class="otpid">1269406494</td></tr><tr><td><span class="ic ko">✗</span></td><td class="otnm">DESKTOP-11K02LQ</td><td class="otsn">DFC-WFM-12A - WAY FINDING MUPI</td><td class="otloc"></td><td class="otpid">1368704472</td></tr><tr><td><span class="ic ko">✗</span></td><td class="otnm">PC-E43A6E3FBC81</td><td class="otsn">DR1-EXT-LED-2A - EB-01-ENTRANCE</td><td class="otloc">Dragon Mart-1</td><td class="otpid">914156646</td></tr><tr><td><span class="ic ko">✗</span></td><td class="otnm">DESKTOP-NTHFA1Q</td><td class="otsn">ENOC-412-Poster-Right - ENOC-412 - Al Hisn Rd.</td><td class="otloc">ENOC Ras Al Khaimah</td><td class="otpid">412-POST-R</td></tr><tr><td><span class="ic ko">✗</span></td><td class="otnm">PC-00018085F9D8</td><td class="otsn">ENOC-1604-Poster-Left - ENOC-1604 - Nad Al Sheba</td><td class="otloc">ENOC Dubai</td><td class="otpid">1604-POST-R</td></tr><tr><td><span class="ic ko">✗</span></td><td class="otnm">MODON-ENTRANCE</td><td class="otsn">MODON ENTRANCE POLE-1 B - Al Hudayriat extension Parking</td><td class="otloc">MODON - HUDAIRIYAT</td><td class="otpid">1246055563</td></tr><tr><td><span class="ic ko">✗</span></td><td class="otnm">AlQusais-concourseleft</td><td class="otsn">G12-12SP-C-FM04 - CONCOURSE LEFT</td><td class="otloc">Al Qusais</td><td class="otpid">1318351214</td></tr><tr><td><span class="ic ko">✗</span></td><td class="otnm">PC-1C697A606AE6</td><td class="otsn">R70-POR-GF-WM01 - GROUND LEVEL SCREEN 1</td><td class="otloc">The Gardens</td><td class="otpid">1284590250</td></tr><tr><td><span class="ic ko">✗</span></td><td class="otnm">PC-E43A6E387302</td><td class="otsn">MUPI - VES - EXPO VES-2</td><td class="otloc">EXPOCITY</td><td class="otpid">1246873722</td></tr><tr><td><span class="ic ko">✗</span></td><td class="otnm">DESKTOP-0RFNBNH</td><td class="otsn">DFC-WFM-4A - WAY FINDING MUPI</td><td class="otloc"></td><td class="otpid">1368714648</td></tr><tr><td><span class="ic ko">✗</span></td><td class="otnm">PC-E43A6E5D6CE7</td><td class="otsn">DIRECTIONAL SIGNAGES-4B - Ground floor Near caribou coffee-B</td><td class="otloc">REEM MALL</td><td class="otpid">880117938</td></tr><tr><td><span class="ic ko">✗</span></td><td class="otnm">PC-C8A362202AAA</td><td class="otsn">DIGITAL TOTEM - TOTEM 18-A</td><td class="otloc">YAS Mall</td><td class="otpid">1257766188</td></tr><tr><td><span class="ic ko">✗</span></td><td class="otnm">DESKTOP-FHI85OM</td><td class="otsn">R70-POR-GF-WM02 - GROUND LEVEL SCREEN 2</td><td class="otloc">The Gardens</td><td class="otpid">1980819721</td></tr><tr><td><span class="ic ko">✗</span></td><td class="otnm">DESKTOP-SKBIMUL</td><td class="otsn">SHZ-LED BRIDGES - AL FARDAN STATION TOWARDS AUH</td><td class="otloc"></td><td class="otpid">1183342265</td></tr><tr><td><span class="ic ko">✗</span></td><td class="otnm">DESKTOP-IBKORG0</td><td class="otsn">R18-12SP-C-FM01 - CONCOURSE LEFT</td><td class="otloc">Union Metro Station</td><td class="otpid">1320732345</td></tr><tr><td><span class="ic ko">✗</span></td><td class="otnm">PC-88AEDD61EEC0</td><td class="otsn">IBM-GF-MPI-11B - SEPHORA</td><td class="otloc">IBN BATTUTA Mall</td><td class="otpid">1260832142</td></tr><tr><td><span class="ic ko">✗</span></td><td class="otnm">Rigga-concourseright1</td><td class="otsn">R17-12SP-C-FM05 - CONCOURSE RIGHT 1</td><td class="otloc">Al Rigga</td><td class="otpid">1306869063</td></tr><tr><td><span class="ic ko">✗</span></td><td class="otnm">IslandDisplay</td><td class="otsn"></td><td class="otloc"></td><td class="otpid">ISLANDDISPLAY</td></tr><tr><td><span class="ic ko">✗</span></td><td class="otnm">Union-platform1</td><td class="otsn">R18-12SP-P-FM06 - PLATFORM 1</td><td class="otloc">Union Metro Station</td><td class="otpid">1320735946</td></tr><tr><td><span class="ic ko">✗</span></td><td class="otnm">PC-E43A6E5D6C85</td><td class="otsn">DIRECTIONAL SIGNAGES-22 A - Ground floor -Near Danube Homes-A</td><td class="otloc">REEM MALL</td><td class="otpid">885869482</td></tr><tr><td><span class="ic ko">✗</span></td><td class="otnm">PC-E43A6E387423</td><td class="otsn">MUPI - VES - EXPO VES-29</td><td class="otloc">EXPOCITY</td><td class="otpid">1266193307</td></tr><tr><td><span class="ic ko">✗</span></td><td class="otnm">PC-E43A6E5D6CD5</td><td class="otsn">DIRECTIONAL SIGNAGES-3B - Ground floor Near caribou coffee-B</td><td class="otloc">REEM MALL</td><td class="otpid">880100903</td></tr><tr><td><span class="ic ko">✗</span></td><td class="otnm">PC-1C697A03CEA3</td><td class="otsn">ENOC-1101-Poster-Right - ENOC-1101 - Sharjah -Dubai Rd</td><td class="otloc">ENOC Sharjah</td><td class="otpid">1101-POST-R</td></tr><tr><td><span class="ic ko">✗</span></td><td class="otnm">PC-E43A6E4578D4</td><td class="otsn">DIGITAL TOTEM - TOTEM 11-A</td><td class="otloc">YAS Mall</td><td class="otpid">587479440</td></tr><tr><td><span class="ic ko">✗</span></td><td class="otnm">PC-E43A6E5D6C79</td><td class="otsn">DIRECTIONAL SIGNAGES-2B - Ground floor Near caribou coffe side-B</td><td class="otloc">REEM MALL</td><td class="otpid">880100066</td></tr><tr><td><span class="ic ko">✗</span></td><td class="otnm">DESKTOP-BTJJF2S</td><td class="otsn">R20-12SP-C-FM04 - CONCOURSE LEFT</td><td class="otloc">ADCB</td><td class="otpid">1307030771</td></tr><tr><td><span class="ic ko">✗</span></td><td class="otnm">MASHREQ-JALI-CON</td><td class="otsn">R33-12SP-C-FM02 - CONCOURSE LEFT</td><td class="otloc">Insurance Market</td><td class="otpid">1308067132</td></tr><tr><td><span class="ic ko">✗</span></td><td class="otnm">PC-E43A6E4576F1</td><td class="otsn">DIGITAL TOTEM - TOTEM 17-A</td><td class="otloc">YAS Mall</td><td class="otpid">587728620</td></tr><tr><td><span class="ic ko">✗</span></td><td class="otnm">PC-E43A6E4577D9</td><td class="otsn">DIGITAL TOTEM - TOTEM 16-A</td><td class="otloc">YAS Mall</td><td class="otpid">587712571</td></tr><tr><td><span class="ic ko">✗</span></td><td class="otnm">PC-C8A362202A38</td><td class="otsn">DIGITAL TOTEM - TOTEM 3-B</td><td class="otloc">YAS Mall</td><td class="otpid">1255373854</td></tr><tr><td><span class="ic ko">✗</span></td><td class="otnm">DESKTOP-9S28IAE</td><td class="otsn">DFC-FC-6B - FOOD COURT SCREEN LCD</td><td class="otloc"></td><td class="otpid">1368714454</td></tr><tr><td><span class="ic ko">✗</span></td><td class="otnm">DM-SZRB-JAB-DXB</td><td class="otsn">SHZ-LED BRIDGES - NATIONAL PAINTS STATION TOWARDS DXB</td><td class="otloc">JABEL ALI DXB</td><td class="otpid">1359803639</td></tr><tr><td><span class="ic ko">✗</span></td><td class="otnm">PC-94C691A8C3EE</td><td class="otsn">ENOC-1116-Column - ENOC-1116 - Plot:85 Yarmook</td><td class="otloc">ENOC Sharjah</td><td class="otpid">1116-CLMN</td></tr><tr><td><span class="ic ko">✗</span></td><td class="otnm">COLUMN-LED</td><td class="otsn">ENOC-1707-Column - ENOC-1707 - Jabal Hafeet</td><td class="otloc">ENOC Al Ain</td><td class="otpid">1707-CLMN</td></tr><tr><td><span class="ic ko">✗</span></td><td class="otnm">SOBHA-INTERACTIVE</td><td class="otsn">R36-INT-C-FM01 - CONCOURSE INTERACTIVE SCREEN</td><td class="otloc">Sobha</td><td class="otpid">1321901648</td></tr><tr><td><span class="ic ko">✗</span></td><td class="otnm">Danube-DXB</td><td class="otsn">SHZ-LED BRIDGES - DANUBE STATION TOWARDS DXB</td><td class="otloc">DANUBE DXB</td><td class="otpid">1183347025</td></tr><tr><td><span class="ic ko">✗</span></td><td class="otnm">PC-E43A6E4576B5</td><td class="otsn">DIGITAL TOTEM - TOTEM 9-A</td><td class="otloc">YAS Mall</td><td class="otpid">587479384</td></tr><tr><td><span class="ic ko">✗</span></td><td class="otnm">PC-E43A6E5D6C46</td><td class="otsn"></td><td class="otloc"></td><td class="otpid">PC-E43A6E5D6C46</td></tr><tr><td><span class="ic ko">✗</span></td><td class="otnm">DESKTOP-MK1PLPQ</td><td class="otsn">DFC-SM-9B - SMART MUPI</td><td class="otloc"></td><td class="otpid">1376494460</td></tr><tr><td><span class="ic ko">✗</span></td><td class="otnm">DESKTOP-SR9HBUL</td><td class="otsn">DFC-WFM-6A - WAY FINDING MUPI</td><td class="otloc"></td><td class="otpid">1368714651</td></tr><tr><td><span class="ic ko">✗</span></td><td class="otnm">DESKTOP-DLCED58</td><td class="otsn">DFC-SM-16B - SMART MUPI</td><td class="otloc"></td><td class="otpid">1908474158</td></tr><tr><td><span class="ic ko">✗</span></td><td class="otnm">PC-E43A6E3873F7</td><td class="otsn">MUPI - VES - EXPO VES-31</td><td class="otloc">EXPOCITY</td><td class="otpid">1327105836</td></tr><tr><td><span class="ic ko">✗</span></td><td class="otnm">PC-E43A6E387401</td><td class="otsn">MUPI - VES - EXPO VES-32</td><td class="otloc">EXPOCITY</td><td class="otpid">EXPO-VES-32</td></tr><tr><td><span class="ic ko">✗</span></td><td class="otnm">DESKTOP-DK92OHU</td><td class="otsn">DFP-LLS-1A - Near BYD -Opp Lulu</td><td class="otloc"></td><td class="otpid">1922091954</td></tr><tr><td><span class="ic ko">✗</span></td><td class="otnm">PC-1C697A6B4970</td><td class="otsn">ENOC-1702-Column - ENOC-1702 - Al Reef</td><td class="otloc">ENOC ABU DHABI</td><td class="otpid">1702-CLMN</td></tr><tr><td><span class="ic ko">✗</span></td><td class="otnm">PC-0007326261A3</td><td class="otsn">ENOC-1702-PELMET - ENOC-1702 - Al Reef</td><td class="otloc">ENOC ABU DHABI</td><td class="otpid">1702-PELMET</td></tr><tr><td><span class="ic ko">✗</span></td><td class="otnm">PC-1C697A6EE166</td><td class="otsn">ENOC-1702-Poster-Right - ENOC-1702 - Al Reef</td><td class="otloc">ENOC ABU DHABI</td><td class="otpid">1702-POST-R</td></tr><tr><td><span class="ic ko">✗</span></td><td class="otnm">ENOC-001</td><td class="otsn">ENOC-1110-Column - ENOC-1110 - Sharjah INDL-3</td><td class="otloc">ENOC Sharjah</td><td class="otpid">1110-CLMN</td></tr><tr><td><span class="ic ko">✗</span></td><td class="otnm">ENOC-COLUMN-LED</td><td class="otsn">ENOC-COLUMN-LED</td><td class="otloc"></td><td class="otpid"></td></tr><tr><td><span class="ic ko">✗</span></td><td class="otnm">ENOC-1161-PELMET</td><td class="otsn">ENOC-1161-Pelmet - ENOC-1161 - Al Falaj</td><td class="otloc">ENOC Sharjah</td><td class="otpid">1161-PELMET</td></tr><tr><td><span class="ic ko">✗</span></td><td class="otnm">REEM-SM-2F-21A</td><td class="otsn">WAY FINDING MUPI-21B - LEVEL-21  - B</td><td class="otloc">REEM MALL</td><td class="otpid"></td></tr><tr><td><span class="ic ko">✗</span></td><td class="otnm">DESKTOP-8S3G9M2</td><td class="otsn">ZUMUROD 4 - MEGACOM</td><td class="otloc">PALM-DUBAI ZUMUROD</td><td class="otpid"></td></tr><tr><td><span class="ic ko">✗</span></td><td class="otnm">DESKTOP-GE4GVOC</td><td class="otsn">DR2-PIL-WM-96A - WALL MOUNTED SCREEN-96</td><td class="otloc">Dragon Mart-2</td><td class="otpid">931581898</td></tr><tr><td><span class="ic ko">✗</span></td><td class="otnm">PC-E43A6E3FBB6E</td><td class="otsn">DR2-PIL-WM-100A - WALL MOUNTED SCREEN-100</td><td class="otloc">Dragon Mart-2</td><td class="otpid">961982663</td></tr><tr><td><span class="ic ko">✗</span></td><td class="otnm">BARSHA-ENTR-H-A</td><td class="otsn"></td><td class="otloc"></td><td class="otpid"></td></tr><tr><td><span class="ic ko">✗</span></td><td class="otnm">BULKHEAD001</td><td class="otsn"></td><td class="otloc"></td><td class="otpid"></td></tr><tr><td><span class="ic ko">✗</span></td><td class="otnm">DESKTOP-L9IBTOR</td><td class="otsn">DIGITAL TOTEM - TOTEM 21-B</td><td class="otloc">YAS Mall</td><td class="otpid">1165488126</td></tr><tr><td><span class="ic ko">✗</span></td><td class="otnm">DESKTOP-BOOQ29O</td><td class="otsn"></td><td class="otloc"></td><td class="otpid"></td></tr><tr><td><span class="ic ko">✗</span></td><td class="otnm">DESKTOP-A8DJF8E</td><td class="otsn">MUPI - VES - EXPO VES-2</td><td class="otloc">EXPOCITY</td><td class="otpid">1965947623</td></tr><tr><td><span class="ic ko">✗</span></td><td class="otnm">PC-1C697A6F4AD9</td><td class="otsn">ENOC-1702-Poster-Left - ENOC-1702 - Al Reef</td><td class="otloc">ENOC ABU DHABI</td><td class="otpid">1702-POST-L</td></tr><tr><td><span class="ic ko">✗</span></td><td class="otnm">IBM-FOOD-COURT</td><td class="otsn">IBM-GF-FC-13A - Food court Pillar-13</td><td class="otloc">IBN BATTUTA Mall</td><td class="otpid">1261043432</td></tr><tr><td><span class="ic ko">✗</span></td><td class="otnm">RUBY7</td><td class="otsn">RUBY 7 - TOTEM</td><td class="otloc">PALM-DUBAI RUBY</td><td class="otpid">1974572603</td></tr><tr><td><span class="ic ko">✗</span></td><td class="otnm">DM2-SMALL-LED</td><td class="otsn">DR2-GF-BS-4A - SMALL LED-NEAR TOYS CENTER</td><td class="otloc">Dragon Mart-2</td><td class="otpid">945684842</td></tr><tr><td><span class="ic ko">✗</span></td><td class="otnm">DESKTOP-8M6UV30</td><td class="otsn">DR2-PIL-WM-28A - WALL MOUNTED SCREEN-28</td><td class="otloc">Dragon Mart-2</td><td class="otpid">928468874</td></tr><tr><td><span class="ic ko">✗</span></td><td class="otnm">DM02-FC03</td><td class="otsn">DR2-PIL-WM-52A - WALL MOUNTED SCREEN-52</td><td class="otloc">Dragon Mart-2</td><td class="otpid">962041043</td></tr><tr><td><span class="ic ko">✗</span></td><td class="otnm">NEW-PC-5</td><td class="otsn">DR2-PIL-WM-40A - WALL MOUNTED SCREEN-40</td><td class="otloc">Dragon Mart-2</td><td class="otpid">950765194</td></tr><tr><td><span class="ic ko">✗</span></td><td class="otnm">MONGROVE-TOTEM7A-EXPCT</td><td class="otsn">EXPO Totem 7A - Mangrove Avenue</td><td class="otloc">EXPOCITY</td><td class="otpid"></td></tr><tr><td><span class="ic ko">✗</span></td><td class="otnm">DESKTOP-765KVEH</td><td class="otsn">MUPI - VES - EXPO VES-21</td><td class="otloc">EXPOCITY</td><td class="otpid">1295743478</td></tr></tbody></table></div></div>
+    </div>
+    <div class="col">
+      <div class="pa" style="border-top:2px solid #ef4444"><div class="ph" style="background:linear-gradient(90deg,rgba(239,68,68,0.1),transparent)"><h3 style="color:#ef4444">Data >60% (20)</h3></div><div class="pb" style="display:flex;flex-direction:column"><div style="font-size:clamp(22px,3vw,36px);font-weight:800;color:#ef4444;padding:5px 0 2px;text-align:center">20</div></div></div>
+</div><div id="dataGauge" style="padding:2px 8px 4px;overflow-y:auto"></div></div></div>
+    </div>
+  </div>
+  </div>
+  <div class="footer">NSOC Status · Updated 2026-06-19 04:00 GST · Data via NSOC</div>
 </div>
-<div class="vc-alert"><span class="ad"></span>2 >60% data</div>
-</div>
-</div><div class="vc" style="border-top:2px solid #8b5cf6">
-<div class="vc-hdr"><h3 style="color:#8b5cf6">Al Warqa</h3><span class="vb">16 PCs</span></div>
-<div class="vc-body">
-<div class="vc-stat">
-<span><span class="vc-dot" style="background:#4ade80"></span>16 online</span>
-<span><span class="vc-dot" style="background:#ef4444"></span>0 offline</span>
-</div>
-<div class="vc-alert"><span class="ad"></span>6 >60% data</div>
-</div>
-</div><div class="vc" style="border-top:2px solid #f59e0b">
-<div class="vc-hdr"><h3 style="color:#f59e0b">Lulu Market</h3><span class="vb">47 PCs</span></div>
-<div class="vc-body">
-<div class="vc-stat">
-<span><span class="vc-dot" style="background:#4ade80"></span>47 online</span>
-<span><span class="vc-dot" style="background:#ef4444"></span>0 offline</span>
-</div>
-
-</div>
-</div></div><div class="section-title" style="margin-top:6px">🔥 High Data Consumption (>60%)</div><table class="alert-table"><thead><tr><th>Name</th><th>Screen Name</th><th style="width:56px;text-align:right">Data</th></tr></thead><tbody><tr class=" r80"><td class="nm">IBM-FOOD-COURT</td><td class="sn">IBM-GF-FC-13A - Food court Pillar-13</td><td class="tr"><div style="display:inline-flex;align-items:center;gap:2px;font-size:9px"><span class="db" style="width:97.13px;background:#ef4444"></span>97.13 %</div></td></tr><tr class=" r80"><td class="nm">DESKTOP-GE4GVOC</td><td class="sn">DR2-PIL-WM-96A - WALL MOUNTED SCREEN-96</td><td class="tr"><div style="display:inline-flex;align-items:center;gap:2px;font-size:9px"><span class="db" style="width:95.35px;background:#ef4444"></span>95.35 %</div></td></tr><tr class=" r80"><td class="nm">DM02-FC03</td><td class="sn">DR2-PIL-WM-52A - WALL MOUNTED SCREEN-52</td><td class="tr"><div style="display:inline-flex;align-items:center;gap:2px;font-size:9px"><span class="db" style="width:95.35px;background:#ef4444"></span>95.35 %</div></td></tr><tr class=" r80"><td class="nm">DM02-LED-NESTO-LED</td><td class="sn">DR2-GF-BS-3A - NESTO SIDE LED</td><td class="tr"><div style="display:inline-flex;align-items:center;gap:2px;font-size:9px"><span class="db" style="width:90.16px;background:#ef4444"></span>90.16 %</div></td></tr><tr class=" r80"><td class="nm">PC-F44D306862C0</td><td class="sn">ABD-FF-BS-2A - YATEEM OPTICS</td><td class="tr"><div style="display:inline-flex;align-items:center;gap:2px;font-size:9px"><span class="db" style="width:89.37px;background:#ef4444"></span>89.37 %</div></td></tr><tr class=" r80"><td class="nm">DESKTOP-C7OQU4Q</td><td class="sn">AL WARQA-LCD Hanging Screen 4A - In Store AISLE</td><td class="tr"><div style="display:inline-flex;align-items:center;gap:2px;font-size:9px"><span class="db" style="width:83.73px;background:#ef4444"></span>83.73 %</div></td></tr><tr class=" r80"><td class="nm">instore</td><td class="sn">AL WARQA-LCD Hanging Screen 4B - In Store AISLE</td><td class="tr"><div style="display:inline-flex;align-items:center;gap:2px;font-size:9px"><span class="db" style="width:83.73px;background:#ef4444"></span>83.73 %</div></td></tr><tr class=" r80"><td class="nm">DESKTOP-0QP9AB0</td><td class="sn">UMM SUQEIM-LCD Hanging Screen 4B - In Store AISLE</td><td class="tr"><div style="display:inline-flex;align-items:center;gap:2px;font-size:9px"><span class="db" style="width:80.89px;background:#ef4444"></span>80.89 %</div></td></tr><tr class=" r80"><td class="nm">DESKTOP-V1VPUTR</td><td class="sn">UMM SUQEIM-LCD Hanging Screen 4A - In Store AISLE</td><td class="tr"><div style="display:inline-flex;align-items:center;gap:2px;font-size:9px"><span class="db" style="width:80.89px;background:#ef4444"></span>80.89 %</div></td></tr><tr class=" r60"><td class="nm">DESKTOP-C6N4OOK</td><td class="sn">ENOC-601-Poster-Right - ENOC-601-DIBBA ROAD</td><td class="tr"><div style="display:inline-flex;align-items:center;gap:2px;font-size:9px"><span class="db" style="width:74.8px;background:#f97316"></span>74.8 %</div></td></tr><tr class=" r60"><td class="nm">DESKTOP-0JRD653</td><td class="sn">ENOC-508-Poster-Right - ENOC-508-Hamad Bin Abdulla</td><td class="tr"><div style="display:inline-flex;align-items:center;gap:2px;font-size:9px"><span class="db" style="width:71.6px;background:#f97316"></span>71.6 %</div></td></tr><tr class=" r60"><td class="nm">DESKTOP-7I5TTGB</td><td class="sn">ENOC-507-Poster-Right - ENOC-507-Fujairah Airport</td><td class="tr"><div style="display:inline-flex;align-items:center;gap:2px;font-size:9px"><span class="db" style="width:68.6px;background:#f97316"></span>68.6 %</div></td></tr><tr class=" r60"><td class="nm">DESKTOP-EB3RM2T</td><td class="sn">ENOC-66-Poster-Right - ENOC-66-Hatta Fort Hotel</td><td class="tr"><div style="display:inline-flex;align-items:center;gap:2px;font-size:9px"><span class="db" style="width:68.4px;background:#f97316"></span>68.4 %</div></td></tr><tr class=" r60"><td class="nm">DESKTOP-S82A2FD</td><td class="sn">AL WARQA-LCD Hanging Screen 1A - In Store AISLE</td><td class="tr"><div style="display:inline-flex;align-items:center;gap:2px;font-size:9px"><span class="db" style="width:67.71px;background:#f97316"></span>67.71 %</div></td></tr><tr class=" r60"><td class="nm">DESKTOP-P045QOV</td><td class="sn">AL WARQA-LCD Hanging Screen 1B - In Store AISLE</td><td class="tr"><div style="display:inline-flex;align-items:center;gap:2px;font-size:9px"><span class="db" style="width:67.71px;background:#f97316"></span>67.71 %</div></td></tr><tr class=" r60"><td class="nm">DESKTOP-T65IM4A</td><td class="sn">ENOC-401-Poster-Right - ENOC-401-Shk Mohd Bin Sale</td><td class="tr"><div style="display:inline-flex;align-items:center;gap:2px;font-size:9px"><span class="db" style="width:67.6px;background:#f97316"></span>67.6 %</div></td></tr><tr class=" r60"><td class="nm">DESKTOP-O95C62P</td><td class="sn">ENOC-404-Poster-Right - ENOC-404-Al Marid</td><td class="tr"><div style="display:inline-flex;align-items:center;gap:2px;font-size:9px"><span class="db" style="width:67.2px;background:#f97316"></span>67.2 %</div></td></tr><tr class=" r60"><td class="nm">DESKTOP-FKL6639</td><td class="sn">ENOC-212-Poster-Right - ENOC-212-Khalifa Hospital</td><td class="tr"><div style="display:inline-flex;align-items:center;gap:2px;font-size:9px"><span class="db" style="width:66.6px;background:#f97316"></span>66.6 %</div></td></tr><tr class=" r60"><td class="nm">DESKTOP-LJ48QVN</td><td class="sn">AL WARQA-LCD Hanging Screen 2A - In Store AISLE</td><td class="tr"><div style="display:inline-flex;align-items:center;gap:2px;font-size:9px"><span class="db" style="width:65.04px;background:#f97316"></span>65.04 %</div></td></tr><tr class=" r60"><td class="nm">DESKTOP-0JBMRIA</td><td class="sn">AL WARQA-LCD Hanging Screen 2B - In Store AISLE</td><td class="tr"><div style="display:inline-flex;align-items:center;gap:2px;font-size:9px"><span class="db" style="width:65.03px;background:#f97316"></span>65.03 %</div></td></tr></tbody></table></div>
-<div class="footer">NSOC Status · Updated 2026-06-19 02:20 GST · Data via NSOC</div>
+<script>
+const CONS = [{"label": "0581306658 - IBM-FOOD-COURT [IBN BATTUTA Mal]", "value": 0.97}, {"label": "0529857980 - DESKTOP-GE4GVOC [Dragon Mart-2]", "value": 0.95}, {"label": "0529857980 - DM02-FC03 [Dragon Mart-2]", "value": 0.95}, {"label": "01529857980 - DM02-LED-NESTO-LED [Dragon Mart-2]", "value": 0.9}, {"label": "01526408366 - PC-F44D306862C0 [Abu Dhabi Mall]", "value": 0.89}, {"label": "0588437435 - DESKTOP-C7OQU4Q [Union Coop AL W]", "value": 0.84}, {"label": "0588437435 - instore [Union Coop AL W]", "value": 0.84}, {"label": "0556816503 - DESKTOP-0QP9AB0 [Union Coop UMM ]", "value": 0.81}, {"label": "0556816503 - DESKTOP-V1VPUTR [Union Coop UMM ]", "value": 0.81}, {"label": "0525307239 - DESKTOP-C6N4OOK [ENOC Fujairah]", "value": 0.75}, {"label": "0525306890 - DESKTOP-0JRD653 [ENOC Fujairah]", "value": 0.72}, {"label": "0525306932 - DESKTOP-7I5TTGB [ENOC Fujairah]", "value": 0.69}, {"label": "0525306290 - DESKTOP-EB3RM2T [ENOC Dubai]", "value": 0.68}, {"label": "0581591561 - DESKTOP-S82A2FD [Union Coop AL W]", "value": 0.68}, {"label": "0581591561 - DESKTOP-P045QOV [Union Coop AL W]", "value": 0.68}, {"label": "0525306389 - DESKTOP-T65IM4A [ENOC Ras Al Kha]", "value": 0.68}, {"label": "0525306818 - DESKTOP-O95C62P [ENOC Ras Al Kha]", "value": 0.67}, {"label": "0525307161 - DESKTOP-FKL6639 [ENOC Ajman]", "value": 0.67}, {"label": "0581591221 - DESKTOP-LJ48QVN [Union Coop AL W]", "value": 0.65}, {"label": "01581591221 - DESKTOP-0JBMRIA [Union Coop AL W]", "value": 0.65}];
+function renderGauge(items) {
+  const el = document.getElementById('dataGauge');
+  if(!items||!items.length){el.innerHTML='<div style="color:#64748b;font-size:11px;text-align:center;padding:8px">No PCs exceed 60%</div>';return;}
+  el.innerHTML = items.map(d => {
+    const cls = d.value > 0.8 ? 'r' : d.value > 0.6 ? 'o' : '';
+    return '<div class="gr"><span class="lb">'+d.label+'</span><div class="tk"><div class="fl '+cls+'" style="width:'+(d.value*100).toFixed(0)+'%"></div></div><span class="pc">'+(d.value*100).toFixed(0)+'%</span></div>';
+  }).join('');
+}
+renderGauge(CONS);
+function initMaps(){
+  window.dMap = L.map('dMap',{center:[25.2,55.3],zoom:9,layers:[L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png',{subdomains:'abcd',maxZoom:19})],zoomControl:false,attributionControl:false});
+  window.aMap = L.map('aMap',{center:[24.45,54.35],zoom:9,layers:[L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png',{subdomains:'abcd',maxZoom:19})],zoomControl:false,attributionControl:false});
+}
+const PCS = [{"n": "PC-E43A6E5D6E6D", "lat": 24.4883731, "lng": 54.397811, "sn": "DIRECTIONAL SIGNAGES-1B - Ground floor-Near Danube Homes-B", "loc": "REEM MALL"}, {"n": "PC-88AEDD61E2C6", "lat": 25.044552, "lng": 55.1177223, "sn": "IBM-GF-MPI-5A - Life Pharmacy", "loc": "IBN BATTUTA Mall"}, {"n": "DESKTOP-05E81SO", "lat": 24.490398, "lng": 54.6077697, "sn": "DIGITAL TOTEM - TOTEM 6-B", "loc": "YAS Mall"}, {"n": "PC-1C697A60FF0C", "lat": 25.2048493, "lng": 55.2707828, "sn": "R76-LC-C-WM14 - CONCOURSE SCREEN 14", "loc": "EXPO 2020"}, {"n": "PC-E43A6E3FBC81", "lat": 25.1724735, "lng": 55.4222805, "sn": "DR1-EXT-LED-2A - EB-01-ENTRANCE", "loc": "Dragon Mart-1"}, {"n": "MODON-ENTRANCE", "lat": 25.0234353, "lng": 55.2716551, "sn": "MODON ENTRANCE POLE-1 B - Al Hudayriat extension Parking", "loc": "MODON - HUDAIRIYAT"}, {"n": "AlQusais-concourseleft", "lat": 25.2626993, "lng": 55.3874514, "sn": "G12-12SP-C-FM04 - CONCOURSE LEFT", "loc": "Al Qusais"}, {"n": "PC-1C697A606AE6", "lat": 25.0423411, "lng": 55.127927, "sn": "R70-POR-GF-WM01 - GROUND LEVEL SCREEN 1", "loc": "The Gardens"}, {"n": "PC-E43A6E387302", "lat": 24.9608843, "lng": 55.1506911, "sn": "MUPI - VES - EXPO VES-2", "loc": "EXPOCITY"}, {"n": "PC-E43A6E5D6CE7", "lat": 24.4883731, "lng": 54.397811, "sn": "DIRECTIONAL SIGNAGES-4B - Ground floor Near caribou coffee-B", "loc": "REEM MALL"}, {"n": "PC-C8A362202AAA", "lat": 24.490398, "lng": 54.6077697, "sn": "DIGITAL TOTEM - TOTEM 18-A", "loc": "YAS Mall"}, {"n": "DESKTOP-FHI85OM", "lat": 25.0423411, "lng": 55.127927, "sn": "R70-POR-GF-WM02 - GROUND LEVEL SCREEN 2", "loc": "The Gardens"}, {"n": "DESKTOP-IBKORG0", "lat": 25.2661087, "lng": 55.3134172, "sn": "R18-12SP-C-FM01 - CONCOURSE LEFT", "loc": "Union Metro Station"}, {"n": "PC-88AEDD61EEC0", "lat": 25.044552, "lng": 55.1177223, "sn": "IBM-GF-MPI-11B - SEPHORA", "loc": "IBN BATTUTA Mall"}, {"n": "Rigga-concourseright1", "lat": 25.2632298, "lng": 55.3241454, "sn": "R17-12SP-C-FM05 - CONCOURSE RIGHT 1", "loc": "Al Rigga"}, {"n": "Union-platform1", "lat": 25.2661087, "lng": 55.3134172, "sn": "R18-12SP-P-FM06 - PLATFORM 1", "loc": "Union Metro Station"}, {"n": "PC-E43A6E5D6C85", "lat": 24.4883731, "lng": 54.397811, "sn": "DIRECTIONAL SIGNAGES-22 A - Ground floor -Near Danube Homes-A", "loc": "REEM MALL"}, {"n": "PC-E43A6E387423", "lat": 24.9608843, "lng": 55.1506911, "sn": "MUPI - VES - EXPO VES-29", "loc": "EXPOCITY"}, {"n": "PC-E43A6E5D6CD5", "lat": 24.4883731, "lng": 54.397811, "sn": "DIRECTIONAL SIGNAGES-3B - Ground floor Near caribou coffee-B", "loc": "REEM MALL"}, {"n": "PC-1C697A03CEA3", "lat": 25.33, "lng": 55.41, "sn": "ENOC-1101-Poster-Right - ENOC-1101 - Sharjah -Dubai Rd", "loc": "ENOC Sharjah"}, {"n": "PC-E43A6E4578D4", "lat": 24.490398, "lng": 54.6077697, "sn": "DIGITAL TOTEM - TOTEM 11-A", "loc": "YAS Mall"}, {"n": "PC-E43A6E5D6C79", "lat": 24.4883731, "lng": 54.397811, "sn": "DIRECTIONAL SIGNAGES-2B - Ground floor Near caribou coffe side-B", "loc": "REEM MALL"}, {"n": "DESKTOP-BTJJF2S", "lat": 25.2446262, "lng": 55.2981612, "sn": "R20-12SP-C-FM04 - CONCOURSE LEFT", "loc": "ADCB"}, {"n": "MASHREQ-JALI-CON", "lat": 25.0468081, "lng": 55.2308837, "sn": "R33-12SP-C-FM02 - CONCOURSE LEFT", "loc": "Insurance Market"}, {"n": "PC-E43A6E4576F1", "lat": 24.490398, "lng": 54.6077697, "sn": "DIGITAL TOTEM - TOTEM 17-A", "loc": "YAS Mall"}, {"n": "PC-E43A6E4577D9", "lat": 24.490398, "lng": 54.6077697, "sn": "DIGITAL TOTEM - TOTEM 16-A", "loc": "YAS Mall"}, {"n": "PC-C8A362202A38", "lat": 24.490398, "lng": 54.6077697, "sn": "DIGITAL TOTEM - TOTEM 3-B", "loc": "YAS Mall"}, {"n": "DM-SZRB-JAB-DXB", "lat": 24.9857145, "lng": 55.0272904, "sn": "SHZ-LED BRIDGES - NATIONAL PAINTS STATION TOWARDS DXB", "loc": "JABEL ALI DXB"}, {"n": "PC-94C691A8C3EE", "lat": 25.33, "lng": 55.41, "sn": "ENOC-1116-Column - ENOC-1116 - Plot:85 Yarmook", "loc": "ENOC Sharjah"}, {"n": "SOBHA-INTERACTIVE", "lat": 25.1761875, "lng": 55.3113125, "sn": "R36-INT-C-FM01 - CONCOURSE INTERACTIVE SCREEN", "loc": "Sobha"}, {"n": "Danube-DXB", "lat": 25.2566932, "lng": 55.3643178, "sn": "SHZ-LED BRIDGES - DANUBE STATION TOWARDS DXB", "loc": "DANUBE DXB"}, {"n": "PC-E43A6E4576B5", "lat": 24.490398, "lng": 54.6077697, "sn": "DIGITAL TOTEM - TOTEM 9-A", "loc": "YAS Mall"}, {"n": "PC-E43A6E3873F7", "lat": 24.9608843, "lng": 55.1506911, "sn": "MUPI - VES - EXPO VES-31", "loc": "EXPOCITY"}, {"n": "PC-E43A6E387401", "lat": 24.9608843, "lng": 55.1506911, "sn": "MUPI - VES - EXPO VES-32", "loc": "EXPOCITY"}, {"n": "PC-1C697A6B4970", "lat": 24.48, "lng": 54.37, "sn": "ENOC-1702-Column - ENOC-1702 - Al Reef", "loc": "ENOC ABU DHABI"}, {"n": "PC-0007326261A3", "lat": 24.48, "lng": 54.37, "sn": "ENOC-1702-PELMET - ENOC-1702 - Al Reef", "loc": "ENOC ABU DHABI"}, {"n": "PC-1C697A6EE166", "lat": 24.48, "lng": 54.37, "sn": "ENOC-1702-Poster-Right - ENOC-1702 - Al Reef", "loc": "ENOC ABU DHABI"}, {"n": "ENOC-001", "lat": 25.33, "lng": 55.41, "sn": "ENOC-1110-Column - ENOC-1110 - Sharjah INDL-3", "loc": "ENOC Sharjah"}, {"n": "ENOC-1161-PELMET", "lat": 25.33, "lng": 55.41, "sn": "ENOC-1161-Pelmet - ENOC-1161 - Al Falaj", "loc": "ENOC Sharjah"}, {"n": "REEM-SM-2F-21A", "lat": 24.4883731, "lng": 54.397811, "sn": "WAY FINDING MUPI-21B - LEVEL-21  - B", "loc": "REEM MALL"}, {"n": "DESKTOP-GE4GVOC", "lat": 25.1736612, "lng": 55.4192455, "sn": "DR2-PIL-WM-96A - WALL MOUNTED SCREEN-96", "loc": "Dragon Mart-2"}, {"n": "PC-E43A6E3FBB6E", "lat": 25.1736612, "lng": 55.4192455, "sn": "DR2-PIL-WM-100A - WALL MOUNTED SCREEN-100", "loc": "Dragon Mart-2"}, {"n": "DESKTOP-L9IBTOR", "lat": 24.490398, "lng": 54.6077697, "sn": "DIGITAL TOTEM - TOTEM 21-B", "loc": "YAS Mall"}, {"n": "DESKTOP-A8DJF8E", "lat": 24.9608843, "lng": 55.1506911, "sn": "MUPI - VES - EXPO VES-2", "loc": "EXPOCITY"}, {"n": "PC-1C697A6F4AD9", "lat": 24.48, "lng": 54.37, "sn": "ENOC-1702-Poster-Left - ENOC-1702 - Al Reef", "loc": "ENOC ABU DHABI"}, {"n": "IBM-FOOD-COURT", "lat": 25.044552, "lng": 55.1177223, "sn": "IBM-GF-FC-13A - Food court Pillar-13", "loc": "IBN BATTUTA Mall"}, {"n": "DM2-SMALL-LED", "lat": 25.1736612, "lng": 55.4192455, "sn": "DR2-GF-BS-4A - SMALL LED-NEAR TOYS CENTER", "loc": "Dragon Mart-2"}, {"n": "DESKTOP-8M6UV30", "lat": 25.1736612, "lng": 55.4192455, "sn": "DR2-PIL-WM-28A - WALL MOUNTED SCREEN-28", "loc": "Dragon Mart-2"}, {"n": "DM02-FC03", "lat": 25.1736612, "lng": 55.4192455, "sn": "DR2-PIL-WM-52A - WALL MOUNTED SCREEN-52", "loc": "Dragon Mart-2"}, {"n": "NEW-PC-5", "lat": 25.1736612, "lng": 55.4192455, "sn": "DR2-PIL-WM-40A - WALL MOUNTED SCREEN-40", "loc": "Dragon Mart-2"}, {"n": "MONGROVE-TOTEM7A-EXPCT", "lat": 24.9608843, "lng": 55.1506911, "sn": "EXPO Totem 7A - Mangrove Avenue", "loc": "EXPOCITY"}, {"n": "DESKTOP-765KVEH", "lat": 24.9608843, "lng": 55.1506911, "sn": "MUPI - VES - EXPO VES-21", "loc": "EXPOCITY"}];
+function loadMaps(){
+  setTimeout(function(){
+    window.dMap.invalidateSize(); window.aMap.invalidateSize();
+    PCS.filter(p=>p.lat>25.1).forEach(p=>{L.circleMarker([p.lat,p.lng],{radius:4,fillColor:'#ef4444',color:'#ff6666',weight:2,opacity:1,fillOpacity:0.7}).addTo(window.dMap).bindTooltip('<b>'+p.n+'</b><br>'+p.loc,{direction:'top',className:'tt-dark'});});
+    PCS.filter(p=>p.lat>24.0&&p.lat<=25.1).forEach(p=>{L.circleMarker([p.lat,p.lng],{radius:4,fillColor:'#ef4444',color:'#ff6666',weight:2,opacity:1,fillOpacity:0.7}).addTo(window.aMap).bindTooltip('<b>'+p.n+'</b><br>'+p.loc,{direction:'top',className:'tt-dark'});});
+  }, 300);
+}
+initMaps(); loadMaps();
+setTimeout(function(){var t=document.querySelector(".pa .pb");if(t){var s=1;setInterval(function(){t.scrollTop+=s;if(t.scrollTop>=t.scrollHeight-t.clientHeight){t.scrollTop=0}},80)}},1000);
+</script>
 </body>
 </html>

@@ -3,174 +3,69 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<meta http-equiv="refresh" content="600">
-<title>NSOC Status · Operations</title>
+<title>NSOC Status</title>
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.7/dist/chart.umd.min.js"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
 <style>
 *{margin:0;padding:0;box-sizing:border-box}
-body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;background:#080a0e;color:#e0e2e6;font-size:13px;height:100vh;display:flex;flex-direction:column;overflow:hidden}
-
-.header{background:linear-gradient(135deg,#111318,#1c212d);padding:8px 20px;border-bottom:1px solid #1e293b;display:flex;align-items:center;justify-content:space-between;flex-shrink:0}
-.header h1{font-size:15px;font-weight:700;color:#f1f5f9}
-.header h1 span{color:#64748b;font-weight:400}
-.header .sub{color:#5b677b;font-size:10px}
-
-.summary{display:flex;gap:6px;padding:6px 20px;background:#0d0f14;border-bottom:1px solid #161b22;flex-shrink:0;flex-wrap:wrap}
-.sc{background:#141820;border-radius:6px;padding:5px 12px;min-width:80px;flex:1;text-align:center;border:1px solid #1c2330}
-.sc .l{font-size:9px;text-transform:uppercase;color:#5b677b;letter-spacing:.4px}
-.sc .v{font-size:16px;font-weight:700;margin-top:1px}
-
-.body{flex:1;padding:8px 20px;overflow-y:auto;display:flex;flex-direction:column;gap:10px;min-height:0}
-
-.section-title{font-size:12px;font-weight:600;color:#94a3b8;text-transform:uppercase;letter-spacing:.6px;flex-shrink:0}
-
-/* ── Offline cards ── */
-.offline-row{display:flex;gap:6px;flex-wrap:wrap}
-.off-card{background:linear-gradient(135deg,rgba(239,68,68,0.1),rgba(239,68,68,0.04));border:1px solid rgba(239,68,68,0.2);border-radius:8px;padding:8px 12px;min-width:180px;flex:1}
-.off-card .oc-hdr{display:flex;align-items:center;gap:6px;margin-bottom:3px}
-.off-card .oc-hdr .oc-nm{font-weight:600;font-size:11px;font-family:'SF Mono',Consolas,monospace;flex:1;overflow:hidden;text-overflow:ellipsis;color:#ef4444}
-.off-card .oc-sn{font-size:9px;color:#6b7c93;overflow:hidden;text-overflow:ellipsis}
-
-.offline-empty{display:flex;align-items:center;justify-content:center;flex:1;color:#22c55e;font-size:14px;gap:8px;background:rgba(34,197,94,0.05);border:1px solid rgba(34,197,94,0.15);border-radius:8px;padding:12px}
-
-/* ── Venue cards ── */
-.venue-row{display:flex;gap:8px;flex-wrap:wrap}
-.vc{flex:1;min-width:180px;background:#0f1117;border:1px solid #1c2330;border-radius:8px;overflow:hidden}
-.vc-hdr{display:flex;align-items:center;justify-content:space-between;padding:5px 10px;background:#141820;border-bottom:1px solid #1c2330}
-.vc-hdr h3{font-size:11px;font-weight:600}
-.vc-hdr .vb{font-size:9px;color:#64748b}
-.vc-body{padding:4px 10px 8px}
-.vc-stat{display:flex;gap:10px;font-size:11px;margin-bottom:4px}
-.vc-stat span{display:flex;align-items:center;gap:3px}
-.vc-dot{width:7px;height:7px;border-radius:50%;display:inline-block}
-
-.vc-alert{font-size:9px;color:#64748b;display:flex;align-items:center;gap:4px;margin-top:2px}
-.vc-alert .ad{width:5px;height:5px;border-radius:50%;background:#ef4444;display:inline-block}
-
-/* ── Data alert table ── */
-.alert-table{width:100%;border-collapse:collapse;font-size:10px}
-.alert-table th{text-align:left;padding:3px 6px;background:#0d0f14;color:#5b677b;font-weight:500;font-size:8px;text-transform:uppercase;letter-spacing:.3px;border-bottom:1px solid #1c2330;position:sticky;top:0}
-.alert-table td{padding:2px 6px;border-bottom:1px solid #11151c;white-space:nowrap}
-.alert-table .nm{font-weight:500;font-family:'SF Mono',Consolas,monospace;font-size:9px}
-.alert-table .sn{color:#6b7c93;font-size:9px}
-.alert-table .tr{text-align:right}
-.alert-table .r80{background:rgba(239,68,68,0.1)}
-.alert-table .r60{background:rgba(249,115,22,0.08)}
-.db{display:inline-block;height:4px;border-radius:2px;min-width:2px}
-
-.footer{text-align:center;padding:4px;color:#3b4557;font-size:9px;border-top:1px solid #131820;flex-shrink:0}
-
-::-webkit-scrollbar{width:4px}
-::-webkit-scrollbar-track{background:transparent}
-::-webkit-scrollbar-thumb{background:#1c2330;border-radius:2px}
+html,body{height:100%;overflow:hidden}
+body{background:#0b1120;color:#e2e8f0;font-family:'Inter',-apple-system,sans-serif;font-size:clamp(12px,1.1vw,16px)}
+.d{flex:1;display:flex;flex-direction:column;padding:clamp(6px,0.8vh,12px) clamp(10px,1.2vw,18px);gap:clamp(3px,0.4vh,8px);max-width:1920px;margin:0 auto;width:100%;height:100vh}
+.hd{display:flex;align-items:center;gap:clamp(8px,1vw,14px);padding:clamp(4px,0.6vh,10px) clamp(10px,1.2vw,18px);background:#111827;border-radius:8px;border:1px solid #1f2b3e;flex-shrink:0}
+.hd .l{width:30px;height:30px;border-radius:6px;background:linear-gradient(135deg,#38bdf8,#a78bfa);display:flex;flex-direction:column;font-weight:800;font-size:12px;color:#fff;flex-shrink:0}
+.hd h1{font-size:clamp(13px,1.4vw,18px);font-weight:700;color:#e2e8f0}
+.hd .sub{font-size:clamp(9px,0.8vw,12px);color:#64748b;margin-left:auto}
+.st{display:grid;grid-template-columns:repeat(4,1fr);gap:clamp(3px,0.4vw,8px);flex-shrink:0}
+.sc{background:#111827;border-radius:6px;padding:clamp(5px,0.8vh,12px) clamp(8px,1vw,14px);border:1px solid #1f2b3e;position:relative;overflow:hidden}
+.sc::before{content:'';position:absolute;top:0;left:0;right:0;height:2px}
+.sc-r::before{background:#ef4444}.sc-g::before{background:#22c55e}.sc-b::before{background:#3b82f6}.sc-p::before{background:#a78bfa}
+.sc .l{font-size:clamp(8px,0.7vw,10px);font-weight:500;text-transform:uppercase;letter-spacing:.4px;color:#64748b;margin-bottom:1px}
+.sc .v{font-size:clamp(18px,2.2vw,28px);font-weight:700;letter-spacing:-1px;line-height:1.1}
+.sc-r .v{color:#ef4444}.sc-g .v{color:#22c55e}.sc-b .v{color:#3b82f6}.sc-p .v{color:#a78bfa}
+.sc .m{font-size:clamp(8px,0.6vw,10px);color:#64748b;margin-top:1px}
+.sc .m .s{font-size:clamp(10px,1vw,14px)}
+.sc .ts{margin-top:3px;display:flex;gap:4px;flex-wrap:wrap}
+.maps-row{display:flex;gap:clamp(3px,0.4vw,8px);flex-shrink:0;height:clamp(250px,35vh,500px)}
+.mp{flex:1;display:flex;flex-direction:column;background:#111827;border-radius:6px;border:1px solid #1f2b3e;overflow:hidden}
+.mp .ph{padding:clamp(2px,0.3vh,4px) clamp(6px,0.8vw,10px);border-bottom:1px solid #1f2b3e;flex-shrink:0}
+.mp .ph h3{font-size:clamp(8px,0.6vw,10px);font-weight:600;color:#94a3b8;text-transform:uppercase;letter-spacing:.3px}
+.mp .mc{flex:1;min-height:0;width:100%}
+.mp .leaflet-container{background:#0b1120}
+.leaflet-tooltip.tt-dark{background:#111827;color:#e2e8f0;border:1px solid #1f2b3e;border-radius:4px;padding:3px 6px;font-size:10px;font-family:Inter,sans-serif}
+.mid-row{display:flex;gap:clamp(3px,0.4vw,8px);flex:1;min-height:0}
+.mid-row .col{flex:1;display:flex;flex-direction:column;min-width:0}
+.pa{background:#111827;border-radius:6px;border:1px solid #1f2b3e;display:flex;flex-direction:column;overflow:hidden;flex:1}
+.pa .ph{padding:clamp(2px,0.3vh,4px) clamp(6px,0.8vw,10px);border-bottom:1px solid #1f2b3e;flex-shrink:0}
+.pa .ph h3{font-size:clamp(8px,0.6vw,10px);font-weight:600;color:#94a3b8;text-transform:uppercase;letter-spacing:.3px}
+.pa .pb{flex:1;overflow-y:auto;min-height:0}
+.ot{width:100%;border-collapse:collapse;table-layout:auto;font-size:9px}
+.ot th{text-align:left;padding:2px 4px;background:#0d0f14;color:#5b677b;font-weight:500;font-size:7px;text-transform:uppercase;border-bottom:1px solid #1f2b3e;position:sticky;top:0}
+.ot td{padding:2px 4px;border-bottom:1px solid rgba(255,255,255,.03);white-space:nowrap}
+.otsn{font-family:'SF Mono',Consolas,monospace;font-size:8px}
+.otpid{color:#6b7c93;font-size:7px}
+.otloc{color:#5b677b;font-size:7px;max-width:70px;overflow:hidden;text-overflow:ellipsis}
+.otnm{font-weight:500;font-family:'SF Mono',Consolas,monospace;font-size:8px;max-width:80px;overflow:hidden;text-overflow:ellipsis}
+.ic{display:inline-flex;flex-direction:column;width:12px;height:12px;border-radius:50%;font-size:6px;font-weight:700;flex-shrink:0;background:#450a0a;color:#ef4444;border:1px solid #7f1d1d}
+.r60 td{background:rgba(249,115,22,0.06)}
+.r80 td{background:rgba(239,68,68,0.1)}
+.gr{display:flex;align-items:center;gap:4px}
+.gr .lb{font-size:9px;color:#94a3b8;flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;min-width:0}
+.gr .tk{flex:2;height:8px;background:#1a2332;border-radius:6px;overflow:hidden;flex-shrink:0}
+.gr .fl{height:100%;border-radius:6px;transition:width .6s;background:linear-gradient(90deg,#3b82f6,#38bdf8)}
+.gr .fl.o{background:linear-gradient(90deg,#f59e0b,#f97316)}
+.gr .fl.r{background:linear-gradient(90deg,#ef4444,#dc2626)}
+.gr .pc{min-width:28px;text-align:right;font-size:clamp(7px,0.5vw,9px);font-weight:600;color:#64748b;flex-shrink:0}
+.footer{text-align:center;padding:3px;color:#3b4557;font-size:8px;border-top:1px solid #131820;flex-shrink:0}
 </style></head>
-<<<<<<< HEAD
-<body><div class="header">
-<div><h1>NSOC <span>Operations</span></h1></div>
-<div class="sub">2026-06-21 01:23 GST</div>
-</div><div class="summary">
-<div class="sc"><div class="l">Total PCs</div><div class="v">1336</div></div>
-<div class="sc"><div class="l">Online</div><div class="v" style="color:#4ade80">1259</div></div>
-<div class="sc"><div class="l">Offline</div><div class="v" style="color:#ef4444">77</div></div>
-<div class="sc"><div class="l">Data >80%</div><div class="v" style="color:#ef4444">10</div></div>
-<div class="sc"><div class="l">Data >60%</div><div class="v" style="color:#f97316">25</div></div>
-<div class="sc"><div class="l">Data >30%</div><div class="v" style="color:#eab308">74</div></div>
-</div><div class="body"><div class="section-title">⚠️ Offline PCs</div><div class="offline-row"><div class="off-card">
-<div class="oc-hdr"><span class="oc-nm">PC-E43A6E5D6E6D</span></div>
-<div class="oc-sn">DIRECTIONAL SIGNAGES-1B - Ground floor-Near Danube · </div>
-</div><div class="off-card">
-<div class="oc-hdr"><span class="oc-nm">PC-7085C2B8EF7B</span></div>
-<div class="oc-sn">ENOC PELMET 1444 · </div>
-</div><div class="off-card">
-<div class="oc-hdr"><span class="oc-nm">DESKTOP-PKT8SGP</span></div>
-<div class="oc-sn">DFC-SM-3A - SMART MUPI · </div>
-</div><div class="off-card">
-<div class="oc-hdr"><span class="oc-nm">PC-E43A6E4577E0</span></div>
-<div class="oc-sn">DIGITAL TOTEM - TOTEM 22-B · </div>
-</div><div class="off-card">
-<div class="oc-hdr"><span class="oc-nm">Alfurjan-plf3d</span></div>
-<div class="oc-sn">R72-POR-P-WM03 - PLATFORM SCREEN 3 · </div>
-</div><div class="off-card">
-<div class="oc-hdr"><span class="oc-nm">PC-04D9F5888D55</span></div>
-<div class="oc-sn"> · </div>
-</div><div class="off-card">
-<div class="oc-hdr"><span class="oc-nm">PC-1C697A60FF0C</span></div>
-<div class="oc-sn">R76-LC-C-WM14 - CONCOURSE SCREEN 14 · </div>
-</div><div class="off-card">
-<div class="oc-hdr"><span class="oc-nm">DESKTOP-11K02LQ</span></div>
-<div class="oc-sn">DFC-WFM-12A - WAY FINDING MUPI · </div>
-</div><div class="off-card">
-<div class="oc-hdr"><span class="oc-nm">PC-E43A6E3FBC81</span></div>
-<div class="oc-sn">DR1-EXT-LED-2A - EB-01-ENTRANCE · </div>
-</div><div class="off-card">
-<div class="oc-hdr"><span class="oc-nm">DESKTOP-NTHFA1Q</span></div>
-<div class="oc-sn">ENOC-412-Poster-Right - ENOC-412 - Al Hisn Rd. · </div>
-</div><div class="off-card">
-<div class="oc-hdr"><span class="oc-nm">PC-00018085F9D8</span></div>
-<div class="oc-sn">ENOC-1604-Poster-Left - ENOC-1604 - Nad Al Sheba · </div>
-</div><div class="off-card">
-<div class="oc-hdr"><span class="oc-nm">MODON-ENTRANCE</span></div>
-<div class="oc-sn">MODON ENTRANCE POLE-1 B - Al Hudayriat extension P · </div>
-</div><div class="off-card">
-<div class="oc-hdr"><span class="oc-nm">AlQusais-concourseleft</span></div>
-<div class="oc-sn">G12-12SP-C-FM04 - CONCOURSE LEFT · </div>
-</div><div class="off-card">
-<div class="oc-hdr"><span class="oc-nm">DESKTOP-D7SH893</span></div>
-<div class="oc-sn">ENOC-503-Poster-Right - ENOC-503 - Al Qasr Rd. · </div>
-</div><div class="off-card">
-<div class="oc-hdr"><span class="oc-nm">DM02-LED-NESTO-LED</span></div>
-<div class="oc-sn">DR2-GF-BS-3A - NESTO SIDE LED · </div>
-</div><div class="off-card">
-<div class="oc-hdr"><span class="oc-nm">PC-1C697A606AE6</span></div>
-<div class="oc-sn">R70-POR-GF-WM01 - GROUND LEVEL SCREEN 1 · </div>
-</div><div class="off-card">
-<div class="oc-hdr"><span class="oc-nm">PC-E43A6E387302</span></div>
-<div class="oc-sn">MUPI - VES - EXPO VES-2 · </div>
-</div><div class="off-card">
-<div class="oc-hdr"><span class="oc-nm">DESKTOP-0RFNBNH</span></div>
-<div class="oc-sn">DFC-WFM-4A - WAY FINDING MUPI · </div>
-</div><div class="off-card">
-<div class="oc-hdr"><span class="oc-nm">PC-E43A6E5D6CE7</span></div>
-<div class="oc-sn">DIRECTIONAL SIGNAGES-4B - Ground floor Near caribo · </div>
-</div><div class="off-card">
-<div class="oc-hdr"><span class="oc-nm">PC-C8A362202AAA</span></div>
-<div class="oc-sn">DIGITAL TOTEM - TOTEM 18-A · </div>
-</div></div><div style="font-size:10px;color:#5b677b;text-align:center">...and 57 more</div><div class="section-title" style="margin-top:6px">📍 Venues</div><div class="venue-row"><div class="vc" style="border-top:2px solid #3b82f6">
-<div class="vc-hdr"><h3 style="color:#3b82f6">Umm Suqeim</h3><span class="vb">15 PCs</span></div>
-<div class="vc-body">
-<div class="vc-stat">
-<span><span class="vc-dot" style="background:#4ade80"></span>15 online</span>
-<span><span class="vc-dot" style="background:#ef4444"></span>0 offline</span>
-</div>
-<div class="vc-alert"><span class="ad"></span>4 >60% data</div>
-</div>
-</div><div class="vc" style="border-top:2px solid #8b5cf6">
-<div class="vc-hdr"><h3 style="color:#8b5cf6">Al Warqa</h3><span class="vb">16 PCs</span></div>
-<div class="vc-body">
-<div class="vc-stat">
-<span><span class="vc-dot" style="background:#4ade80"></span>16 online</span>
-<span><span class="vc-dot" style="background:#ef4444"></span>0 offline</span>
-</div>
-<div class="vc-alert"><span class="ad"></span>8 >60% data</div>
-</div>
-</div><div class="vc" style="border-top:2px solid #f59e0b">
-<div class="vc-hdr"><h3 style="color:#f59e0b">Lulu Market</h3><span class="vb">47 PCs</span></div>
-<div class="vc-body">
-<div class="vc-stat">
-<span><span class="vc-dot" style="background:#4ade80"></span>47 online</span>
-<span><span class="vc-dot" style="background:#ef4444"></span>0 offline</span>
-</div>
-
-</div>
-</div></div><div class="section-title" style="margin-top:6px">🔥 High Data Consumption (>60%)</div><table class="alert-table"><thead><tr><th>Name</th><th>Screen Name</th><th style="width:56px;text-align:right">Data</th></tr></thead><tbody><tr class=" r80"><td class="nm">IBM-FOOD-COURT</td><td class="sn">IBM-GF-FC-13A - Food court Pillar-13</td><td class="tr"><div style="display:inline-flex;align-items:center;gap:2px;font-size:9px"><span class="db" style="width:97.13px;background:#ef4444"></span>97.13 %</div></td></tr><tr class=" r80"><td class="nm">DESKTOP-GE4GVOC</td><td class="sn">DR2-PIL-WM-96A - WALL MOUNTED SCREEN-96</td><td class="tr"><div style="display:inline-flex;align-items:center;gap:2px;font-size:9px"><span class="db" style="width:95.35px;background:#ef4444"></span>95.35 %</div></td></tr><tr class=" r80"><td class="nm">DM02-FC03</td><td class="sn">DR2-PIL-WM-52A - WALL MOUNTED SCREEN-52</td><td class="tr"><div style="display:inline-flex;align-items:center;gap:2px;font-size:9px"><span class="db" style="width:95.35px;background:#ef4444"></span>95.35 %</div></td></tr><tr class=" r80"><td class="nm">PC-F44D306862C0</td><td class="sn">ABD-FF-BS-2A - YATEEM OPTICS</td><td class="tr"><div style="display:inline-flex;align-items:center;gap:2px;font-size:9px"><span class="db" style="width:94.47px;background:#ef4444"></span>94.47 %</div></td></tr><tr class=" r80"><td class="nm">DESKTOP-C7OQU4Q</td><td class="sn">AL WARQA-LCD Hanging Screen 4A - In Store AISLE</td><td class="tr"><div style="display:inline-flex;align-items:center;gap:2px;font-size:9px"><span class="db" style="width:92.6px;background:#ef4444"></span>92.6 %</div></td></tr><tr class=" r80"><td class="nm">instore</td><td class="sn">AL WARQA-LCD Hanging Screen 4B - In Store AISLE</td><td class="tr"><div style="display:inline-flex;align-items:center;gap:2px;font-size:9px"><span class="db" style="width:92.6px;background:#ef4444"></span>92.6 %</div></td></tr><tr class=" r80"><td class="nm">DESKTOP-0QP9AB0</td><td class="sn">UMM SUQEIM-LCD Hanging Screen 4B - In Store AISLE</td><td class="tr"><div style="display:inline-flex;align-items:center;gap:2px;font-size:9px"><span class="db" style="width:90.57px;background:#ef4444"></span>90.57 %</div></td></tr><tr class=" r80"><td class="nm">DESKTOP-V1VPUTR</td><td class="sn">UMM SUQEIM-LCD Hanging Screen 4A - In Store AISLE</td><td class="tr"><div style="display:inline-flex;align-items:center;gap:2px;font-size:9px"><span class="db" style="width:90.57px;background:#ef4444"></span>90.57 %</div></td></tr><tr class=" r80"><td class="nm">DM02-LED-NESTO-LED</td><td class="sn">DR2-GF-BS-3A - NESTO SIDE LED</td><td class="tr"><div style="display:inline-flex;align-items:center;gap:2px;font-size:9px"><span class="db" style="width:90.16px;background:#ef4444"></span>90.16 %</div></td></tr><tr class=" r80"><td class="nm">DESKTOP-C6N4OOK</td><td class="sn">ENOC-601-Poster-Right - ENOC-601-DIBBA ROAD</td><td class="tr"><div style="display:inline-flex;align-items:center;gap:2px;font-size:9px"><span class="db" style="width:82.8px;background:#ef4444"></span>82.8 %</div></td></tr><tr class=" r60"><td class="nm">DESKTOP-S82A2FD</td><td class="sn">AL WARQA-LCD Hanging Screen 1A - In Store AISLE</td><td class="tr"><div style="display:inline-flex;align-items:center;gap:2px;font-size:9px"><span class="db" style="width:75.86px;background:#f97316"></span>75.86 %</div></td></tr><tr class=" r60"><td class="nm">DESKTOP-P045QOV</td><td class="sn">AL WARQA-LCD Hanging Screen 1B - In Store AISLE</td><td class="tr"><div style="display:inline-flex;align-items:center;gap:2px;font-size:9px"><span class="db" style="width:75.86px;background:#f97316"></span>75.86 %</div></td></tr><tr class=" r60"><td class="nm">DESKTOP-0JRD653</td><td class="sn">ENOC-508-Poster-Right - ENOC-508-Hamad Bin Abdulla</td><td class="tr"><div style="display:inline-flex;align-items:center;gap:2px;font-size:9px"><span class="db" style="width:75.4px;background:#f97316"></span>75.4 %</div></td></tr><tr class=" r60"><td class="nm">DESKTOP-O95C62P</td><td class="sn">ENOC-404-Poster-Right - ENOC-404-Al Marid</td><td class="tr"><div style="display:inline-flex;align-items:center;gap:2px;font-size:9px"><span class="db" style="width:74.8px;background:#f97316"></span>74.8 %</div></td></tr><tr class=" r60"><td class="nm">DESKTOP-FKL6639</td><td class="sn">ENOC-212-Poster-Right - ENOC-212-Khalifa Hospital</td><td class="tr"><div style="display:inline-flex;align-items:center;gap:2px;font-size:9px"><span class="db" style="width:74.6px;background:#f97316"></span>74.6 %</div></td></tr><tr class=" r60"><td class="nm">DESKTOP-0JBMRIA</td><td class="sn">AL WARQA-LCD Hanging Screen 2B - In Store AISLE</td><td class="tr"><div style="display:inline-flex;align-items:center;gap:2px;font-size:9px"><span class="db" style="width:72.22px;background:#f97316"></span>72.22 %</div></td></tr><tr class=" r60"><td class="nm">DESKTOP-LJ48QVN</td><td class="sn">AL WARQA-LCD Hanging Screen 2A - In Store AISLE</td><td class="tr"><div style="display:inline-flex;align-items:center;gap:2px;font-size:9px"><span class="db" style="width:72.21px;background:#f97316"></span>72.21 %</div></td></tr><tr class=" r60"><td class="nm">DESKTOP-7I5TTGB</td><td class="sn">ENOC-507-Poster-Right - ENOC-507-Fujairah Airport</td><td class="tr"><div style="display:inline-flex;align-items:center;gap:2px;font-size:9px"><span class="db" style="width:72.2px;background:#f97316"></span>72.2 %</div></td></tr><tr class=" r60"><td class="nm">DESKTOP-EB3RM2T</td><td class="sn">ENOC-66-Poster-Right - ENOC-66-Hatta Fort Hotel</td><td class="tr"><div style="display:inline-flex;align-items:center;gap:2px;font-size:9px"><span class="db" style="width:72.0px;background:#f97316"></span>72.0 %</div></td></tr><tr class=" r60"><td class="nm">DESKTOP-T65IM4A</td><td class="sn">ENOC-401-Poster-Right - ENOC-401-Shk Mohd Bin Sale</td><td class="tr"><div style="display:inline-flex;align-items:center;gap:2px;font-size:9px"><span class="db" style="width:71.2px;background:#f97316"></span>71.2 %</div></td></tr><tr class=" r60"><td class="nm">DESKTOP-RP0KMJ3</td><td class="sn">ENOC-303-Poster-Right - ENOC-303-Falaj Al Moalla</td><td class="tr"><div style="display:inline-flex;align-items:center;gap:2px;font-size:9px"><span class="db" style="width:67.0px;background:#f97316"></span>67.0 %</div></td></tr><tr class=" r60"><td class="nm">DESKTOP-B8KKPF0</td><td class="sn">AL WARQA-LCD Hanging Screen 3A - In Store AISLE</td><td class="tr"><div style="display:inline-flex;align-items:center;gap:2px;font-size:9px"><span class="db" style="width:63.75px;background:#f97316"></span>63.75 %</div></td></tr><tr class=" r60"><td class="nm">DESKTOP-B799TNL</td><td class="sn">AL WARQA-LCD Hanging Screen 3B - In Store AISLE</td><td class="tr"><div style="display:inline-flex;align-items:center;gap:2px;font-size:9px"><span class="db" style="width:63.75px;background:#f97316"></span>63.75 %</div></td></tr><tr class=" r60"><td class="nm">DESKTOP-QOJKQ58</td><td class="sn">UMM SUQEIM-LCD Hanging Screen 2B - In Store AISLE</td><td class="tr"><div style="display:inline-flex;align-items:center;gap:2px;font-size:9px"><span class="db" style="width:63.18px;background:#f97316"></span>63.18 %</div></td></tr><tr class=" r60"><td class="nm">DESKTOP-A86104T</td><td class="sn">UMM SUQEIM-LCD Hanging Screen 2A - In Store AISLE</td><td class="tr"><div style="display:inline-flex;align-items:center;gap:2px;font-size:9px"><span class="db" style="width:63.18px;background:#f97316"></span>63.18 %</div></td></tr></tbody></table></div>
-<div class="footer">NSOC Status · Updated 2026-06-21 01:23 GST · Data via NSOC</div>
-=======
 <body>
 <div class="d">
   <div class="hd">
     <div class="l">N</div>
     <h1>NSOC Status</h1>
     <div style="margin-left:10px;background:rgba(239,68,68,0.15);color:#ef4444;font-weight:700;font-size:clamp(10px,0.9vw,13px);padding:2px 8px;border-radius:4px;white-space:nowrap">25 >60%</div>
-    <div class="sub">2026-06-21 02:00 GST</div>
+    <div class="sub">2026-06-21 03:00 GST</div>
   </div>
   <div class="st">
     <div class="sc sc-r"><div class="l">Offline</div><div class="v">77</div><div class="m">Computers</div></div>
@@ -441,7 +336,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;b
     </div>
   </div>
   </div>
-  <div class="footer">NSOC Status · Updated 2026-06-21 02:00 GST · Data via NSOC</div>
+  <div class="footer">NSOC Status · Updated 2026-06-21 03:00 GST · Data via NSOC</div>
 </div>
 <script>
 const CONS = [{"label": "0581306658 - IBM-FOOD-COURT [IBN BATTUTA Mal]", "value": 0.97}, {"label": "0529857980 - DESKTOP-GE4GVOC [Dragon Mart-2]", "value": 0.95}, {"label": "0529857980 - DM02-FC03 [Dragon Mart-2]", "value": 0.95}, {"label": "01526408366 - PC-F44D306862C0 [Abu Dhabi Mall]", "value": 0.94}, {"label": "0588437435 - DESKTOP-C7OQU4Q [Union Coop AL W]", "value": 0.93}, {"label": "0588437435 - instore [Union Coop AL W]", "value": 0.93}, {"label": "0556816503 - DESKTOP-0QP9AB0 [Union Coop UMM ]", "value": 0.91}, {"label": "0556816503 - DESKTOP-V1VPUTR [Union Coop UMM ]", "value": 0.91}, {"label": "01529857980 - DM02-LED-NESTO-LED [Dragon Mart-2]", "value": 0.9}, {"label": "0525307239 - DESKTOP-C6N4OOK [ENOC Fujairah]", "value": 0.83}, {"label": "0581591561 - DESKTOP-S82A2FD [Union Coop AL W]", "value": 0.76}, {"label": "0581591561 - DESKTOP-P045QOV [Union Coop AL W]", "value": 0.76}, {"label": "0525306890 - DESKTOP-0JRD653 [ENOC Fujairah]", "value": 0.75}, {"label": "0525306818 - DESKTOP-O95C62P [ENOC Ras Al Kha]", "value": 0.75}, {"label": "0525307161 - DESKTOP-FKL6639 [ENOC Ajman]", "value": 0.75}, {"label": "01581591221 - DESKTOP-0JBMRIA [Union Coop AL W]", "value": 0.72}, {"label": "0581591221 - DESKTOP-LJ48QVN [Union Coop AL W]", "value": 0.72}, {"label": "0525306932 - DESKTOP-7I5TTGB [ENOC Fujairah]", "value": 0.72}, {"label": "0525306290 - DESKTOP-EB3RM2T [ENOC Dubai]", "value": 0.72}, {"label": "0525306389 - DESKTOP-T65IM4A [ENOC Ras Al Kha]", "value": 0.71}, {"label": "0525307018 - DESKTOP-RP0KMJ3 [ENOC Umm Al Quw]", "value": 0.67}, {"label": "0581595010 - DESKTOP-B8KKPF0 [Union Coop AL W]", "value": 0.64}, {"label": "0581595010 - DESKTOP-B799TNL [Union Coop AL W]", "value": 0.64}, {"label": "0556816302 - DESKTOP-QOJKQ58 [Union Coop UMM ]", "value": 0.63}, {"label": "0556816302 - DESKTOP-A86104T [Union Coop UMM ]", "value": 0.63}];
@@ -469,6 +364,5 @@ function loadMaps(){
 initMaps(); loadMaps();
 setTimeout(function(){var t=document.querySelector(".pa .pb");if(t){var s=1;setInterval(function(){t.scrollTop+=s;if(t.scrollTop>=t.scrollHeight-t.clientHeight){t.scrollTop=0}},80)}},1000);
 </script>
->>>>>>> Auto-retail 2026-06-20 22:00
 </body>
 </html>

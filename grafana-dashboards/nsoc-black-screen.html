@@ -9,337 +9,247 @@
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
 <style>
 *{margin:0;padding:0;box-sizing:border-box}
-html,body{height:100%;overflow:hidden}
-body{background:#0b1120;color:#e2e8f0;font-family:'Inter',-apple-system,sans-serif;font-size:clamp(12px,1.1vw,16px)}
-.dash{flex:1;display:flex;flex-direction:column;padding:clamp(8px,1vh,16px) clamp(12px,1.5vw,24px);gap:clamp(4px,0.6vh,10px);max-width:1920px;margin:0 auto;width:100%;height:100vh}
-
-/* Header */
-.hd{display:flex;align-items:center;gap:clamp(8px,1vw,14px);padding:clamp(6px,0.8vh,12px) clamp(10px,1.2vw,18px);background:#111827;border-radius:8px;border:1px solid #1f2b3e;flex-shrink:0}
-.hd .dot{width:4px;height:clamp(18px,2.5vh,28px);background:#ef4444;border-radius:3px;flex-shrink:0}
-.hd h1{font-size:clamp(14px,1.6vw,22px);font-weight:700;color:#ef4444;letter-spacing:-0.3px;white-space:nowrap}
-.hd .sub{font-size:clamp(10px,1vw,14px);color:#64748b;padding-left:clamp(8px,1vw,14px);border-left:1px solid #1f2b3e;margin-left:clamp(8px,1vw,14px);white-space:nowrap}
-.hd .ts{margin-left:auto;font-size:clamp(10px,0.9vw,13px);color:#64748b;font-family:monospace;white-space:nowrap}
-.hd .mode{padding:2px 8px;border-radius:4px;font-size:clamp(8px,0.65vw,10px);font-weight:600;text-transform:uppercase}
-.mode-live{background:rgba(34,197,94,.2);color:#22c55e}
-.mode-fallback{background:rgba(245,158,11,.2);color:#f59e0b}
-
-/* Stats */
-.st{display:grid;grid-template-columns:repeat(4,1fr);gap:clamp(4px,0.6vw,10px);flex-shrink:0}
-.sc{background:#111827;border-radius:8px;padding:clamp(8px,1.2vh,18px) clamp(10px,1.5vw,20px);border:1px solid #1f2b3e;position:relative;overflow:hidden}
-.sc::before{content:'';position:absolute;top:0;left:0;right:0;height:3px}
-.sc-r::before{background:#ef4444}.sc-b::before{background:#3b82f6}.sc-o::before{background:#f59e0b}.sc-p::before{background:#a78bfa}
-.sc .l{font-size:clamp(9px,0.8vw,11px);font-weight:500;text-transform:uppercase;letter-spacing:.6px;color:#64748b;margin-bottom:2px}
-.sc .v{font-size:clamp(22px,3vw,36px);font-weight:700;letter-spacing:-1px;line-height:1.1}
-.sc-r .v{color:#ef4444}.sc-b .v{color:#3b82f6}.sc-o .v{color:#f59e0b}.sc-p .v{color:#a78bfa}
-.sc .m{font-size:clamp(9px,0.75vw,11px);color:#64748b;margin-top:2px}
-
-/* Content panels */
-.ct{flex:1;display:grid;grid-template-columns:1.8fr 1.2fr 3fr;gap:clamp(4px,0.6vw,10px);min-height:0}
-.pa{background:#111827;border-radius:8px;border:1px solid #1f2b3e;display:flex;flex-direction:column;overflow:hidden}
-.pa .ph{padding:clamp(4px,0.5vh,8px) clamp(8px,1vw,14px);border-bottom:1px solid #1f2b3e;flex-shrink:0}
-.pa .ph h3{font-size:clamp(9px,0.75vw,11px);font-weight:600;color:#94a3b8;text-transform:uppercase;letter-spacing:.4px}
-.pa .ph h3 .cnt{font-weight:400;color:#64748b;font-size:0.85em}
-.pa .pb{flex:1;overflow:hidden;position:relative}
-
-/* Venue list */
-.vlist{overflow-y:auto;height:100%;padding:4px 0}
-.vrow{display:flex;align-items:center;padding:clamp(3px,0.3vh,5px) clamp(6px,0.7vw,10px);border-bottom:1px solid rgba(255,255,255,.03);gap:8px}
-.vrow .vname{flex:1;font-size:clamp(9px,0.7vw,11px);color:#94a3b8;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.vrow .vbar{flex:2;height:clamp(10px,1.2vh,14px);background:#1a2332;border-radius:6px;overflow:hidden}
-.vrow .vfill{height:100%;border-radius:6px;background:linear-gradient(90deg,#ef4444,#dc2626);transition:width .3s}
-.vrow .vcount{min-width:clamp(20px,2vw,30px);text-align:right;font-size:clamp(10px,0.8vw,13px);font-weight:600;color:#e2e8f0;font-family:monospace}
-
-/* Type chart */
-.type-list{overflow-y:auto;height:100%;padding:8px}
-.type-item{display:flex;align-items:center;gap:8px;padding:clamp(4px,0.4vh,7px) 0;border-bottom:1px solid rgba(255,255,255,.03)}
-.type-item:last-child{border:none}
-.type-dot{width:8px;height:8px;border-radius:50%;flex-shrink:0}
-.type-name{flex:1;font-size:clamp(9px,0.7vw,11px);color:#94a3b8}
-.type-val{font-size:clamp(10px,0.8vw,13px);font-weight:600;color:#e2e8f0;font-family:monospace}
-.type-pct{font-size:clamp(8px,0.65vw,10px);color:#64748b;min-width:clamp(28px,2.5vw,38px);text-align:right}
-
-/* Table */
-.tb-wrap{overflow:auto;height:100%}
-.tb{width:100%;border-collapse:collapse;font-size:clamp(9px,0.7vw,11px)}
-.tb th{text-align:left;padding:clamp(3px,0.35vh,5px) clamp(6px,0.7vw,10px);color:#64748b;font-weight:500;font-size:clamp(8px,0.65vw,10px);text-transform:uppercase;letter-spacing:.4px;border-bottom:1px solid #1f2b3e;position:sticky;top:0;background:#111827;z-index:1}
-.tb td{padding:clamp(3px,0.35vh,5px) clamp(6px,0.7vw,10px);border-bottom:1px solid rgba(255,255,255,.03);color:#94a3b8;white-space:nowrap}
-.tb tr.hl td{background:rgba(239,68,68,.05)}
-.tb bdg{display:inline-block;padding:1px 6px;border-radius:3px;font-size:clamp(8px,0.65vw,10px);font-weight:600}
-.bg-r{background:rgba(239,68,68,.2);color:#ef4444}.bg-o{background:rgba(245,158,11,.2);color:#f59e0b}
-
-.map-row{display:flex;gap:clamp(4px,0.6vw,10px);flex-shrink:0;height:clamp(180px,22vh,260px)}
-.map-pa{flex:1;display:flex;flex-direction:column;background:#111827;border-radius:8px;border:1px solid #1f2b3e;overflow:hidden}
-.map-pa .ph{padding:clamp(3px,0.4vh,6px) clamp(8px,1vw,14px);border-bottom:1px solid #1f2b3e;flex-shrink:0}
-.map-pa .ph h3{font-size:clamp(9px,0.7vw,11px);font-weight:600;color:#94a3b8;text-transform:uppercase;letter-spacing:.4px}
-.map-pa .map-c{flex:1;min-height:0;width:100%}
-.map-pa .leaflet-container{background:#0b1120}
-.leaflet-tooltip.tt-dark{background:#111827;color:#e2e8f0;border:1px solid #1f2b3e;border-radius:6px;padding:4px 8px;font-size:11px;font-family:Inter,sans-serif;box-shadow:0 2px 8px rgba(0,0,0,.4)}
-
-@media(max-width:1200px){
-  .ct{grid-template-columns:1fr}
-  .map-row{flex-direction:column;height:auto}
-  .map-row .map-c{height:150px}
-}
+body{font-family:'Inter',-apple-system,sans-serif;background:#080a0e;color:#e0e2e6;font-size:13px;height:100vh;display:flex;flex-direction:column;overflow:hidden}
+.header{background:linear-gradient(135deg,#111318,#1c212d);padding:7px 18px;border-bottom:1px solid #1e293b;display:flex;align-items:center;justify-content:space-between;flex-shrink:0;gap:8px;flex-wrap:wrap}
+.header h1{font-size:14px;font-weight:700;background:linear-gradient(90deg,#3b82f6,#8b5cf6);-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+.header .meta{display:flex;align-items:center;gap:8px}
+.header .ts{color:#52525b;font-size:9px;font-family:monospace}
+.mode{font-size:9px;font-weight:700;padding:2px 8px;border-radius:10px;text-transform:uppercase;letter-spacing:.3px}
+.mode-live{background:rgba(34,197,94,.2);color:#22c55e;border:1px solid rgba(34,197,94,.3)}
+.mode-fallback{background:rgba(245,158,11,.2);color:#f59e0b;border:1px solid rgba(245,158,11,.3)}
+.stats-row{display:flex;gap:8px;padding:8px 18px;background:#0c0e13;border-bottom:1px solid #161b22;flex-shrink:0;flex-wrap:wrap}
+.stat-card{background:linear-gradient(145deg,#161b22,#12151d);border:1px solid #1e293b;border-radius:8px;padding:8px 16px;min-width:100px;flex:1;text-align:center}
+.stat-card .sv{font-size:22px;font-weight:800;background:linear-gradient(90deg,#3b82f6,#8b5cf6);-webkit-background-clip:text;-webkit-text-fill-color:transparent;line-height:1.2}
+.stat-card .sl{font-size:9px;color:#64748b;text-transform:uppercase;letter-spacing:.5px;margin-top:2px}
+.body{flex:1;display:flex;flex-direction:column;overflow:hidden;padding:6px 12px 0;gap:6px}
+.top-row{display:flex;gap:8px;flex-shrink:0;overflow-x:auto;padding-bottom:6px;min-height:60px}
+.top-pc-card{background:#0c0e13;border:1px solid #161b22;border-radius:8px;padding:8px 12px;flex-shrink:0;display:flex;flex-direction:column;justify-content:center;min-width:180px}
+.top-pc-label{font-size:9px;color:#64748b}
+.top-pc-val{font-size:16px;font-weight:700}
+.mid-row{display:flex;gap:8px;flex:1;min-height:0}
+.left-panel{flex:1;min-width:0;display:flex;flex-direction:column;background:#0c0e13;border:1px solid #161b22;border-radius:8px;overflow:hidden}
+.left-panel .lp-header{padding:6px 10px;font-size:9px;color:#64748b;text-transform:uppercase;letter-spacing:.5px;font-weight:600;border-bottom:1px solid #161b22;flex-shrink:0}
+.scroll-area{flex:1;overflow-y:auto;padding:4px 6px}
+.venue-bar{display:flex;align-items:center;gap:6px;padding:3px 4px;font-size:11px}
+.vb-label{min-width:80px;max-width:120px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;color:#94a3b8}
+.vb-track{flex:1;height:14px;background:#161b22;border-radius:3px;overflow:hidden;max-width:200px}
+.vb-fill{height:100%;border-radius:3px;min-width:4px}
+.vb-val{min-width:24px;text-align:right;font-weight:600}
+.right-panel{width:clamp(220px,28vw,340px);display:flex;flex-direction:column;background:#0c0e13;border:1px solid #161b22;border-radius:8px;overflow:hidden}
+.right-panel .rp-header{padding:6px 10px;font-size:9px;color:#64748b;text-transform:uppercase;letter-spacing:.5px;font-weight:600;border-bottom:1px solid #161b22;flex-shrink:0}
+.type-item{display:flex;align-items:center;gap:6px;padding:4px 8px;font-size:11px;border-bottom:1px solid rgba(255,255,255,.03)}
+.type-dot{width:8px;height:8px;border-radius:2px;flex-shrink:0}
+.type-name{color:#94a3b8;flex:1}
+.type-val{font-weight:700;font-size:13px}
+.type-pct{font-size:10px;color:#52525b;min-width:28px;text-align:right}
+.venue-row{flex:1;min-height:0;overflow-x:auto;display:flex;gap:6px;padding:0 0 6px 0}
+.venue-card{background:#0c0e13;border:1px solid #161b22;border-radius:8px;min-width:300px;flex:1;display:flex;flex-direction:column;overflow:hidden}
+.vc-header{display:flex;align-items:center;justify-content:space-between;padding:6px 10px;border-bottom:1px solid #161b22;flex-shrink:0}
+.vc-header h3{font-size:12px;font-weight:600}
+.badge{background:#161b22;padding:0 8px;border-radius:8px;font-size:9px;color:#64748b;font-weight:600}
+.scroll-t{flex:1;overflow-y:auto}
+.pc-t{width:100%;border-collapse:collapse;font-size:10px}
+.pc-t th{padding:4px 6px;background:#080a0e;color:#52525b;font-size:8px;text-transform:uppercase;letter-spacing:.5px;text-align:left;font-weight:600;position:sticky;top:0;z-index:1;border-bottom:1px solid #161b22}
+.pc-t td{padding:3px 6px;border-bottom:1px solid rgba(255,255,255,.02);vertical-align:middle}
+.pc-t tr:hover td{background:rgba(59,130,246,.06)}
+.sn{white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:200px;color:#e0e2e6}
+.tg{font-family:'SF Mono',Consolas,monospace;color:#52525b;font-size:9px}
+.tr{text-align:right;white-space:nowrap}
+.ic{font-size:11px}
+.ic.ok{color:#22c55e}
+.dc{display:flex;align-items:center;gap:4px;justify-content:flex-end}
+.db{height:10px;border-radius:2px;min-width:2px}
+.footer{padding:4px 18px;text-align:center;color:#1e293b;font-size:8px;border-top:1px solid #161b22;flex-shrink:0}
+@media(max-width:1000px){.right-panel{width:180px}.mid-row{flex-direction:column}.venue-row{flex-direction:column}}
 </style>
 </head>
 <body>
-<div class="dash">
-  <div class="hd">
-    <div class="dot"></div>
-    <h1>NSOC Black Screen</h1>
-    <div class="sub">Screens with black ratio ≥ 95%</div>
-    <span class="mode mode-live" id="modeBadge">LIVE</span>
-    <div class="ts" id="updateTime">—</div>
-  </div>
-
-  <div class="st">
-    <div class="sc sc-r"><div class="l">Black Screens</div><div class="v" id="s1">—</div><div class="m">Screens affected</div></div>
-    <div class="sc sc-b"><div class="l">Monitored</div><div class="v" id="s2">—</div><div class="m">Screens with script</div></div>
-    <div class="sc sc-o"><div class="l">Locations</div><div class="v" id="s3">—</div><div class="m">Venues affected</div></div>
-    <div class="sc sc-p"><div class="l">Venue Types</div><div class="v" id="s4">—</div><div class="m">Categories</div></div>
-  </div>
-
-  <div class="ct">
-    <div class="pa">
-      <div class="ph"><h3>Black Screens by Venue</h3></div>
-      <div class="pb"><div class="vlist" id="venueList"></div></div>
-    </div>
-    <div class="pa">
-      <div class="ph"><h3>By Venue Type</h3></div>
-      <div class="pb"><div class="type-list" id="typeList"></div></div>
-    </div>
-    <div class="pa">
-      <div class="ph"><h3>PC with Black Screen <span class="cnt" id="pcCnt"></span></h3></div>
-      <div class="tb-wrap" id="tableWrap">
-        <table class="tb"><thead><tr><th>PC Name</th><th>Venue</th><th>Type</th><th>Ratio</th></tr></thead><tbody id="tableBody"></tbody></table>
-      </div>
-    </div>
-  </div>
-
-  <div class="map-row">
-    <div class="map-pa"><div class="ph"><h3>Dubai</h3></div><div id="dubaiMap" class="map-c"></div></div>
-    <div class="map-pa"><div class="ph"><h3>Abu Dhabi</h3></div><div id="abuDhabiMap" class="map-c"></div></div>
-  </div>
+<div class="header">
+<h1>NSOC Black Screen Monitor</h1>
+<div class="meta"><span class="ts">2026-06-21 00:26 UTC</span><span class="mode mode-live">LIVE</span></div>
 </div>
-
-<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
-<script>
-// ===== STATIC FALLBACK DATA =====
-const FALLBACK = {
-  stats: {blackTotal:34, monitored:1227, venues:16, venueTypes:5},
-  venues: [
-    {venue:'ENOC Dubai',count:3},{venue:'REEM MALL',count:5},{venue:'Dalma Mall',count:4},
-    {venue:'EXPOCITY',count:3},{venue:'YAS Mall',count:2},{venue:'NAKHEEL MALL',count:2},
-    {venue:'ENOC Umm Al Quwain',count:1},{venue:'IBN BATTUTA Mall',count:1},{venue:'Abu Dhabi Mall',count:1},
-    {venue:'Union Coop AL BARSHA',count:1},{venue:'Mushrif Mall',count:1},{venue:'The Gardens',count:1},
-    {venue:'JABEL ALI DXB',count:1},{venue:'PALM-DUBAI ZUMUROD',count:1},{venue:'Jumeirah Golf Estate',count:1},
-    {venue:'The WTC MALL',count:1}
-  ],
-  types: [
-    {type:'Malls',count:19},{type:'Convenience Stores',count:5},{type:'Outdoor',count:4},
-    {type:'In-Store',count:1},{type:'Metro',count:2},{type:'Unknown',count:3}
-  ],
-  pcs: [
-    {pc:'DESKTOP-EFLKTKP',venue:'ENOC Dubai',type:'Convenience Stores',ratio:1,playerid:'1017-PELMET'},
-    {pc:'PC-E454E8CBE81A',venue:'ENOC Umm Al Quwain',type:'Convenience Stores',ratio:1,playerid:'1301-PELMET'},
-    {pc:'PC-E454E8CBE853',venue:'ENOC Dubai',type:'Convenience Stores',ratio:1,playerid:'1069-PELMET'},
-    {pc:'PC-94C6911FB145',venue:'IBN BATTUTA Mall',type:'Malls',ratio:1,playerid:'1259843380'},
-    {pc:'AUH-DDP-4A',venue:'Abu Dhabi Mall',type:'Malls',ratio:1,playerid:'1230684793'},
-    {pc:'DESKTOP-R8SI3CH',venue:'YAS Mall',type:'Malls',ratio:1,playerid:'1307404912'},
-    {pc:'DESKTOP-05E81SO',venue:'YAS Mall',type:'Malls',ratio:1,playerid:'587479136'},
-    {pc:'PC-00E04C01578B',venue:'NAKHEEL MALL',type:'Malls',ratio:1,playerid:'895330458'},
-    {pc:'DESKTOP-8HGL0S0',venue:'EXPOCITY',type:'Outdoor',ratio:1,playerid:'713572909'},
-    {pc:'DESKTOP-66E39U2',venue:'EXPOCITY',type:'Outdoor',ratio:1,playerid:'714355354'},
-    {pc:'DESKTOP-5K9INR3',venue:'EXPOCITY',type:'Outdoor',ratio:1,playerid:'714357589'},
-    {pc:'COLUMN-10',venue:'REEM MALL',type:'Malls',ratio:1,playerid:'973850861'},
-    {pc:'DESKTOP-1GEV8UL',venue:'EXPOCITY',type:'Outdoor',ratio:1,playerid:'1077605994'},
-    {pc:'PC-00018087DEF8',venue:'ENOC Dubai',type:'Convenience Stores',ratio:1,playerid:'1017-POST-R'},
-    {pc:'BARSHA-H-E',venue:'Union Coop AL BARSHA',type:'In-Store',ratio:1,playerid:'844741833'},
-    {pc:'ALWSL-TOTEM2B-EXPCT',venue:'—',type:'—',ratio:1,playerid:'ALWSL-TOTEM2B-E'},
-    {pc:'PC-00E04C0157EE',venue:'NAKHEEL MALL',type:'Malls',ratio:1,playerid:'0'},
-    {pc:'PC-E43A6E5D688F',venue:'REEM MALL',type:'Malls',ratio:1,playerid:'983420635'},
-    {pc:'PC-E43A6E5F25DF',venue:'REEM MALL',type:'Malls',ratio:1,playerid:'973368453'},
-    {pc:'PC-E43A6E39A29A',venue:'REEM MALL',type:'Malls',ratio:1,playerid:'973368985'},
-    {pc:'PC-E43A6E39B925',venue:'REEM MALL',type:'Malls',ratio:1,playerid:'927850022'},
-    {pc:'PC-88AEDD07261B',venue:'Dalma Mall',type:'Malls',ratio:1,playerid:'1154787954'},
-    {pc:'PC-CC28AA47305C',venue:'Mushrif Mall',type:'Malls',ratio:1,playerid:'1244473332'},
-    {pc:'PC-88AEDD01E257',venue:'Dalma Mall',type:'Malls',ratio:1,playerid:'1154787203'},
-    {pc:'PC-1C697A606AE6',venue:'The Gardens',type:'Metro',ratio:1,playerid:'1284590250'},
-    {pc:'DM-SZRB-JAB-DXB',venue:'JABEL ALI DXB',type:'Outdoor',ratio:1,playerid:'1359803639'},
-    {pc:'Burjuman-HOLOGRAM-S1-2300002',venue:'—',type:'—',ratio:1,playerid:'BURJUMAN-HOLOGR'},
-    {pc:'MEGACOM-07',venue:'PALM-DUBAI ZUMUROD',type:'—',ratio:1,playerid:'1266055281'},
-    {pc:'PC-88AEDD01E2B7',venue:'Dalma Mall',type:'Malls',ratio:1,playerid:'1169407680'},
-    {pc:'PC-88AEDD021336',venue:'Dalma Mall',type:'Malls',ratio:1,playerid:'1152880722'},
-    {pc:'MOEHLGPC02',venue:'—',type:'—',ratio:1,playerid:'MOEHLGPC02'},
-    {pc:'MEGACOM-9',venue:'—',type:'—',ratio:1,playerid:'MEGACOM-9'},
-    {pc:'PC-1C697A606C40',venue:'Jumeirah Golf Estate',type:'Metro',ratio:1,playerid:'1275930633'},
-    {pc:'PC-00E04C68082D',venue:'The WTC MALL',type:'Malls',ratio:1,playerid:'1155822611'}
-  ]
-};
-
-// ===== PUBLIC API (via NUC tunnel with CORS) =====
-const API_BASE = 'https://nsoc.aiootech.com/grafana';
-const TOKEN = 'glsa_iOdat53jZghjVTaqumTIqzguKQyNdsm8_5efbb828';
-
-async function fetchGrafana(sql) {
-  const r = await fetch(API_BASE+'/api/ds/query', {
-    method:'POST',
-    headers:{'Authorization':'Bearer '+TOKEN,'Content-Type':'application/json'},
-    body:JSON.stringify({queries:[{refId:'A',datasource:{uid:'afgjq2q0g0000c',type:'mysql'},rawSql:sql,format:'table',rawQuery:true,editorMode:'code'}]})
-  });
-  const d = await r.json();
-  const v = d?.results?.A?.frames?.[0]?.data?.values;
-  if (!v) throw new Error('No data');
-  return v;
-}
-
-async function fetchBlackStats() {
-  const v = await fetchGrafana("SELECT COUNT(DISTINCT fields.items_id) as total FROM glpi_plugin_fields_computerlivescreens fields WHERE fields.itemtype='Computer' AND JSON_VALID(fields.livescreenfield) AND CAST(JSON_EXTRACT(fields.livescreenfield, '$.metrics.black_ratio') AS DECIMAL(4,2)) >= 0.95");
-  return {blackTotal: Number(v[0][0])||0};
-}
-
-async function fetchMonitored() {
-  const v = await fetchGrafana("SELECT COUNT(*) as cnt FROM glpi_plugin_fields_computerlivescreens WHERE livescreenfield IS NOT NULL AND livescreenfield <> ''");
-  return {monitored: Number(v[0][0])||0};
-}
-
-async function fetchVenues() {
-  const v = await fetchGrafana("SELECT COUNT(DISTINCT loc.completename) as venues FROM glpi_plugin_fields_computerlivescreens fields JOIN glpi_computers comp ON fields.items_id = comp.id LEFT JOIN glpi_locations loc ON comp.locations_id = loc.id WHERE fields.itemtype='Computer' AND JSON_VALID(fields.livescreenfield) AND CAST(JSON_EXTRACT(fields.livescreenfield, '$.metrics.black_ratio') AS DECIMAL(4,2)) >= 0.95 AND loc.completename IS NOT NULL");
-  return {venues: Number(v[0][0])||0};
-}
-
-async function fetchTypes() {
-  const v = await fetchGrafana("SELECT COUNT(DISTINCT tags.name) as types FROM glpi_plugin_fields_computerlivescreens fields JOIN glpi_computers comp ON fields.items_id = comp.id LEFT JOIN glpi_plugin_tag_tagitems tag_items ON (comp.id = tag_items.items_id AND tag_items.itemtype='Computer') LEFT JOIN glpi_plugin_tag_tags tags ON tag_items.plugin_tag_tags_id = tags.id WHERE fields.itemtype='Computer' AND JSON_VALID(fields.livescreenfield) AND CAST(JSON_EXTRACT(fields.livescreenfield, '$.metrics.black_ratio') AS DECIMAL(4,2)) >= 0.95 AND tags.name IS NOT NULL");
-  return {venueTypes: Number(v[0][0])||0};
-}
-
-async function fetchVenuesList() {
-  const data = await fetchGrafana("SELECT loc.completename AS venue, COUNT(DISTINCT fields.items_id) AS black_count FROM glpi_plugin_fields_computerlivescreens fields JOIN glpi_computers comp ON fields.items_id = comp.id LEFT JOIN glpi_locations loc ON comp.locations_id = loc.id WHERE fields.itemtype='Computer' AND JSON_VALID(fields.livescreenfield) AND CAST(JSON_EXTRACT(fields.livescreenfield, '$.metrics.black_ratio') AS DECIMAL(4,2)) >= 0.95 GROUP BY loc.completename ORDER BY black_count DESC LIMIT 15");
-  return data[0].map((v,i) => ({venue: v, count: Number(data[1][i])}));
-}
-
-async function fetchTypesList() {
-  const data = await fetchGrafana("SELECT COALESCE(tags.name, 'Unknown') AS type, COUNT(DISTINCT fields.items_id) AS count FROM glpi_plugin_fields_computerlivescreens fields JOIN glpi_computers comp ON fields.items_id = comp.id LEFT JOIN glpi_plugin_tag_tagitems tag_items ON (comp.id = tag_items.items_id AND tag_items.itemtype='Computer') LEFT JOIN glpi_plugin_tag_tags tags ON tag_items.plugin_tag_tags_id = tags.id WHERE fields.itemtype='Computer' AND JSON_VALID(fields.livescreenfield) AND CAST(JSON_EXTRACT(fields.livescreenfield, '$.metrics.black_ratio') AS DECIMAL(4,2)) >= 0.95 GROUP BY tags.name ORDER BY count DESC");
-  return data[0].map((v,i) => ({type: v||'Unknown', count: Number(data[1][i])}));
-}
-
-async function fetchPCs() {
-  const data = await fetchGrafana("SELECT comp.name AS pc, COALESCE(loc.completename, '-') AS venue, COALESCE(tags.name, '-') AS type, CAST(JSON_EXTRACT(fields.livescreenfield, '$.metrics.black_ratio') AS DECIMAL(4,2)) AS ratio, COALESCE(agents.tag, '-') AS playerid FROM glpi_plugin_fields_computerlivescreens fields JOIN glpi_computers comp ON fields.items_id = comp.id LEFT JOIN glpi_locations loc ON comp.locations_id = loc.id LEFT JOIN glpi_agents agents ON (comp.id = agents.items_id AND agents.itemtype='Computer') LEFT JOIN glpi_plugin_tag_tagitems tag_items ON (comp.id = tag_items.items_id AND tag_items.itemtype='Computer') LEFT JOIN glpi_plugin_tag_tags tags ON tag_items.plugin_tag_tags_id = tags.id WHERE fields.itemtype='Computer' AND JSON_VALID(fields.livescreenfield) AND CAST(JSON_EXTRACT(fields.livescreenfield, '$.metrics.black_ratio') AS DECIMAL(4,2)) >= 0.95 ORDER BY ratio DESC, fields.date_mod DESC");
-  return data[0].map((v,i) => ({pc:v, venue:data[1][i], type:data[2][i], ratio:Number(data[3][i]), playerid:data[4][i]}));
-}
-
-// ===== STATE =====
-let isLive = false;
-let pcs = [];
-let page = 0, rowsPerPage = 8, scrollTimer = null;
-
-// ===== TYPE COLORS =====
-const TC = {'Convenience Stores':'#22c55e','In-Store':'#ec4899','Malls':'#3b82f6','Outdoor':'#f59e0b','Metro':'#a78bfa'};
-const TD = {'Convenience Stores':0,'In-Store':1,'Malls':2,'Outdoor':3,'Metro':4};
-
-// ===== RENDER =====
-function renderStats(d) {
-  document.getElementById('s1').textContent = d.blackTotal;
-  document.getElementById('s2').textContent = d.monitored;
-  document.getElementById('s3').textContent = d.venues;
-  document.getElementById('s4').textContent = d.venueTypes;
-  document.getElementById('updateTime').textContent = new Date().toLocaleTimeString('en-GB',{hour12:false});
-}
-
-function renderVenues(list) {
-  const max = Math.max(...list.map(v=>v.count), 1);
-  const el = document.getElementById('venueList');
-  el.innerHTML = list.map(v =>
-    `<div class="vrow"><span class="vname">${v.venue}</span><div class="vbar"><div class="vfill" style="width:${(v.count/max*100).toFixed(0)}%"></div></div><span class="vcount">${v.count}</span></div>`
-  ).join('');
-}
-
-function renderTypes(list) {
-  const total = list.reduce((s,t)=>s+t.count, 0);
-  const el = document.getElementById('typeList');
-  el.innerHTML = list.sort((a,b)=>TD[a.type]!==undefined&&TD[b.type]!==undefined?TD[a.type]-TD[b.type]:b.count-a.count).map(t =>
-    `<div class="type-item"><span class="type-dot" style="background:${TC[t.type]||'#64748b'}"></span><span class="type-name">${t.type}</span><span class="type-val">${t.count}</span><span class="type-pct">${(t.count/total*100).toFixed(0)}%</span></div>`
-  ).join('');
-}
-
-function renderTable() {
-  const start = page * rowsPerPage;
-  const pg = pcs.slice(start, start + rowsPerPage);
-  document.getElementById('pcCnt').textContent = `(${pcs.length} total)`;
-  document.getElementById('tableBody').innerHTML = pg.map(p =>
-    `<tr${p.ratio===1?' class="hl"':''}><td style="font-weight:500;color:#e2e8f0">${p.pc}</td><td>${p.venue}</td><td>${p.type}</td><td><span class="bdg ${p.ratio>=1?'bg-r':'bg-o'}">${(p.ratio*100).toFixed(0)}%</span></td></tr>`
-  ).join('');
-}
-
-function startAutoScroll() {
-  if (scrollTimer) clearInterval(scrollTimer);
-  scrollTimer = setInterval(() => {
-    const total = Math.ceil(pcs.length / rowsPerPage);
-    page = (page + 1) % total;
-    renderTable();
-    document.getElementById('tableWrap').scrollTop = 0;
-  }, 4000);
-}
-
-function loadData(data) {
-  renderStats(data.stats);
-  renderVenues(data.venues);
-  renderTypes(data.types);
-  pcs = data.pcs;
-  page = 0;
-  renderTable();
-  startAutoScroll();
-}
-
-// ===== FETCH =====
-async function tryFetch() {
-  const badge = document.getElementById('modeBadge');
-  try {
-    const [statsData, venuesList, typesList, pcsData] = await Promise.all([
-      fetchJSON('/api/black-screen-stats'),
-      fetchVenuesList(),
-      fetchTypesList(),
-      fetchPCs()
-    ]);
-    loadData({
-      stats: {blackTotal: statsData.blackTotal, monitored: statsData.monitored, venues: statsData.venues, venueTypes: statsData.venueTypes},
-      venues: venuesList,
-      types: typesList,
-      pcs: pcsData
-    });
-    badge.textContent = 'LIVE';
-    badge.className = 'mode mode-live';
-    isLive = true;
-  } catch(e) {
-    console.log('Live data unavailable, using static data:', e.message);
-    loadData(FALLBACK);
-    badge.textContent = 'STATIC';
-    badge.className = 'mode mode-fallback';
-  }
-  loadBlackMapData();
-  // Refresh every 5 min
-  setTimeout(tryFetch, 300000);
-}
-
-// ===== MAPS =====
-function initMaps(){
-  window.dubaiMap = L.map('dubaiMap',{center:[25.2,55.3],zoom:10,layers:[L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png',{subdomains:'abcd',maxZoom:19})],zoomControl:false,attributionControl:false});
-  window.abuMap = L.map('abuDhabiMap',{center:[24.45,54.35],zoom:10,layers:[L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png',{subdomains:'abcd',maxZoom:19})],zoomControl:false,attributionControl:false});
-}
-
-async function loadBlackMapData(){
-  try {
-    const data = await fetchGrafana("SELECT comp.name, gl.latitude, gl.longitude FROM glpi_plugin_fields_computerlivescreens fields JOIN glpi_computers comp ON fields.items_id=comp.id LEFT JOIN glpi_locations gl ON comp.locations_id=gl.id WHERE fields.itemtype='Computer' AND JSON_VALID(fields.livescreenfield) AND CAST(JSON_EXTRACT(fields.livescreenfield, '$.metrics.black_ratio') AS DECIMAL(4,2))>=0.95 AND gl.latitude IS NOT NULL AND gl.longitude IS NOT NULL");
-    data[0].forEach((_,i)=>{
-      const lat=Number(data[1][i]), lng=Number(data[2][i]);
-      if(!lat||!lng)return;
-      L.circleMarker([lat,lng],{radius:8,fillColor:'#ef4444',color:'#ff6666',weight:2,opacity:1,fillOpacity:0.6}).addTo(lat>25?window.dubaiMap:window.abuMap).bindTooltip("<b>"+data[0][i]+"</b><br>🔴 Black Screen",{direction:'top',className:'tt-dark'});
-    });
-  } catch(e){} // fallback empty
-}
-
-tryFetch();
-initMaps();
-</script>
+<div class="stats-row">
+<div class="stat-card"><div class="sv">38</div><div class="sl">Black Screens</div></div>
+<div class="stat-card"><div class="sv">1227</div><div class="sl">Monitored</div></div>
+<div class="stat-card"><div class="sv">15</div><div class="sl">Venues</div></div>
+<div class="stat-card"><div class="sv">5</div><div class="sl">Venue Types</div></div>
+</div>
+<div class="body">
+<div class="top-row"><div style="background:rgba(239,68,68,0.08);border:1px solid rgba(239,68,68,0.15);border-radius:5px;padding:6px 12px;min-width:200px;flex:1">
+<div style="display:flex;align-items:center;gap:6px">
+<span style="font-weight:700;color:#ef4444;font-size:12px">#1</span>
+<span style="font-weight:600;font-size:12px;font-family:'SF Mono',Consolas,monospace">PC-94C6911FB145</span>
+<span style="font-weight:700;font-size:14px;color:#f97316;margin-left:auto">100%</span>
+</div>
+<div style="display:flex;gap:10px;font-size:9px;color:#6b7c93;margin-top:1px">
+<span>Player: 1259843380</span>
+<span>IBN BATTUTA Mall</span>
+</div>
+</div><div style="background:rgba(239,68,68,0.08);border:1px solid rgba(239,68,68,0.15);border-radius:5px;padding:6px 12px;min-width:200px;flex:1">
+<div style="display:flex;align-items:center;gap:6px">
+<span style="font-weight:700;color:#ef4444;font-size:12px">#2</span>
+<span style="font-weight:600;font-size:12px;font-family:'SF Mono',Consolas,monospace">PC-00E0971CA91B</span>
+<span style="font-weight:700;font-size:14px;color:#f97316;margin-left:auto">100%</span>
+</div>
+<div style="display:flex;gap:10px;font-size:9px;color:#6b7c93;margin-top:1px">
+<span>Player: 948185370</span>
+<span>REEM MALL</span>
+</div>
+</div><div style="background:rgba(239,68,68,0.08);border:1px solid rgba(239,68,68,0.15);border-radius:5px;padding:6px 12px;min-width:200px;flex:1">
+<div style="display:flex;align-items:center;gap:6px">
+<span style="font-weight:700;color:#ef4444;font-size:12px">#3</span>
+<span style="font-weight:600;font-size:12px;font-family:'SF Mono',Consolas,monospace">SOBHA-WATERFALL</span>
+<span style="font-weight:700;font-size:14px;color:#f97316;margin-left:auto">100%</span>
+</div>
+<div style="display:flex;gap:10px;font-size:9px;color:#6b7c93;margin-top:1px">
+<span>Player: 1321880534</span>
+<span>-</span>
+</div>
+</div><div style="background:rgba(239,68,68,0.08);border:1px solid rgba(239,68,68,0.15);border-radius:5px;padding:6px 12px;min-width:200px;flex:1">
+<div style="display:flex;align-items:center;gap:6px">
+<span style="font-weight:700;color:#ef4444;font-size:12px">#4</span>
+<span style="font-weight:600;font-size:12px;font-family:'SF Mono',Consolas,monospace">PC-00E0971CA8F9</span>
+<span style="font-weight:700;font-size:14px;color:#f97316;margin-left:auto">100%</span>
+</div>
+<div style="display:flex;gap:10px;font-size:9px;color:#6b7c93;margin-top:1px">
+<span>Player: 971841128</span>
+<span>REEM MALL</span>
+</div>
+</div><div style="background:rgba(239,68,68,0.08);border:1px solid rgba(239,68,68,0.15);border-radius:5px;padding:6px 12px;min-width:200px;flex:1">
+<div style="display:flex;align-items:center;gap:6px">
+<span style="font-weight:700;color:#ef4444;font-size:12px">#5</span>
+<span style="font-weight:600;font-size:12px;font-family:'SF Mono',Consolas,monospace">PC-00E0971CAA23</span>
+<span style="font-weight:700;font-size:14px;color:#f97316;margin-left:auto">100%</span>
+</div>
+<div style="display:flex;gap:10px;font-size:9px;color:#6b7c93;margin-top:1px">
+<span>Player: 973303787</span>
+<span>REEM MALL</span>
+</div>
+</div><div style="background:rgba(239,68,68,0.08);border:1px solid rgba(239,68,68,0.15);border-radius:5px;padding:6px 12px;min-width:200px;flex:1">
+<div style="display:flex;align-items:center;gap:6px">
+<span style="font-weight:700;color:#ef4444;font-size:12px">#6</span>
+<span style="font-weight:600;font-size:12px;font-family:'SF Mono',Consolas,monospace">DESKTOP-EFLKTKP</span>
+<span style="font-weight:700;font-size:14px;color:#f97316;margin-left:auto">100%</span>
+</div>
+<div style="display:flex;gap:10px;font-size:9px;color:#6b7c93;margin-top:1px">
+<span>Player: 1017-PELMET</span>
+<span>ENOC Dubai</span>
+</div>
+</div><div style="background:rgba(239,68,68,0.08);border:1px solid rgba(239,68,68,0.15);border-radius:5px;padding:6px 12px;min-width:200px;flex:1">
+<div style="display:flex;align-items:center;gap:6px">
+<span style="font-weight:700;color:#ef4444;font-size:12px">#7</span>
+<span style="font-weight:600;font-size:12px;font-family:'SF Mono',Consolas,monospace">PC-E454E8DD8569</span>
+<span style="font-weight:700;font-size:14px;color:#f97316;margin-left:auto">100%</span>
+</div>
+<div style="display:flex;gap:10px;font-size:9px;color:#6b7c93;margin-top:1px">
+<span>Player: 1204-PELMET</span>
+<span>ENOC Ajman</span>
+</div>
+</div><div style="background:rgba(239,68,68,0.08);border:1px solid rgba(239,68,68,0.15);border-radius:5px;padding:6px 12px;min-width:200px;flex:1">
+<div style="display:flex;align-items:center;gap:6px">
+<span style="font-weight:700;color:#ef4444;font-size:12px">#8</span>
+<span style="font-weight:600;font-size:12px;font-family:'SF Mono',Consolas,monospace">PC-A4BB6DD5620C</span>
+<span style="font-weight:700;font-size:14px;color:#f97316;margin-left:auto">100%</span>
+</div>
+<div style="display:flex;gap:10px;font-size:9px;color:#6b7c93;margin-top:1px">
+<span>Player: 1124-PELMET</span>
+<span>ENOC Sharjah</span>
+</div>
+</div><div style="background:rgba(239,68,68,0.08);border:1px solid rgba(239,68,68,0.15);border-radius:5px;padding:6px 12px;min-width:200px;flex:1">
+<div style="display:flex;align-items:center;gap:6px">
+<span style="font-weight:700;color:#ef4444;font-size:12px">#9</span>
+<span style="font-weight:600;font-size:12px;font-family:'SF Mono',Consolas,monospace">PC-E454E89A6D02</span>
+<span style="font-weight:700;font-size:14px;color:#f97316;margin-left:auto">100%</span>
+</div>
+<div style="display:flex;gap:10px;font-size:9px;color:#6b7c93;margin-top:1px">
+<span>Player: 1060-PELMET</span>
+<span>ENOC Dubai</span>
+</div>
+</div><div style="background:rgba(239,68,68,0.08);border:1px solid rgba(239,68,68,0.15);border-radius:5px;padding:6px 12px;min-width:200px;flex:1">
+<div style="display:flex;align-items:center;gap:6px">
+<span style="font-weight:700;color:#ef4444;font-size:12px">#10</span>
+<span style="font-weight:600;font-size:12px;font-family:'SF Mono',Consolas,monospace">Union-platform1</span>
+<span style="font-weight:700;font-size:14px;color:#f97316;margin-left:auto">100%</span>
+</div>
+<div style="display:flex;gap:10px;font-size:9px;color:#6b7c93;margin-top:1px">
+<span>Player: 1320735946</span>
+<span>Union Metro Station</span>
+</div>
+</div><div style="background:rgba(239,68,68,0.08);border:1px solid rgba(239,68,68,0.15);border-radius:5px;padding:6px 12px;min-width:200px;flex:1">
+<div style="display:flex;align-items:center;gap:6px">
+<span style="font-weight:700;color:#ef4444;font-size:12px">#11</span>
+<span style="font-weight:600;font-size:12px;font-family:'SF Mono',Consolas,monospace">AUH-DDP-4A</span>
+<span style="font-weight:700;font-size:14px;color:#f97316;margin-left:auto">100%</span>
+</div>
+<div style="display:flex;gap:10px;font-size:9px;color:#6b7c93;margin-top:1px">
+<span>Player: 1230684793</span>
+<span>Abu Dhabi Mall</span>
+</div>
+</div><div style="background:rgba(239,68,68,0.08);border:1px solid rgba(239,68,68,0.15);border-radius:5px;padding:6px 12px;min-width:200px;flex:1">
+<div style="display:flex;align-items:center;gap:6px">
+<span style="font-weight:700;color:#ef4444;font-size:12px">#12</span>
+<span style="font-weight:600;font-size:12px;font-family:'SF Mono',Consolas,monospace">DESKTOP-R8SI3CH</span>
+<span style="font-weight:700;font-size:14px;color:#f97316;margin-left:auto">100%</span>
+</div>
+<div style="display:flex;gap:10px;font-size:9px;color:#6b7c93;margin-top:1px">
+<span>Player: 1307404912</span>
+<span>YAS Mall</span>
+</div>
+</div></div>
+<div class="mid-row">
+<div class="left-panel"><div class="lp-header">Venues with black screens</div><div class="scroll-area"><div class="venue-bar"><div class="vb-label">REEM MALL</div><div class="vb-track"><div class="vb-fill" style="width:200px;background:#ef4444"></div></div><div class="vb-val">8</div></div><div class="venue-bar"><div class="vb-label">EXPOCITY</div><div class="vb-track"><div class="vb-fill" style="width:150px;background:#ef4444"></div></div><div class="vb-val">6</div></div><div class="venue-bar"><div class="vb-label">None</div><div class="vb-track"><div class="vb-fill" style="width:125px;background:#ef4444"></div></div><div class="vb-val">5</div></div><div class="venue-bar"><div class="vb-label">Dalma Mall</div><div class="vb-track"><div class="vb-fill" style="width:75px;background:#ef4444"></div></div><div class="vb-val">3</div></div><div class="venue-bar"><div class="vb-label">ENOC Dubai</div><div class="vb-track"><div class="vb-fill" style="width:75px;background:#ef4444"></div></div><div class="vb-val">3</div></div><div class="venue-bar"><div class="vb-label">NAKHEEL MALL</div><div class="vb-track"><div class="vb-fill" style="width:50px;background:#ef4444"></div></div><div class="vb-val">2</div></div><div class="venue-bar"><div class="vb-label">YAS Mall</div><div class="vb-track"><div class="vb-fill" style="width:50px;background:#ef4444"></div></div><div class="vb-val">2</div></div><div class="venue-bar"><div class="vb-label">Abu Dhabi Mall</div><div class="vb-track"><div class="vb-fill" style="width:25px;background:#ef4444"></div></div><div class="vb-val">1</div></div><div class="venue-bar"><div class="vb-label">Al Furjan</div><div class="vb-track"><div class="vb-fill" style="width:25px;background:#ef4444"></div></div><div class="vb-val">1</div></div><div class="venue-bar"><div class="vb-label">ENOC Ajman</div><div class="vb-track"><div class="vb-fill" style="width:25px;background:#ef4444"></div></div><div class="vb-val">1</div></div><div class="venue-bar"><div class="vb-label">ENOC Sharjah</div><div class="vb-track"><div class="vb-fill" style="width:25px;background:#ef4444"></div></div><div class="vb-val">1</div></div><div class="venue-bar"><div class="vb-label">IBN BATTUTA Mall</div><div class="vb-track"><div class="vb-fill" style="width:25px;background:#ef4444"></div></div><div class="vb-val">1</div></div><div class="venue-bar"><div class="vb-label">JABEL ALI DXB</div><div class="vb-track"><div class="vb-fill" style="width:25px;background:#ef4444"></div></div><div class="vb-val">1</div></div><div class="venue-bar"><div class="vb-label">PALM-DUBAI ZUMUROD</div><div class="vb-track"><div class="vb-fill" style="width:25px;background:#ef4444"></div></div><div class="vb-val">1</div></div><div class="venue-bar"><div class="vb-label">Union Coop AL BARSHA</div><div class="vb-track"><div class="vb-fill" style="width:25px;background:#ef4444"></div></div><div class="vb-val">1</div></div></div></div>
+<div class="right-panel"><div class="rp-header">By venue type</div><div class="scroll-area"><div class="type-item"><span class="type-dot" style="background:#3b82f6"></span><span class="type-name">Malls</span><span class="type-val">17</span><span class="type-pct">53%</span></div><div class="type-item"><span class="type-dot" style="background:#f59e0b"></span><span class="type-name">Outdoor</span><span class="type-val">7</span><span class="type-pct">22%</span></div><div class="type-item"><span class="type-dot" style="background:#22c55e"></span><span class="type-name">Convenience Stores</span><span class="type-val">5</span><span class="type-pct">16%</span></div><div class="type-item"><span class="type-dot" style="background:#a78bfa"></span><span class="type-name">Metro</span><span class="type-val">2</span><span class="type-pct">6%</span></div><div class="type-item"><span class="type-dot" style="background:#ec4899"></span><span class="type-name">In-Store</span><span class="type-val">1</span><span class="type-pct">3%</span></div></div></div>
+</div>
+<div class="venue-row"><div class="venue-card" style="border-top:2px solid #3b82f6">
+<div class="vc-header"><h3 style="color:#3b82f6">REEM MALL</h3><span class="badge">8 black screens</span></div>
+<div class="scroll-t"><table class="pc-t"><thead><tr><th style="width:14px">S</th><th>PC</th><th style="width:40px">Player</th><th style="width:56px;text-align:right">Black %</th></tr></thead><tbody><tr><td><span class="ic ok">✓</span></td><td class="sn" title="PC-00E0971CA91B">PC-00E0971CA91B</td><td class="tg">948185370</td><td class="tr"><div class="dc"><span class="db" style="width:100.0px;background:#ef4444"></span>100%</div></td></tr><tr><td><span class="ic ok">✓</span></td><td class="sn" title="PC-00E0971CA8F9">PC-00E0971CA8F9</td><td class="tg">971841128</td><td class="tr"><div class="dc"><span class="db" style="width:100.0px;background:#ef4444"></span>100%</div></td></tr><tr><td><span class="ic ok">✓</span></td><td class="sn" title="PC-00E0971CAA23">PC-00E0971CAA23</td><td class="tg">973303787</td><td class="tr"><div class="dc"><span class="db" style="width:100.0px;background:#ef4444"></span>100%</div></td></tr><tr><td><span class="ic ok">✓</span></td><td class="sn" title="COLUMN-10">COLUMN-10</td><td class="tg">973850861</td><td class="tr"><div class="dc"><span class="db" style="width:100.0px;background:#ef4444"></span>100%</div></td></tr><tr><td><span class="ic ok">✓</span></td><td class="sn" title="PC-E43A6E5D6ABA">PC-E43A6E5D6ABA</td><td class="tg">959316189</td><td class="tr"><div class="dc"><span class="db" style="width:99.0px;background:#ef4444"></span>99.00%</div></td></tr><tr><td><span class="ic ok">✓</span></td><td class="sn" title="PC-E43A6E5D6901">PC-E43A6E5D6901</td><td class="tg">961249274</td><td class="tr"><div class="dc"><span class="db" style="width:99.0px;background:#ef4444"></span>99.00%</div></td></tr><tr><td><span class="ic ok">✓</span></td><td class="sn" title="PC-E43A6E39B8D2">PC-E43A6E39B8D2</td><td class="tg">927753285</td><td class="tr"><div class="dc"><span class="db" style="width:98.0px;background:#ef4444"></span>98.00%</div></td></tr><tr><td><span class="ic ok">✓</span></td><td class="sn" title="PC-E43A6E5D691C">PC-E43A6E5D691C</td><td class="tg">959301832</td><td class="tr"><div class="dc"><span class="db" style="width:97.0px;background:#ef4444"></span>97.00%</div></td></tr></tbody></table></div>
+</div><div class="venue-card" style="border-top:2px solid #f59e0b">
+<div class="vc-header"><h3 style="color:#f59e0b">EXPOCITY</h3><span class="badge">6 black screens</span></div>
+<div class="scroll-t"><table class="pc-t"><thead><tr><th style="width:14px">S</th><th>PC</th><th style="width:40px">Player</th><th style="width:56px;text-align:right">Black %</th></tr></thead><tbody><tr><td><span class="ic ok">✓</span></td><td class="sn" title="DESKTOP-8HGL0S0">DESKTOP-8HGL0S0</td><td class="tg">713572909</td><td class="tr"><div class="dc"><span class="db" style="width:100.0px;background:#ef4444"></span>100%</div></td></tr><tr><td><span class="ic ok">✓</span></td><td class="sn" title="DESKTOP-66E39U2">DESKTOP-66E39U2</td><td class="tg">714355354</td><td class="tr"><div class="dc"><span class="db" style="width:100.0px;background:#ef4444"></span>100%</div></td></tr><tr><td><span class="ic ok">✓</span></td><td class="sn" title="DESKTOP-5K9INR3">DESKTOP-5K9INR3</td><td class="tg">714357589</td><td class="tr"><div class="dc"><span class="db" style="width:100.0px;background:#ef4444"></span>100%</div></td></tr><tr><td><span class="ic ok">✓</span></td><td class="sn" title="DESKTOP-1GEV8UL">DESKTOP-1GEV8UL</td><td class="tg">1077605994</td><td class="tr"><div class="dc"><span class="db" style="width:100.0px;background:#ef4444"></span>100%</div></td></tr><tr><td><span class="ic ok">✓</span></td><td class="sn" title="PC-E43A6E37EB99">PC-E43A6E37EB99</td><td class="tg">1266006919</td><td class="tr"><div class="dc"><span class="db" style="width:96.0px;background:#ef4444"></span>96.00%</div></td></tr><tr><td><span class="ic ok">✓</span></td><td class="sn" title="PC-E43A6E3873F7">PC-E43A6E3873F7</td><td class="tg">1327105836</td><td class="tr"><div class="dc"><span class="db" style="width:96.0px;background:#ef4444"></span>96.00%</div></td></tr></tbody></table></div>
+</div><div class="venue-card" style="border-top:2px solid #64748b">
+<div class="vc-header"><h3 style="color:#64748b">-</h3><span class="badge">5 black screens</span></div>
+<div class="scroll-t"><table class="pc-t"><thead><tr><th style="width:14px">S</th><th>PC</th><th style="width:40px">Player</th><th style="width:56px;text-align:right">Black %</th></tr></thead><tbody><tr><td><span class="ic ok">✓</span></td><td class="sn" title="SOBHA-WATERFALL">SOBHA-WATERFALL</td><td class="tg">1321880534</td><td class="tr"><div class="dc"><span class="db" style="width:100.0px;background:#ef4444"></span>100%</div></td></tr><tr><td><span class="ic ok">✓</span></td><td class="sn" title="Burjuman-HOLOGRAM-S1-2300002">Burjuman-HOLOGRAM-S1-2300002</td><td class="tg">BURJUMAN-HOLOGR</td><td class="tr"><div class="dc"><span class="db" style="width:96.0px;background:#ef4444"></span>96.00%</div></td></tr><tr><td><span class="ic ok">✓</span></td><td class="sn" title="MOEHLGPC02">MOEHLGPC02</td><td class="tg">MOEHLGPC02</td><td class="tr"><div class="dc"><span class="db" style="width:96.0px;background:#ef4444"></span>96.00%</div></td></tr><tr><td><span class="ic ok">✓</span></td><td class="sn" title="MEGACOM-9">MEGACOM-9</td><td class="tg">MEGACOM-9</td><td class="tr"><div class="dc"><span class="db" style="width:96.0px;background:#ef4444"></span>96.00%</div></td></tr><tr><td><span class="ic ok">✓</span></td><td class="sn" title="ALWSL-TOTEM2B-EXPCT">ALWSL-TOTEM2B-EXPCT</td><td class="tg">ALWSL-TOTEM2B-E</td><td class="tr"><div class="dc"><span class="db" style="width:96.0px;background:#ef4444"></span>96.00%</div></td></tr></tbody></table></div>
+</div><div class="venue-card" style="border-top:2px solid #22c55e">
+<div class="vc-header"><h3 style="color:#22c55e">ENOC Dubai</h3><span class="badge">3 black screens</span></div>
+<div class="scroll-t"><table class="pc-t"><thead><tr><th style="width:14px">S</th><th>PC</th><th style="width:40px">Player</th><th style="width:56px;text-align:right">Black %</th></tr></thead><tbody><tr><td><span class="ic ok">✓</span></td><td class="sn" title="DESKTOP-EFLKTKP">DESKTOP-EFLKTKP</td><td class="tg">1017-PELMET</td><td class="tr"><div class="dc"><span class="db" style="width:100.0px;background:#ef4444"></span>100%</div></td></tr><tr><td><span class="ic ok">✓</span></td><td class="sn" title="PC-E454E89A6D02">PC-E454E89A6D02</td><td class="tg">1060-PELMET</td><td class="tr"><div class="dc"><span class="db" style="width:100.0px;background:#ef4444"></span>100%</div></td></tr><tr><td><span class="ic ok">✓</span></td><td class="sn" title="PC-00018087DEF8">PC-00018087DEF8</td><td class="tg">1017-POST-R</td><td class="tr"><div class="dc"><span class="db" style="width:100.0px;background:#ef4444"></span>100%</div></td></tr></tbody></table></div>
+</div><div class="venue-card" style="border-top:2px solid #3b82f6">
+<div class="vc-header"><h3 style="color:#3b82f6">Dalma Mall</h3><span class="badge">3 black screens</span></div>
+<div class="scroll-t"><table class="pc-t"><thead><tr><th style="width:14px">S</th><th>PC</th><th style="width:40px">Player</th><th style="width:56px;text-align:right">Black %</th></tr></thead><tbody><tr><td><span class="ic ok">✓</span></td><td class="sn" title="PC-88AEDD01E257">PC-88AEDD01E257</td><td class="tg">1154787203</td><td class="tr"><div class="dc"><span class="db" style="width:97.0px;background:#ef4444"></span>97.00%</div></td></tr><tr><td><span class="ic ok">✓</span></td><td class="sn" title="PC-88AEDD07261B">PC-88AEDD07261B</td><td class="tg">1154787954</td><td class="tr"><div class="dc"><span class="db" style="width:97.0px;background:#ef4444"></span>97.00%</div></td></tr><tr><td><span class="ic ok">✓</span></td><td class="sn" title="PC-88AEDD01DF14">PC-88AEDD01DF14</td><td class="tg">1154795124</td><td class="tr"><div class="dc"><span class="db" style="width:95.0px;background:#ef4444"></span>95.00%</div></td></tr></tbody></table></div>
+</div><div class="venue-card" style="border-top:2px solid #3b82f6">
+<div class="vc-header"><h3 style="color:#3b82f6">YAS Mall</h3><span class="badge">2 black screens</span></div>
+<div class="scroll-t"><table class="pc-t"><thead><tr><th style="width:14px">S</th><th>PC</th><th style="width:40px">Player</th><th style="width:56px;text-align:right">Black %</th></tr></thead><tbody><tr><td><span class="ic ok">✓</span></td><td class="sn" title="DESKTOP-R8SI3CH">DESKTOP-R8SI3CH</td><td class="tg">1307404912</td><td class="tr"><div class="dc"><span class="db" style="width:100.0px;background:#ef4444"></span>100%</div></td></tr><tr><td><span class="ic ok">✓</span></td><td class="sn" title="DESKTOP-05E81SO">DESKTOP-05E81SO</td><td class="tg">587479136</td><td class="tr"><div class="dc"><span class="db" style="width:100.0px;background:#ef4444"></span>100%</div></td></tr></tbody></table></div>
+</div><div class="venue-card" style="border-top:2px solid #3b82f6">
+<div class="vc-header"><h3 style="color:#3b82f6">NAKHEEL MALL</h3><span class="badge">2 black screens</span></div>
+<div class="scroll-t"><table class="pc-t"><thead><tr><th style="width:14px">S</th><th>PC</th><th style="width:40px">Player</th><th style="width:56px;text-align:right">Black %</th></tr></thead><tbody><tr><td><span class="ic ok">✓</span></td><td class="sn" title="PC-00E04C01578B">PC-00E04C01578B</td><td class="tg">895330458</td><td class="tr"><div class="dc"><span class="db" style="width:100.0px;background:#ef4444"></span>100%</div></td></tr><tr><td><span class="ic ok">✓</span></td><td class="sn" title="PC-00E04C0157EE">PC-00E04C0157EE</td><td class="tg">0</td><td class="tr"><div class="dc"><span class="db" style="width:98.0px;background:#ef4444"></span>98.00%</div></td></tr></tbody></table></div>
+</div><div class="venue-card" style="border-top:2px solid #3b82f6">
+<div class="vc-header"><h3 style="color:#3b82f6">IBN BATTUTA Mall</h3><span class="badge">1 black screens</span></div>
+<div class="scroll-t"><table class="pc-t"><thead><tr><th style="width:14px">S</th><th>PC</th><th style="width:40px">Player</th><th style="width:56px;text-align:right">Black %</th></tr></thead><tbody><tr><td><span class="ic ok">✓</span></td><td class="sn" title="PC-94C6911FB145">PC-94C6911FB145</td><td class="tg">1259843380</td><td class="tr"><div class="dc"><span class="db" style="width:100.0px;background:#ef4444"></span>100%</div></td></tr></tbody></table></div>
+</div><div class="venue-card" style="border-top:2px solid #22c55e">
+<div class="vc-header"><h3 style="color:#22c55e">ENOC Ajman</h3><span class="badge">1 black screens</span></div>
+<div class="scroll-t"><table class="pc-t"><thead><tr><th style="width:14px">S</th><th>PC</th><th style="width:40px">Player</th><th style="width:56px;text-align:right">Black %</th></tr></thead><tbody><tr><td><span class="ic ok">✓</span></td><td class="sn" title="PC-E454E8DD8569">PC-E454E8DD8569</td><td class="tg">1204-PELMET</td><td class="tr"><div class="dc"><span class="db" style="width:100.0px;background:#ef4444"></span>100%</div></td></tr></tbody></table></div>
+</div><div class="venue-card" style="border-top:2px solid #22c55e">
+<div class="vc-header"><h3 style="color:#22c55e">ENOC Sharjah</h3><span class="badge">1 black screens</span></div>
+<div class="scroll-t"><table class="pc-t"><thead><tr><th style="width:14px">S</th><th>PC</th><th style="width:40px">Player</th><th style="width:56px;text-align:right">Black %</th></tr></thead><tbody><tr><td><span class="ic ok">✓</span></td><td class="sn" title="PC-A4BB6DD5620C">PC-A4BB6DD5620C</td><td class="tg">1124-PELMET</td><td class="tr"><div class="dc"><span class="db" style="width:100.0px;background:#ef4444"></span>100%</div></td></tr></tbody></table></div>
+</div><div class="venue-card" style="border-top:2px solid #a78bfa">
+<div class="vc-header"><h3 style="color:#a78bfa">Union Metro Station</h3><span class="badge">1 black screens</span></div>
+<div class="scroll-t"><table class="pc-t"><thead><tr><th style="width:14px">S</th><th>PC</th><th style="width:40px">Player</th><th style="width:56px;text-align:right">Black %</th></tr></thead><tbody><tr><td><span class="ic ok">✓</span></td><td class="sn" title="Union-platform1">Union-platform1</td><td class="tg">1320735946</td><td class="tr"><div class="dc"><span class="db" style="width:100.0px;background:#ef4444"></span>100%</div></td></tr></tbody></table></div>
+</div><div class="venue-card" style="border-top:2px solid #3b82f6">
+<div class="vc-header"><h3 style="color:#3b82f6">Abu Dhabi Mall</h3><span class="badge">1 black screens</span></div>
+<div class="scroll-t"><table class="pc-t"><thead><tr><th style="width:14px">S</th><th>PC</th><th style="width:40px">Player</th><th style="width:56px;text-align:right">Black %</th></tr></thead><tbody><tr><td><span class="ic ok">✓</span></td><td class="sn" title="AUH-DDP-4A">AUH-DDP-4A</td><td class="tg">1230684793</td><td class="tr"><div class="dc"><span class="db" style="width:100.0px;background:#ef4444"></span>100%</div></td></tr></tbody></table></div>
+</div><div class="venue-card" style="border-top:2px solid #ec4899">
+<div class="vc-header"><h3 style="color:#ec4899">Union Coop AL BARSHA</h3><span class="badge">1 black screens</span></div>
+<div class="scroll-t"><table class="pc-t"><thead><tr><th style="width:14px">S</th><th>PC</th><th style="width:40px">Player</th><th style="width:56px;text-align:right">Black %</th></tr></thead><tbody><tr><td><span class="ic ok">✓</span></td><td class="sn" title="BARSHA-H-E">BARSHA-H-E</td><td class="tg">844731591</td><td class="tr"><div class="dc"><span class="db" style="width:100.0px;background:#ef4444"></span>100%</div></td></tr></tbody></table></div>
+</div><div class="venue-card" style="border-top:2px solid #a78bfa">
+<div class="vc-header"><h3 style="color:#a78bfa">Al Furjan</h3><span class="badge">1 black screens</span></div>
+<div class="scroll-t"><table class="pc-t"><thead><tr><th style="width:14px">S</th><th>PC</th><th style="width:40px">Player</th><th style="width:56px;text-align:right">Black %</th></tr></thead><tbody><tr><td><span class="ic ok">✓</span></td><td class="sn" title="Alfurjan-Banner2d">Alfurjan-Banner2d</td><td class="tg">1279041595</td><td class="tr"><div class="dc"><span class="db" style="width:98.0px;background:#ef4444"></span>98.00%</div></td></tr></tbody></table></div>
+</div><div class="venue-card" style="border-top:2px solid #f59e0b">
+<div class="vc-header"><h3 style="color:#f59e0b">JABEL ALI DXB</h3><span class="badge">1 black screens</span></div>
+<div class="scroll-t"><table class="pc-t"><thead><tr><th style="width:14px">S</th><th>PC</th><th style="width:40px">Player</th><th style="width:56px;text-align:right">Black %</th></tr></thead><tbody><tr><td><span class="ic ok">✓</span></td><td class="sn" title="DM-SZRB-JAB-DXB">DM-SZRB-JAB-DXB</td><td class="tg">1359803639</td><td class="tr"><div class="dc"><span class="db" style="width:97.0px;background:#ef4444"></span>97.00%</div></td></tr></tbody></table></div>
+</div><div class="venue-card" style="border-top:2px solid #64748b">
+<div class="vc-header"><h3 style="color:#64748b">PALM-DUBAI ZUMUROD</h3><span class="badge">1 black screens</span></div>
+<div class="scroll-t"><table class="pc-t"><thead><tr><th style="width:14px">S</th><th>PC</th><th style="width:40px">Player</th><th style="width:56px;text-align:right">Black %</th></tr></thead><tbody><tr><td><span class="ic ok">✓</span></td><td class="sn" title="MEGACOM-07">MEGACOM-07</td><td class="tg">1266055281</td><td class="tr"><div class="dc"><span class="db" style="width:96.0px;background:#ef4444"></span>96.00%</div></td></tr></tbody></table></div>
+</div></div>
+</div>
+<div class="footer">NSOC Black Screen Monitor · 2026-06-21 00:26 UTC</div>
 </body>
 </html>

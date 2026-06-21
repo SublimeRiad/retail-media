@@ -256,11 +256,24 @@ function initMaps(){
 async function loadMapData(){
   try {
     const data = await gq("SELECT gc.name, gl.latitude, gl.longitude, CASE WHEN gc.states_id=1 THEN 1 WHEN gc.states_id=7 THEN 0 END AS st FROM glpi_computers gc INNER JOIN glpi_locations gl ON gc.locations_id=gl.id WHERE gl.latitude IS NOT NULL AND gl.longitude IS NOT NULL AND gc.is_deleted=0 AND gc.states_id IN (1,7)");
+    // Separate online and offline, add offline last so they render on top
+    const pts = [];
     data[0].forEach((_,i)=>{
       const lat=Number(data[1][i]), lng=Number(data[2][i]);
       if(!lat||!lng)return;
-      const on=Number(data[3][i])===1;
-      L.circleMarker([lat,lng],{radius:6,fillColor:on?'#22c55e':'#ef4444',color:on?'#22c55e':'#ff6666',weight:2,opacity:1,fillOpacity:0.7}).addTo(lat>25?window.dMap:window.aMap).bindTooltip("<b>"+data[0][i]+"</b><br>"+(on?'✅ Online':'❌ Offline'),{direction:'top',className:'tt-dark'});
+      pts.push({lat,lng,name:data[0][i],st:Number(data[3][i])});
+    });
+    pts.sort((a,b)=>a.st-b.st); // online(1) first, offline(0) last = on top
+    pts.forEach(p=>{
+      const on=p.st===1;
+      L.circleMarker([p.lat,p.lng],{
+        radius:on?4:9,
+        fillColor:on?'#22c55e':'#ef4444',
+        color:on?'#22c55e':'#ff4444',
+        weight:on?1:3,
+        opacity:1,
+        fillOpacity:on?0.5:0.95
+      }).addTo(p.lat>25?window.dMap:window.aMap).bindTooltip("<b>"+p.name+"</b><br>"+(on?'✅ Online':'❌ Offline'),{direction:'top',className:'tt-dark'});
     });
   } catch(e){} // fallback empty maps
 }

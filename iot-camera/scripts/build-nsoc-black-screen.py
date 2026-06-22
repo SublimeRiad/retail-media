@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """Build nsoc-black-screen.html — query Grafana API, embed live data.
 Output: old layout with Chart.js charts, Leaflet maps, paginated table."""
-import json, os, urllib.request, datetime, math
+import json, os, urllib.request, datetime
 
 # ── Auth ───────────────────────────────────
 token = os.environ.get('GRAFANA_TOKEN', '')
@@ -57,13 +57,6 @@ def safe_str(frame, row=0, col=0):
         return str(frame[col][row])
     except (IndexError, TypeError, KeyError):
         return '-'
-
-def safe_float(frame, row=0, col=0):
-    try:
-        v = frame[col][row]
-        return float(v) if v is not None else None
-    except (IndexError, TypeError, KeyError, ValueError):
-        return None
 
 # ── Fetch data ─────────────────────────────
 def fetch_all():
@@ -180,30 +173,6 @@ def fetch_all():
                 'last_check': safe_str(pcs_frame, i, 5)
             })
 
-    print('[8] Querying GPS coordinates for black PCs...')
-    coords_frame = grafana_query(
-        "SELECT comp.name AS pc, loc.latitude, loc.longitude "
-        "FROM glpi_plugin_fields_computerlivescreens fields "
-        "JOIN glpi_computers comp ON fields.items_id = comp.id "
-        "JOIN glpi_locations loc ON comp.locations_id = loc.id "
-        "WHERE fields.itemtype='Computer' "
-        "AND JSON_VALID(fields.livescreenfield) "
-        "AND CAST(JSON_EXTRACT(fields.livescreenfield, '$.metrics.black_ratio') AS DECIMAL(4,2)) >= 0.95 "
-        "AND loc.latitude IS NOT NULL AND loc.latitude <> 0 "
-        "AND loc.longitude IS NOT NULL AND loc.longitude <> 0"
-    )
-    coords_list = []
-    if coords_frame and len(coords_frame) >= 3:
-        for i in range(len(coords_frame[0])):
-            lat = safe_float(coords_frame, i, 1)
-            lng = safe_float(coords_frame, i, 2)
-            if lat and lng:
-                coords_list.append({
-                    'pc': safe_str(coords_frame, i, 0),
-                    'lat': lat,
-                    'lng': lng
-                })
-
     use_live = black_frame is not None
 
     return {
@@ -216,7 +185,6 @@ def fetch_all():
         'venues': venues_list,
         'types': types_list,
         'pcs': pcs_list,
-        'coords': coords_list,
         'live': use_live
     }
 
@@ -224,7 +192,6 @@ def fetch_all():
 def build_html(data):
     s = data['stats']
     pcs = data['pcs']
-    coords = data['coords']
 
     def esc(t):
         return str(t).replace('&','&amp;').replace('<','&lt;').replace('>','&gt;').replace('"','&quot;')
@@ -239,8 +206,6 @@ def build_html(data):
         if v and v != '-':
             venue_counts[v] = venue_counts.get(v, 0) + 1
     venue_sorted = sorted(venue_counts.items(), key=lambda x: -x[1])[:12]
-    venue_labels_json = json.dumps([esc(v[0]) for v in venue_sorted])
-    venue_data_json = json.dumps([v[1] for v in venue_sorted])
 
     # Build type doughnut data
     type_counts = {}
@@ -249,13 +214,6 @@ def build_html(data):
         if t and t != '-':
             type_counts[t] = type_counts.get(t, 0) + 1
     type_sorted = sorted(type_counts.items(), key=lambda x: -x[1])
-    type_labels_json = json.dumps([esc(t[0]) for t in type_sorted])
-    type_data_json = json.dumps([t[1] for t in type_sorted])
-
-    # Type background colors
-    TC = {'Convenience Stores':'#22c55e','In-Store':'#ec4899','Malls':'#3b82f6','Outdoor':'#f59e0b','Metro':'#a78bfa'}
-    type_colors = [TC.get(t[0], '#64748b') for t in type_sorted]
-    type_colors_json = json.dumps(type_colors)
 
     # Build PC table JSON data
     pcs_json = json.dumps([{
@@ -266,19 +224,6 @@ def build_html(data):
         'playerid': esc(p['playerid']),
         'last_check': esc(p.get('last_check', '-'))
     } for p in pcs])
-
-    # Split coordinates into Dubai vs Abu Dhabi
-    dubai_markers = []
-    abu_markers = []
-    for c in coords:
-        if c['lat'] and c['lng']:
-            if c['lat'] >= 25.0:  # Dubai approximate
-                dubai_markers.append([c['lat'], c['lng']])
-            else:
-                abu_markers.append([c['lat'], c['lng']])
-
-    dubai_coords_json = json.dumps(dubai_markers)
-    abu_coords_json = json.dumps(abu_markers)
 
     # Timestamp
     ts = datetime.datetime.utcnow().strftime('%Y-%m-%d %H:%M UTC')
@@ -291,8 +236,6 @@ def build_html(data):
 <meta http-equiv="refresh" content="600">
 <title>NSOC Black Screen Monitor</title>
 <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.7/dist/chart.umd.min.js"></script>
-<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
-<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
 <style>
 *{{margin:0;padding:0;box-sizing:border-box}}
@@ -314,7 +257,7 @@ html,body{{height:100vh;overflow:hidden;font-family:'Inter',-apple-system,sans-s
 .mp .mh{{flex-shrink:0;padding:4px 10px;font-size:9px;color:#64748b;text-transform:uppercase;letter-spacing:.5px;font-weight:600;border-bottom:1px solid #161b22}}
 .mp .mb{{flex:1;position:relative;min-height:0}}
 .mp .mb canvas{{height:100%!important;width:100%!important}}
-.mp-50{{flex:0.5}}.mp-dub{{flex:0.55}}
+.mp-50{{flex:0.5}}
 /* ── BOTTOM TABLE ── */
 .btm{{flex:1;display:flex;flex-direction:column;padding:0 10px 4px;min-height:0}}
 .btm .bh{{display:flex;align-items:center;justify-content:space-between;padding:3px 8px;flex-shrink:0}}
@@ -337,12 +280,6 @@ html,body{{height:100vh;overflow:hidden;font-family:'Inter',-apple-system,sans-s
 .bg-re{{background:rgba(239,68,68,.2);color:#ef4444}}
 .bg-or{{background:rgba(245,158,11,.2);color:#f59e0b}}
 .bg-gr{{background:rgba(34,197,94,.2);color:#22c55e}}
-/* Map inside mid panel */
-.map-s{{height:100%;width:100%}}
-.map-row{{display:flex;flex-direction:column;height:100%}}
-.map-half{{flex:1;position:relative}}
-.map-half:first-child{{border-bottom:1px solid #161b22}}
-.map-half .map-s{{height:100%!important}}
 </style>
 </head>
 <body>
@@ -370,13 +307,7 @@ html,body{{height:100vh;overflow:hidden;font-family:'Inter',-apple-system,sans-s
     <div class="mh">By Type</div>
     <div class="mb"><canvas id="typeChart"></canvas></div>
   </div>
-  <div class="mp mp-dub">
-    <div class="mh">Maps</div>
-    <div class="map-row">
-      <div class="map-half"><div id="dubaiMap" class="map-s"></div></div>
-      <div class="map-half"><div id="abuDhabiMap" class="map-s"></div></div>
-    </div>
-  </div>
+
 </div>
 
 <!-- BOTTOM: PC TABLE -->
@@ -445,19 +376,7 @@ new Chart(document.getElementById('typeChart'), {{
   }}
 }});
 
-// ===== MAPS =====
-function initMap(id,center,markers){{
-  if(markers.length===0) return;
-  const m = L.map(id,{{ center, zoom:12, layers:[L.tileLayer('https://{{s}}.basemaps.cartocdn.com/dark_all/{{z}}/{{x}}/{{y}}{{r}}.png',{{subdomains:'abcd',maxZoom:19}})], zoomControl:false, attributionControl:false, dragging:false, scrollWheelZoom:false }});
-  setTimeout(()=>m.invalidateSize(), 200);
-  markers.forEach(p=>{{
-    L.circleMarker([p[0],p[1]], {{ radius:5, fillColor:'#ef4444', color:'#fff', weight:1.2, opacity:0.8, fillOpacity:0.5 }}).addTo(m);
-  }});
-}}
-const dubaiCoords = {dubai_coords_json};
-const abuCoords = {abu_coords_json};
-initMap('dubaiMap',[25.18,55.28], dubaiCoords);
-initMap('abuDhabiMap',[24.46,54.38], abuCoords);
+
 </script>
 </body>
 </html>'''
@@ -471,7 +390,6 @@ def main():
     print(f'  Venues: {data["stats"]["venues"]}')
     print(f'  Venue types: {data["stats"]["venueTypes"]}')
     print(f'  PCs in list: {len(data["pcs"])}')
-    print(f'  Coords found: {len(data["coords"])}')
     print(f'  Mode: {"LIVE" if data["live"] else "STATIC"}')
 
     html = build_html(data)

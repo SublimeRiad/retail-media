@@ -295,138 +295,122 @@ def build_html(data):
 <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
 <style>
-:root{{--bg:#0b1120;--s1:#111827;--s2:#1a2332;--b1:#1f2b3e;--t1:#e2e8f0;--t2:#94a3b8;--t3:#64748b;--ac:#38bdf8;--gr:#22c55e;--re:#ef4444;--or:#f59e0b;--bl:#3b82f6;--pu:#a78bfa}}
 *{{margin:0;padding:0;box-sizing:border-box}}
-body{{background:var(--bg);color:var(--t1);font-family:'Inter',-apple-system,sans-serif;-webkit-font-smoothing:antialiased}}
-.d{{max-width:1440px;margin:0 auto;padding:20px}}
-/* Header */
-.hd{{display:flex;align-items:center;gap:14px;padding:14px 20px;margin-bottom:18px;background:var(--s1);border-radius:10px;border:1px solid var(--b1)}}
-.hd .dot{{width:4px;height:28px;background:var(--re);border-radius:3px}}
-.hd h1{{font-size:18px;font-weight:700;color:var(--re);letter-spacing:-0.3px}}
-.hd .sub{{font-size:13px;color:var(--t3);padding-left:12px;border-left:1px solid var(--b1);margin-left:12px;display:flex;align-items:center;gap:8px}}
-.hd .ts{{font-size:10px;color:#52525b;font-family:monospace}}
-.hd .mode{{font-size:9px;font-weight:700;padding:2px 8px;border-radius:10px;text-transform:uppercase;letter-spacing:.3px;background:rgba(34,197,94,.2);color:#22c55e;border:1px solid rgba(34,197,94,.3)}}
-/* Stats */
-.st{{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-bottom:16px}}
-.sc{{background:var(--s1);border-radius:10px;padding:16px 20px;border:1px solid var(--b1);position:relative;overflow:hidden}}
-.sc::before{{content:'';position:absolute;top:0;left:0;right:0;height:3px}}
-.sc-r::before{{background:var(--re)}}.sc-b::before{{background:var(--bl)}}.sc-o::before{{background:var(--or)}}.sc-p::before{{background:var(--pu)}}
-.sc .l{{font-size:11px;font-weight:500;text-transform:uppercase;letter-spacing:.8px;color:var(--t3);margin-bottom:4px}}
-.sc .v{{font-size:30px;font-weight:700;letter-spacing:-1px;line-height:1.2}}
-.sc-r .v{{color:var(--re)}}.sc-b .v{{color:var(--bl)}}.sc-o .v{{color:var(--or)}}.sc-p .v{{color:var(--pu)}}
-.sc .m{{font-size:11px;color:var(--t3);margin-top:4px}}
-/* Section */
-.sx{{display:flex;align-items:center;gap:10px;padding:0 4px;margin-bottom:12px;margin-top:20px}}
-.sx .bar{{width:3px;height:18px;border-radius:2px}}
-.sx .bar.r{{background:var(--re)}}.sx .bar.g{{background:var(--gr)}}
-.sx h2{{font-size:13px;font-weight:600;text-transform:uppercase;letter-spacing:1.2px;color:var(--t2)}}
-/* Split */
-.sp{{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:16px}}
-/* Panel */
-.pa{{background:var(--s1);border-radius:10px;overflow:hidden;border:1px solid var(--b1)}}
-.pa .ph{{display:flex;align-items:center;justify-content:space-between;padding:10px 14px;border-bottom:1px solid var(--b1)}}
-.pa .ph h3{{font-size:12px;font-weight:600;color:var(--t2);text-transform:uppercase;letter-spacing:.5px}}
-.pa .pb{{padding:6px}}
-/* Charts */
-.cw{{position:relative;height:220px;width:100%}}
-/* Table */
-.tb{{width:100%;border-collapse:collapse;font-size:12px}}
-.tb th{{text-align:left;padding:8px 12px;color:var(--t3);font-weight:500;font-size:11px;text-transform:uppercase;letter-spacing:.5px;border-bottom:1px solid var(--b1)}}
-.tb td{{padding:7px 12px;border-bottom:1px solid rgba(255,255,255,.04);color:var(--t2)}}
-.tb tr:hover td{{background:rgba(255,255,255,.03)}}
-.tb .badge{{display:inline-block;padding:2px 7px;border-radius:4px;font-size:10px;font-weight:600}}
-.bg-re{{background:rgba(239,68,68,.2);color:var(--re)}}
-.bg-or{{background:rgba(245,158,11,.2);color:var(--or)}}
-.bg-gr{{background:rgba(34,197,94,.2);color:var(--gr)}}
-/* Pagination */
-.pag{{display:flex;align-items:center;justify-content:space-between;padding:8px 14px;font-size:12px;color:var(--t3)}}
-.pag button{{background:var(--s2);border:1px solid var(--b1);color:var(--t2);padding:4px 12px;border-radius:5px;cursor:pointer;font-size:11px}}
-.pag button:hover{{background:var(--b1)}}
-.pag .info{{color:var(--t3)}}
-@media(max-width:960px){{.st{{grid-template-columns:1fr 1fr}}.sp{{grid-template-columns:1fr}}}}
+html,body{{height:100vh;overflow:hidden;font-family:'Inter',-apple-system,sans-serif;background:#080a0e;color:#e0e2e6;font-size:12px}}
+/* ── TOP BAR ── */
+.top{{display:flex;align-items:center;gap:8px;padding:6px 14px;background:#0c0e13;border-bottom:1px solid #161b22;height:46px;flex-shrink:0}}
+.top .dot{{width:3px;height:18px;background:#ef4444;border-radius:2px}}
+.top h1{{font-size:13px;font-weight:700;color:#ef4444;white-space:nowrap}}
+.st-badge{{display:flex;align-items:center;gap:4px;padding:2px 10px;border-radius:4px;font-size:10px;font-weight:600;height:24px;border:1px solid rgba(255,255,255,.06)}}
+.st-badge .sv{{font-size:14px;font-weight:800}}
+.st-badge .sl{{color:#64748b;font-weight:500}}
+.st-br{{background:rgba(239,68,68,.12);color:#ef4444}}.st-bb{{background:rgba(59,130,246,.12);color:#60a5fa}}.st-bo{{background:rgba(245,158,11,.12);color:#f59e0b}}.st-bp{{background:rgba(168,85,247,.12);color:#a78bfa}}
+.top .spacer{{flex:1}}
+.top .ts{{color:#52525b;font-size:9px;font-family:monospace}}
+.top .mode{{font-size:8px;font-weight:700;padding:1px 7px;border-radius:8px;text-transform:uppercase;letter-spacing:.3px;background:rgba(34,197,94,.2);color:#22c55e;border:1px solid rgba(34,197,94,.3)}}
+/* ── MID ROW ── */
+.mid{{display:flex;gap:6px;padding:5px 10px;height:clamp(200px,32vh,260px);flex-shrink:0}}
+.mp{{flex:1;background:#0c0e13;border:1px solid #161b22;border-radius:6px;overflow:hidden;display:flex;flex-direction:column}}
+.mp .mh{{flex-shrink:0;padding:4px 10px;font-size:9px;color:#64748b;text-transform:uppercase;letter-spacing:.5px;font-weight:600;border-bottom:1px solid #161b22}}
+.mp .mb{{flex:1;position:relative;min-height:0}}
+.mp .mb canvas{{height:100%!important;width:100%!important}}
+.mp-50{{flex:0.5}}.mp-dub{{flex:0.55}}
+/* ── BOTTOM TABLE ── */
+.btm{{flex:1;display:flex;flex-direction:column;padding:0 10px 4px;min-height:0}}
+.btm .bh{{display:flex;align-items:center;justify-content:space-between;padding:3px 8px;flex-shrink:0}}
+.btm .bh h2{{font-size:10px;color:#64748b;text-transform:uppercase;letter-spacing:.6px;font-weight:600}}
+.btm .bh .cnt{{font-size:10px;color:#52525b}}
+.tb-wr{{flex:1;overflow-y:auto;border:1px solid #161b22;border-radius:4px}}
+.tb-wr::-webkit-scrollbar{{width:4px}}
+.tb-wr::-webkit-scrollbar-track{{background:#080a0e}}
+.tb-wr::-webkit-scrollbar-thumb{{background:#1e293b;border-radius:3px}}
+.tb{{width:100%;border-collapse:collapse;font-size:10px}}
+.tb th{{position:sticky;top:0;z-index:2;text-align:left;padding:3px 8px;color:#52525b;font-weight:600;font-size:9px;text-transform:uppercase;letter-spacing:.4px;background:#080a0e;border-bottom:1px solid #161b22}}
+.tb td{{padding:3px 8px;border-bottom:1px solid rgba(255,255,255,.02);color:#94a3b8}}
+.tb tr:hover td{{background:rgba(59,130,246,.06)}}
+.tb .pc-n{{color:#e0e2e6;font-weight:500}}
+.tb .pc-p{{font-family:'SF Mono',Consolas,monospace;font-size:9px;color:#52525b}}
+.tb .pc-ven{{max-width:120px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}}
+.bt{{display:inline-flex;align-items:center;gap:3px}}
+.bt-bar{{width:36px;height:8px;border-radius:2px}}
+.badge{{padding:1px 6px;border-radius:3px;font-size:9px;font-weight:600}}
+.bg-re{{background:rgba(239,68,68,.2);color:#ef4444}}
+.bg-or{{background:rgba(245,158,11,.2);color:#f59e0b}}
+.bg-gr{{background:rgba(34,197,94,.2);color:#22c55e}}
+/* Map inside mid panel */
+.map-s{{height:100%;width:100%}}
+.map-row{{display:flex;flex-direction:column;height:100%}}
+.map-half{{flex:1;position:relative}}
+.map-half:first-child{{border-bottom:1px solid #161b22}}
+.map-half .map-s{{height:100%!important}}
 </style>
 </head>
 <body>
-<div class="d">
 
-<!-- HEADER -->
-<div class="hd"><div class="dot"></div><h1>NSOC Black Screen</h1><div class="sub">Screens with black ratio ≥ 95%<span class="ts">{esc(ts)}</span><span class="mode">LIVE</span></div></div>
-
-<!-- STATS -->
-<div class="st">
-  <div class="sc sc-r"><div class="l">Black Screens</div><div class="v">{s["blackTotal"]}</div><div class="m">Screens affected</div></div>
-  <div class="sc sc-b"><div class="l">Monitored</div><div class="v">{monitored_str}</div><div class="m">Screens with script</div></div>
-  <div class="sc sc-o"><div class="l">Locations</div><div class="v">{s["venues"]}</div><div class="m">Venues affected</div></div>
-  <div class="sc sc-p"><div class="l">Venue Types</div><div class="v">{s["venueTypes"]}</div><div class="m">Categories affected</div></div>
+<!-- TOP BAR -->
+<div class="top">
+  <div class="dot"></div>
+  <h1>NSOC Black Screen</h1>
+  <div class="st-badge st-br"><span class="sv">{s["blackTotal"]}</span>&nbsp;<span class="sl">Black</span></div>
+  <div class="st-badge st-bb"><span class="sv">{monitored_str}</span>&nbsp;<span class="sl">Monitored</span></div>
+  <div class="st-badge st-bo"><span class="sv">{s["venues"]}</span>&nbsp;<span class="sl">Venues</span></div>
+  <div class="st-badge st-bp"><span class="sv">{s["venueTypes"]}</span>&nbsp;<span class="sl">Types</span></div>
+  <div class="spacer"></div>
+  <span class="ts">{esc(ts)}</span>
+  <span class="mode">LIVE</span>
 </div>
 
-<!-- BY VENUE & TYPE -->
-<div class="sx"><div class="bar r"></div><h2>Breakdown</h2></div>
-<div class="sp">
-  <div class="pa">
-    <div class="ph"><h3>Black Screens by Venue</h3></div>
-    <div class="cw"><canvas id="venueChart"></canvas></div>
+<!-- MID ROW: CHARTS + MAPS -->
+<div class="mid">
+  <div class="mp mp-50">
+    <div class="mh">Black Screens by Venue</div>
+    <div class="mb"><canvas id="venueChart"></canvas></div>
   </div>
-  <div class="pa">
-    <div class="ph"><h3>By Venue Type</h3></div>
-    <div class="cw"><canvas id="typeChart"></canvas></div>
+  <div class="mp" style="flex:0.35">
+    <div class="mh">By Type</div>
+    <div class="mb"><canvas id="typeChart"></canvas></div>
+  </div>
+  <div class="mp mp-dub">
+    <div class="mh">Maps</div>
+    <div class="map-row">
+      <div class="map-half"><div id="dubaiMap" class="map-s"></div></div>
+      <div class="map-half"><div id="abuDhabiMap" class="map-s"></div></div>
+    </div>
   </div>
 </div>
 
-<!-- DETAILED LIST -->
-<div class="sx"><div class="bar g"></div><h2>PC with Black Screen — Detailed List</h2></div>
-<div class="pa">
-  <div style="overflow-x:auto">
-    <table class="tb" id="pcTable">
-      <thead><tr><th>PC Name</th><th>Venue</th><th>Type</th><th>Ratio</th><th>Player ID</th><th>Last Check</th></tr></thead>
+<!-- BOTTOM: PC TABLE -->
+<div class="btm">
+  <div class="bh">
+    <h2>PC with Black Screen</h2>
+    <span class="cnt" id="pcCount"></span>
+  </div>
+  <div class="tb-wr">
+    <table class="tb">
+      <thead><tr><th style="width:30px">#</th><th>PC Name</th><th>Venue</th><th style="width:80px">Type</th><th style="width:100px">Black %</th><th style="width:80px">Player ID</th><th style="width:80px">Last Check</th></tr></thead>
       <tbody id="pcBody"></tbody>
     </table>
   </div>
-  <div class="pag"><span class="info" id="tableInfo"></span><div><button onclick="prevPage()">← Prev</button><button onclick="nextPage()" style="margin-left:6px">Next →</button></div></div>
 </div>
 
-<!-- MAPS -->
-<div class="sx"><div class="bar r"></div><h2>Geographic Overview</h2></div>
-<div class="sp">
-  <div class="pa">
-    <div class="ph"><h3>Dubai</h3></div>
-    <div id="dubaiMap" style="height:320px"></div>
-  </div>
-  <div class="pa">
-    <div class="ph"><h3>Abu Dhabi</h3></div>
-    <div id="abuDhabiMap" style="height:320px"></div>
-  </div>
-</div>
-
-</div>
+</body>
 
 <script>
 // ===== LIVE DATA =====
 const pcs = {pcs_json};
+document.getElementById('pcCount').textContent = pcs.length + ' PC' + (pcs.length!==1?'s':'');
 
-// ===== STATS =====
-const uniqueVenues = new Set(pcs.filter(p=>p.venue!=='-'&&p.venue!=='—').map(p=>p.venue));
-const uniqueTypes = new Set(pcs.filter(p=>p.type!=='-'&&p.type!=='—').map(p=>p.type));
-
-// ===== TABLE =====
-const perPage = 15; let curPage = 0;
-function renderTable(){{
-  const start = curPage * perPage;
-  const pg = pcs.slice(start, start + perPage);
-  document.getElementById('pcBody').innerHTML = pg.map(p => `
-    <tr>
-      <td style="font-weight:500;color:var(--t1)">${{p.pc}}</td>
-      <td>${{p.venue}}</td>
-      <td>${{p.type}}</td>
-      <td><span class="badge ${{p.ratio>=1?'bg-re':p.ratio>0.95?'bg-or':'bg-gr'}}">${{(p.ratio*100).toFixed(0)}}%</span></td>
-      <td style="font-family:monospace;font-size:11px">${{p.playerid}}</td>
-      <td style="color:var(--t3)">${{p.last_check}}</td>
-    </tr>`).join('');
-  document.getElementById('tableInfo').textContent = `${{start+1}}–${{Math.min(start+perPage, pcs.length)}} of ${{pcs.length}}`;
-}}
-function nextPage(){{if((curPage+1)*perPage < pcs.length){{curPage++;renderTable()}}}}
-function prevPage(){{if(curPage>0){{curPage--;renderTable()}}}}
-renderTable();
+// ===== TABLE (scrollable, all rows) =====
+document.getElementById('pcBody').innerHTML = pcs.map((p,i) => `
+  <tr>
+    <td style="color:#52525b">${{i+1}}</td>
+    <td class="pc-n">${{p.pc}}</td>
+    <td class="pc-ven">${{p.venue}}</td>
+    <td>${{p.type}}</td>
+    <td><span class="bt"><span class="bt-bar" style="background:${{p.ratio>=1?'#ef4444':p.ratio>0.95?'#f97316':'#22c55e'}};width:${{Math.min(p.ratio*36,36)}}px"></span><span class="badge ${{p.ratio>=1?'bg-re':p.ratio>0.95?'bg-or':'bg-gr'}}">${{(p.ratio*100).toFixed(0)}}%</span></span></td>
+    <td class="pc-p">${{p.playerid}}</td>
+    <td>${{p.last_check}}</td>
+  </tr>`).join('');
 
 // ===== VENUE CHART =====
 const venueCounts = {{}};
@@ -434,13 +418,13 @@ pcs.forEach(p => {{ if(p.venue!=='-'&&p.venue!=='—') venueCounts[p.venue] = (v
 const sorted = Object.entries(venueCounts).sort((a,b)=>b[1]-a[1]).slice(0,12);
 new Chart(document.getElementById('venueChart'), {{
   type:'bar',
-  data:{{ labels:sorted.map(s=>s[0]), datasets:[{{label:'Black Screens', data:sorted.map(s=>s[1]), backgroundColor:['#ef4444','#f59e0b','#3b82f6','#22c55e','#a78bfa','#ec4899','#06b6d4','#f97316','#8b5cf6','#14b8a6','#e11d48','#84cc16'], borderRadius:4 }}] }},
+  data:{{ labels:sorted.map(s=>s[0]), datasets:[{{label:'Black Screens', data:sorted.map(s=>s[1]), backgroundColor:['#ef4444','#f59e0b','#3b82f6','#22c55e','#a78bfa','#ec4899','#06b6d4','#f97316','#8b5cf6','#14b8a6','#e11d48','#84cc16'], borderRadius:3 }}] }},
   options:{{
     indexAxis:'y', responsive:true, maintainAspectRatio:false,
     plugins:{{legend:{{display:false}}}},
     scales:{{
-      x:{{grid:{{color:'rgba(255,255,255,.04)'}}, ticks:{{color:'#64748b',font:{{size:10}}}}, beginAtZero:true }},
-      y:{{grid:{{display:false}}, ticks:{{color:'#64748b',font:{{size:10}}}} }}
+      x:{{grid:{{color:'rgba(255,255,255,.04)'}}, ticks:{{color:'#64748b',font:{{size:9}}}}, beginAtZero:true }},
+      y:{{grid:{{display:false}}, ticks:{{color:'#64748b',font:{{size:8}}}} }}
     }}
   }}
 }});
@@ -456,7 +440,7 @@ new Chart(document.getElementById('typeChart'), {{
   options:{{
     responsive:true, maintainAspectRatio:false,
     plugins:{{
-      legend:{{ position:'right', labels:{{ color:'#94a3b8', font:{{size:11}}, boxWidth:10, padding:12 }} }}
+      legend:{{ position:'right', labels:{{ color:'#94a3b8', font:{{size:9}}, boxWidth:8, padding:8 }}}}
     }}
   }}
 }});
@@ -464,9 +448,10 @@ new Chart(document.getElementById('typeChart'), {{
 // ===== MAPS =====
 function initMap(id,center,markers){{
   if(markers.length===0) return;
-  const m = L.map(id,{{ center, zoom:12, layers:[L.tileLayer('https://{{s}}.basemaps.cartocdn.com/dark_all/{{z}}/{{x}}/{{y}}{{r}}.png',{{subdomains:'abcd',maxZoom:19}})], zoomControl:false, attributionControl:false }});
+  const m = L.map(id,{{ center, zoom:12, layers:[L.tileLayer('https://{{s}}.basemaps.cartocdn.com/dark_all/{{z}}/{{x}}/{{y}}{{r}}.png',{{subdomains:'abcd',maxZoom:19}})], zoomControl:false, attributionControl:false, dragging:false, scrollWheelZoom:false }});
+  setTimeout(()=>m.invalidateSize(), 200);
   markers.forEach(p=>{{
-    L.circleMarker([p[0],p[1]], {{ radius:8, fillColor:'#ef4444', color:'#fff', weight:1.5, opacity:0.8, fillOpacity:0.5 }}).addTo(m);
+    L.circleMarker([p[0],p[1]], {{ radius:5, fillColor:'#ef4444', color:'#fff', weight:1.2, opacity:0.8, fillOpacity:0.5 }}).addTo(m);
   }});
 }}
 const dubaiCoords = {dubai_coords_json};

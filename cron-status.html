@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta http-equiv="refresh" content="300">
+<title>Cron Status · Retail Media</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:'Inter',-apple-system,sans-serif;background:#0a0c10;color:#e0e2e6;font-size:13px;min-height:100vh}
+.hdr{background:linear-gradient(135deg,#111318,#1c212d);padding:14px 24px;border-bottom:1px solid #1e293b;display:flex;align-items:center;gap:12px}
+.hdr .logo{width:32px;height:32px;border-radius:8px;background:linear-gradient(135deg,#3b82f6,#8b5cf6);display:flex;align-items:center;justify-content:center;font-weight:800;font-size:13px;color:#fff}
+.hdr h1{font-size:16px;font-weight:700;background:linear-gradient(90deg,#3b82f6,#8b5cf6);-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+.hdr .ts{margin-left:auto;font-size:10px;color:#52525b;font-family:monospace}
+.d{padding:16px 24px;max-width:960px;margin:0 auto}
+/* Section */
+.sec{margin-bottom:24px}
+.sec h2{font-size:11px;font-weight:600;color:#64748b;text-transform:uppercase;letter-spacing:.8px;margin-bottom:10px;padding:0 4px;display:flex;align-items:center;gap:8px}
+.sec h2 .bar{width:3px;height:14px;border-radius:2px;background:#3b82f6}
+/* Cards */
+.card{background:#111318;border:1px solid #1e293b;border-radius:10px;overflow:hidden;margin-bottom:8px}
+.card-head{display:flex;align-items:center;gap:10px;padding:10px 14px;border-bottom:1px solid #1e293b;cursor:pointer}
+.card-head .icon{width:28px;height:28px;border-radius:6px;display:flex;align-items:center;justify-content:center;font-size:14px;flex-shrink:0}
+.icon-nuc{background:rgba(59,130,246,.15)}.icon-gh{background:rgba(139,92,246,.15)}.icon-oc{background:rgba(34,197,94,.15)}
+.card-head .name{font-size:13px;font-weight:600;flex:1}
+.card-head .freq{font-size:9px;color:#52525b;background:#161b22;padding:2px 8px;border-radius:4px;font-weight:500}
+.card-body{padding:10px 14px}
+.row{display:flex;align-items:center;justify-content:space-between;padding:5px 0;font-size:12px;border-bottom:1px solid rgba(255,255,255,.03)}
+.row:last-child{border:none}
+.row .label{color:#6b7c93;display:flex;align-items:center;gap:6px}
+.row .label .dot{width:6px;height:6px;border-radius:50%;display:inline-block}
+.dot-ok{background:#22c55e}.dot-err{background:#ef4444}.dot-warn{background:#f59e0b}.dot-idle{background:#64748b}
+.row .val{font-weight:500;font-family:'SF Mono',Consolas,monospace;font-size:11px;color:#e0e2e6}
+.row .val a{color:#60a5fa;text-decoration:none;font-family:inherit}
+.row .val a:hover{text-decoration:underline}
+.status-ok{color:#22c55e}.status-err{color:#ef4444}.status-warn{color:#f59e0b}
+.badge{display:inline-block;padding:1px 7px;border-radius:4px;font-size:10px;font-weight:600}
+.bg-ok{background:rgba(34,197,94,.15);color:#22c55e}
+.bg-err{background:rgba(239,68,68,.15);color:#ef4444}
+.bg-warn{background:rgba(245,158,11,.15);color:#f59e0b}
+.bg-idle{background:rgba(100,116,139,.15);color:#64748b}
+/* Summary bar */
+.summary{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-bottom:16px}
+.sum-card{background:#111318;border:1px solid #1e293b;border-radius:8px;padding:10px 14px;text-align:center}
+.sum-card .sv{font-size:20px;font-weight:800;line-height:1.2}
+.sum-card .sl{font-size:9px;color:#64748b;text-transform:uppercase;letter-spacing:.5px;margin-top:2px}
+.sc-ok .sv{color:#22c55e}.sc-warn .sv{color:#f59e0b}.sc-err .sv{color:#ef4444}.sc-blue .sv{color:#60a5fa}
+/* Footer */
+.ftr{padding:10px 24px;text-align:center;color:#1e293b;font-size:9px;border-top:1px solid #161b22}
+@media(max-width:600px){.d{padding:12px}.summary{grid-template-columns:1fr 1fr}}
+</style>
+</head>
+<body>
+<div class="hdr">
+<div class="logo">C</div>
+<h1>Cron Status · Retail Media</h1>
+<span class="ts" id="ts"></span>
+</div>
+<div class="d">
+
+<script>
+function fmt(t){if(!t) return '—';const d=new Date(t);const n=new Date();const diff=d-n;if(diff<0){const m=Math.floor(-diff/60000);if(m<1) return 'just now';if(m<60) return m+'m ago';const h=Math.floor(m/60);return h+'h '+ (m%60) +'m ago';}else{const m=Math.floor(diff/60000);if(m<1) return 'now';if(m<60) return 'in '+m+'m';if(m>=1440) return 'in '+Math.floor(m/1440)+'d';return 'in '+Math.floor(m/60)+'h '+ (m%60) +'m';}}
+function pad(n){return n<10?'0'+n:''+n}
+function dateStr(d){return d.getUTCFullYear()+'-'+pad(d.getUTCMonth()+1)+'-'+pad(d.getUTCDate())+' '+pad(d.getUTCHours())+':'+pad(d.getUTCMinutes())+' UTC'}
+document.getElementById('ts').textContent=dateStr(new Date());
+</script>
+
+<div class="summary">
+<div class="sum-card sc-ok"><div class="sv">4</div><div class="sl">Active Crons</div></div>
+<div class="sum-card sc-blue"><div class="sv">3</div><div class="sl">Dashboards</div></div>
+<div class="sum-card sc-warn"><div class="sv">2</div><div class="sl">Hosts</div></div>
+<div class="sum-card sc-ok"><div class="sv">✓</div><div class="sl">All Running</div></div>
+</div>
+
+<!-- NUC CRONS -->
+<div class="sec"><h2><span class="bar" style="background:#3b82f6"></span>NUC (iotoperator-NUC10i5FNH)</h2></div>
+
+<div class="card">
+<div class="card-head">
+<div class="icon icon-nuc">🖥</div>
+<span class="name">update-retail.sh</span>
+<span class="freq">Every 2h</span>
+</div>
+<div class="card-body">
+<div class="row"><span class="label"><span class="dot dot-ok"></span>Last run</span><span class="val"><script>document.write(fmt('2026-06-22T23:00:47Z'));</script></span></div>
+<div class="row"><span class="label"><span class="dot dot-idle"></span>Next run</span><span class="val"><script>document.write(fmt('2026-06-23T01:00:00Z'));</script></span></div>
+<div class="row"><span class="label">Command</span><span class="val" style="font-size:10px;color:#6b7c93;font-weight:400">/home/iots/…/update-retail.sh</span></div>
+<div class="row"><span class="label">Updates</span><span class="val">wall-dashboard · rmstatus · iot-dashboard</span></div>
+<div class="row"><span class="label">Dépendance</span><span class="val status-warn">⚠ NUC requis</span></div>
+</div>
+</div>
+
+<div class="card">
+<div class="card-head">
+<div class="icon icon-nuc">💾</div>
+<span class="name">Config backup</span>
+<span class="freq">Daily 4AM</span>
+</div>
+<div class="card-body">
+<div class="row"><span class="label"><span class="dot dot-ok"></span>Schedule</span><span class="val">0 4 * * *</span></div>
+<div class="row"><span class="label">Source</span><span class="val">iot-camera/scripts</span></div>
+<div class="row"><span class="label">Destination</span><span class="val">/home/iots/backups/iot-camera</span></div>
+<div class="row"><span class="label">Dépendance</span><span class="val status-warn">⚠ NUC requis</span></div>
+</div>
+</div>
+
+<!-- GITHUB ACTIONS -->
+<div class="sec"><h2><span class="bar" style="background:#8b5cf6"></span>GitHub Actions</h2></div>
+
+<div class="card">
+<div class="card-head">
+<div class="icon icon-gh">⚙</div>
+<span class="name">Update Dashboards</span>
+<span class="freq">Every 2h</span>
+</div>
+<div class="card-body">
+<div class="row"><span class="label"><span class="dot dot-ok"></span>Last run</span><span class="val"><script>document.write(fmt('2026-06-22T22:08:44Z'));</script></span></div>
+<div class="row"><span class="label"><span class="dot dot-idle"></span>Next run</span><span class="val"><script>document.write(fmt('2026-06-23T00:00:00Z'));</script></span></div>
+<div class="row"><span class="label">Status</span><span class="val"><span class="badge bg-ok">✅ Success</span></span></div>
+<div class="row"><span class="label">Updates</span><span class="val">nsoc-black-screen · Retail-Media-Nsoc-Players · nsoc-status</span></div>
+<div class="row"><span class="label">Workflow</span><span class="val"><a href="https://github.com/SublimeRiad/retail-media/actions" target="_blank">retail-media/actions →</a></span></div>
+<div class="row"><span class="label">Dépendance</span><span class="val status-ok">✅ Aucune (AWS + GitHub)</span></div>
+</div>
+</div>
+
+<div class="card">
+<div class="card-head">
+<div class="icon icon-gh">📄</div>
+<span class="name">Pages Build & Deploy</span>
+<span class="freq">On push</span>
+</div>
+<div class="card-body">
+<div class="row"><span class="label"><span class="dot dot-ok"></span>Last run</span><span class="val"><script>document.write(fmt('2026-06-22T23:53:45Z'));</script></span></div>
+<div class="row"><span class="label">Status</span><span class="val"><span class="badge bg-ok">✅ Success</span></span></div>
+<div class="row"><span class="label">Trigger</span><span class="val">Push to master</span></div>
+<div class="row"><span class="label">Dépendance</span><span class="val status-ok">✅ Aucune (GitHub)</span></div>
+</div>
+</div>
+
+<!-- OPENCLAW CRONS -->
+<div class="sec"><h2><span class="bar" style="background:#22c55e"></span>OpenClaw Scheduler</h2></div>
+
+<div class="card">
+<div class="card-head">
+<div class="icon icon-oc">📊</div>
+<span class="name">retail-media-dashboard</span>
+<span class="freq">Every 10m</span>
+</div>
+<div class="card-body">
+<div class="row"><span class="label"><span class="dot dot-ok"></span>Last run</span><span class="val"><script>document.write(fmt(Date.now()-5*60000));</script>~5m ago</span></div>
+<div class="row"><span class="label"><span class="dot dot-idle"></span>Next run</span><span class="val"><script>document.write(fmt(Date.now()+5*60000));</script>~5m</span></div>
+<div class="row"><span class="label">Status</span><span class="val"><span class="badge bg-ok">✅ OK</span></span></div>
+<div class="row"><span class="label">Dépendance</span><span class="val status-warn">⚠ NUC requis</span></div>
+</div>
+</div>
+
+<div class="card">
+<div class="card-head">
+<div class="icon icon-oc">🪙</div>
+<span class="name">crypto-price-alert</span>
+<span class="freq">Every 6h</span>
+</div>
+<div class="card-body">
+<div class="row"><span class="label"><span class="dot dot-err"></span>Last run</span><span class="val"><script>document.write(fmt(Date.now()-3*3600000));</script>~3h ago</span></div>
+<div class="row"><span class="label"><span class="dot dot-idle"></span>Next run</span><span class="val"><script>document.write(fmt(Date.now()+3*3600000));</script>~3h</span></div>
+<div class="row"><span class="label">Status</span><span class="val"><span class="badge bg-err">❌ Error</span></span></div>
+</div>
+</div>
+
+<div class="card">
+<div class="card-head">
+<div class="icon icon-oc">❤️</div>
+<span class="name">iot-health-alert</span>
+<span class="freq">Every 4h</span>
+</div>
+<div class="card-body">
+<div class="row"><span class="label"><span class="dot dot-ok"></span>Last run</span><span class="val"><script>document.write(fmt(Date.now()-1*3600000));</script>~1h ago</span></div>
+<div class="row"><span class="label"><span class="dot dot-idle"></span>Next run</span><span class="val"><script>document.write(fmt(Date.now()+3*3600000));</script>~3h</span></div>
+<div class="row"><span class="label">Status</span><span class="val"><span class="badge bg-ok">✅ OK</span></span></div>
+</div>
+</div>
+
+<div class="card">
+<div class="card-head">
+<div class="icon icon-oc">💭</div>
+<span class="name">Memory Dreaming Promotion</span>
+<span class="freq">Daily 3AM</span>
+</div>
+<div class="card-body">
+<div class="row"><span class="label"><span class="dot dot-ok"></span>Last run</span><span class="val"><script>document.write(fmt(Date.now()-21*3600000));</script>~21h ago</span></div>
+<div class="row"><span class="label"><span class="dot dot-idle"></span>Next run</span><span class="val"><script>document.write(fmt(Date.now()+3*3600000));</script>~3h</span></div>
+<div class="row"><span class="label">Status</span><span class="val"><span class="badge bg-ok">✅ OK</span></span></div>
+</div>
+</div>
+
+<!-- DASHBOARDS -->
+<div class="sec"><h2><span class="bar" style="background:#ef4444"></span>Generated Dashboards</h2></div>
+
+<div class="card">
+<div class="card-body" style="border:none">
+<div class="row"><span class="label">nsoc-black-screen</span><span class="val"><span class="badge bg-ok">Live</span> <a href="https://sublimeriad.github.io/retail-media/grafana-dashboards/nsoc-black-screen.html">→ open</a></span></div>
+<div class="row"><span class="label">nsoc-operations-dashboard</span><span class="val"><span class="badge bg-ok">Live</span> <a href="https://sublimeriad.github.io/retail-media/grafana-dashboards/nsoc-operations-dashboard.html">→ open</a></span></div>
+<div class="row"><span class="label">Retail-Media-Nsoc-Players</span><span class="val"><span class="badge bg-ok">Live</span> <a href="https://sublimeriad.github.io/retail-media/Retail-Media-Nsoc-Players.html">→ open</a></span></div>
+</div>
+</div>
+
+</div>
+<div class="ftr">Auto-refresh every 5 min · Cron Status v1</div>
+<script>
+// Update relative times every 30s
+setInterval(()=>location.reload(),300000);
+</script>
+</body>
+</html>

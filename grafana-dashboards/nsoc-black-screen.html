@@ -5,143 +5,120 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta http-equiv="refresh" content="600">
 <title>NSOC Black Screen Monitor</title>
-
 <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
 <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 <style>
-:root{--bg:#0b1120;--s1:#111827;--s2:#1a2332;--b1:#1f2b3e;--t1:#e2e8f0;--t2:#94a3b8;--t3:#64748b;--ac:#38bdf8;--gr:#22c55e;--re:#ef4444;--or:#f59e0b;--bl:#3b82f6;--pu:#a78bfa}
 *{margin:0;padding:0;box-sizing:border-box}
-body{background:var(--bg);color:var(--t1);font-family:'Inter',-apple-system,sans-serif;-webkit-font-smoothing:antialiased}
-.d{max-width:1440px;margin:0 auto;padding:20px}
-/* Header */
-.hd{display:flex;align-items:center;gap:14px;padding:14px 20px;margin-bottom:18px;background:var(--s1);border-radius:10px;border:1px solid var(--b1)}
-.hd .dot{width:4px;height:28px;background:var(--re);border-radius:3px}
-.hd h1{font-size:18px;font-weight:700;color:var(--re);letter-spacing:-0.3px}
-.hd .sub{font-size:13px;color:var(--t3);padding-left:12px;border-left:1px solid var(--b1);margin-left:12px;display:flex;align-items:center;gap:8px}
-.hd .ts{font-size:10px;color:#52525b;font-family:monospace}
-.hd .mode{font-size:9px;font-weight:700;padding:2px 8px;border-radius:10px;text-transform:uppercase;letter-spacing:.3px;background:rgba(34,197,94,.2);color:#22c55e;border:1px solid rgba(34,197,94,.3)}
-/* Stats */
-.st{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-bottom:16px}
-.sc{background:var(--s1);border-radius:10px;padding:16px 20px;border:1px solid var(--b1);position:relative;overflow:hidden}
-.sc::before{content:'';position:absolute;top:0;left:0;right:0;height:3px}
-.sc-r::before{background:var(--re)}.sc-b::before{background:var(--bl)}.sc-o::before{background:var(--or)}.sc-p::before{background:var(--pu)}
-.sc .l{font-size:11px;font-weight:500;text-transform:uppercase;letter-spacing:.8px;color:var(--t3);margin-bottom:4px}
-.sc .v{font-size:30px;font-weight:700;letter-spacing:-1px;line-height:1.2}
-.sc-r .v{color:var(--re)}.sc-b .v{color:var(--bl)}.sc-o .v{color:var(--or)}.sc-p .v{color:var(--pu)}
-.sc .m{font-size:11px;color:var(--t3);margin-top:4px}
-/* Section */
-.sx{display:flex;align-items:center;gap:10px;padding:0 4px;margin-bottom:12px;margin-top:20px}
-.sx .bar{width:3px;height:18px;border-radius:2px}
-.sx .bar.r{background:var(--re)}.sx .bar.g{background:var(--gr)}
-.sx h2{font-size:13px;font-weight:600;text-transform:uppercase;letter-spacing:1.2px;color:var(--t2)}
-/* Table */
-.tb{width:100%;border-collapse:collapse;font-size:12px}
-.tb th{text-align:left;padding:8px 12px;color:var(--t3);font-weight:500;font-size:11px;text-transform:uppercase;letter-spacing:.5px;border-bottom:1px solid var(--b1)}
-.tb td{padding:7px 12px;border-bottom:1px solid rgba(255,255,255,.04);color:var(--t2)}
-.tb tr:hover td{background:rgba(255,255,255,.03)}
-.tb .badge{display:inline-block;padding:2px 7px;border-radius:4px;font-size:10px;font-weight:600}
-.bg-re{background:rgba(239,68,68,.2);color:var(--re)}
-.bg-or{background:rgba(245,158,11,.2);color:var(--or)}
-.bg-gr{background:rgba(34,197,94,.2);color:var(--gr)}
-/* Pagination */
-.pag{display:flex;align-items:center;justify-content:space-between;padding:8px 14px;font-size:12px;color:var(--t3)}
-.pag button{background:var(--s2);border:1px solid var(--b1);color:var(--t2);padding:4px 12px;border-radius:5px;cursor:pointer;font-size:11px}
-.pag button:hover{background:var(--b1)}
-.pag .info{color:var(--t3)}
-@media(max-width:960px){.st{grid-template-columns:1fr 1fr}.sp{grid-template-columns:1fr}}
+html,body{height:100vh;overflow:hidden;font-family:'Inter',sans-serif;background:#080a0e;color:#e0e2e6}
+/* ── TOP BAR ── */
+.top{display:flex;align-items:center;gap:8px;padding:5px 14px;background:#0c0e13;border-bottom:1px solid #161b22;height:42px;flex-shrink:0}
+.top .dot{width:3px;height:16px;background:#ef4444;border-radius:2px}
+.top h1{font-size:12px;font-weight:700;color:#ef4444;white-space:nowrap}
+.stb{display:flex;align-items:center;gap:3px;padding:1px 8px;border-radius:3px;font-size:9px;font-weight:600;height:20px;border:1px solid rgba(255,255,255,.06)}
+.stb .sv{font-size:12px;font-weight:800}
+.stb .sl{color:#64748b}
+.sr{background:rgba(239,68,68,.12);color:#ef4444}.sb{background:rgba(59,130,246,.12);color:#60a5fa}.so{background:rgba(245,158,11,.12);color:#f59e0b}.sp{background:rgba(168,85,247,.12);color:#a78bfa}
+.top .spc{flex:1}
+.top .ts{color:#52525b;font-size:8px;font-family:monospace}
+.top .mode{font-size:7px;font-weight:700;padding:1px 6px;border-radius:6px;text-transform:uppercase;background:rgba(34,197,94,.2);color:#22c55e;border:1px solid rgba(34,197,94,.3)}
+/* ── MAIN SPLIT ── */
+.main{display:flex;flex:1;min-height:0;padding:4px 10px 4px;gap:6px}
+/* Left: maps */
+.mcol{flex:0.48;display:flex;flex-direction:column;gap:4px;min-width:0}
+.mcol .mlabel{font-size:8px;color:#64748b;text-transform:uppercase;letter-spacing:.4px;font-weight:600;padding:0 2px}
+.mcol .mmap{flex:1;border-radius:4px;overflow:hidden;border:1px solid #161b22;background:#0c0e13}
+/* Right: table */
+.tcol{flex:0.52;display:flex;flex-direction:column;min-width:0}
+.tcol .thdr{display:flex;align-items:center;justify-content:space-between;padding:0 2px 2px;flex-shrink:0}
+.tcol .thdr h2{font-size:9px;color:#64748b;text-transform:uppercase;letter-spacing:.5px;font-weight:600}
+.tcol .thdr .cnt{font-size:8px;color:#52525b}
+.tb-wr{flex:1;overflow:hidden;border:1px solid #161b22;border-radius:4px;position:relative}
+.tb-sc{animation:scUp 50s linear infinite}
+.tb-sc:hover{animation-play-state:paused}
+@keyframes scUp{0%{transform:translateY(0)}100%{transform:translateY(-50%)}}
+.tb{width:100%;border-collapse:collapse;font-size:10px}
+.tb th{position:sticky;top:0;z-index:2;text-align:left;padding:4px 8px;color:#52525b;font-weight:600;font-size:8px;text-transform:uppercase;letter-spacing:.3px;background:#080a0e;border-bottom:1px solid #161b22}
+.tb td{padding:3px 8px;border-bottom:1px solid rgba(255,255,255,.015);color:#94a3b8}
+.tb tr:hover td{background:rgba(59,130,246,.06)}
+.tb .pn{color:#e0e2e6;font-weight:500}
+.tb .cm{color:#52525b;font-size:8px;display:block}
+.tb .pp{font-family:monospace;font-size:8px;color:#52525b}
+.tb .pv{max-width:100px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.bt{display:inline-flex;align-items:center;gap:2px}
+.bt-bar{width:28px;height:6px;border-radius:2px}
+.bdg{padding:1px 5px;border-radius:2px;font-size:8px;font-weight:600}
+.bdr{background:rgba(239,68,68,.2);color:#ef4444}
+.bdo{background:rgba(245,158,11,.2);color:#f97316}
+.bdg{background:rgba(34,197,94,.2);color:#22c55e}
+::-webkit-scrollbar{width:3px}
+::-webkit-scrollbar-track{background:#080a0e}
+::-webkit-scrollbar-thumb{background:#1e293b;border-radius:2px}
 </style>
 </head>
 <body>
-<div class="d">
 
-<!-- HEADER -->
-<div class="hd"><div class="dot"></div><h1>NSOC Black Screen</h1><div class="sub">Screens with black ratio ≥ 95%<span class="ts">2026-06-23 01:29 UTC</span><span class="mode">LIVE</span></div></div>
-
-<!-- STATS -->
-<div class="st">
-  <div class="sc sc-r"><div class="l">Black Screens</div><div class="v">41</div><div class="m">Screens affected</div></div>
-  <div class="sc sc-b"><div class="l">Monitored</div><div class="v">1227</div><div class="m">Screens with script</div></div>
-  <div class="sc sc-o"><div class="l">Locations</div><div class="v">19</div><div class="m">Venues affected</div></div>
-  <div class="sc sc-p"><div class="l">Venue Types</div><div class="v">5</div><div class="m">Categories affected</div></div>
+<div class="top">
+  <div class="dot"></div>
+  <h1>NSOC Black Screen</h1>
+  <div class="stb sr"><span class="sv">35</span>&nbsp;<span class="sl">Black</span></div>
+  <div class="stb sb"><span class="sv">1227</span>&nbsp;<span class="sl">Monitored</span></div>
+  <div class="stb so"><span class="sv">18</span>&nbsp;<span class="sl">Venues</span></div>
+  <div class="stb sp"><span class="sv">5</span>&nbsp;<span class="sl">Types</span></div>
+  <div class="spc"></div>
+  <span class="ts">2026-06-23 01:40 UTC</span>
+  <span class="mode">LIVE</span>
 </div>
 
-<!-- MAPS -->
-<div class="sx"><div class="bar r"></div><h2>Geographic Overview</h2></div>
-<div class="sp">
-  <div class="pa">
-    <div class="ph"><h3>Dubai</h3></div>
-    <div id="dubaiMap" style="height:260px"></div>
+<div class="main">
+  <!-- Left: Maps column -->
+  <div class="mcol">
+    <span class="mlabel"><span style="color:var(--re)">●</span> Geographic Overview</span>
+    <div class="mmap" id="dubaiMap"></div>
+    <div class="mmap" id="abuDhabiMap"></div>
   </div>
-  <div class="pa">
-    <div class="ph"><h3>Abu Dhabi</h3></div>
-    <div id="abuDhabiMap" style="height:260px"></div>
+  <!-- Right: Auto-scroll PC table -->
+  <div class="tcol">
+    <div class="thdr">
+      <h2>PC with Black Screen</h2>
+      <span class="cnt" id="pcCount"></span>
+    </div>
+    <div class="tb-wr">
+      <div class="tb-sc">
+        <table class="tb">
+          <thead><tr><th style="width:24px">#</th><th>PC Name / Comment</th><th style="width:70px">Venue</th><th style="width:55px">Type</th><th style="width:70px">Black %</th><th style="width:60px">Player</th><th style="width:55px">Checked</th></tr></thead>
+          <tbody></tbody>
+        </table>
+      </div>
+    </div>
   </div>
-</div>
-
-<!-- DETAILED LIST -->
-<div class="sx"><div class="bar g"></div><h2>PC with Black Screen — Detailed List</h2></div>
-<div class="pa">
-  <div style="overflow-x:auto">
-    <table class="tb" id="pcTable">
-      <thead><tr><th>PC Name / Comment</th><th>Venue</th><th>Type</th><th>Ratio</th><th>Player ID</th><th>Last Check</th></tr></thead>
-      <tbody id="pcBody"></tbody>
-    </table>
-  </div>
-  <div class="pag"><span class="info" id="tableInfo"></span><div><button onclick="prevPage()">← Prev</button><button onclick="nextPage()" style="margin-left:6px">Next →</button></div></div>
-</div>
-
-<!-- MAPS -->
-<div class="sx"><div class="bar r"></div><h2>Geographic Overview</h2></div>
-<div class="sp">
-  <div class="pa">
-    <div class="ph"><h3>Dubai</h3></div>
-    <div id="dubaiMap" style="height:320px"></div>
-  </div>
-  <div class="pa">
-    <div class="ph"><h3>Abu Dhabi</h3></div>
-    <div id="abuDhabiMap" style="height:320px"></div>
-  </div>
-</div>
-
 </div>
 
 <script>
-// ===== LIVE DATA =====
-const pcs = [{"pc": "PC-94C6911FB145", "venue": "IBN BATTUTA Mall", "type": "Malls", "ratio": 1.0, "playerid": "1259843380", "last_check": "2026-06-22", "comment": "IBM-GF-INF-1A - TUNISIA COURT"}, {"pc": "PC-88AEDD0AD8A6", "venue": "IBN BATTUTA Mall", "type": "Malls", "ratio": 1.0, "playerid": "1288295522", "last_check": "2026-06-22", "comment": "IBM-GF-MPI-4A - The Face Shop"}, {"pc": "PC-88AEDD620DD5", "venue": "Circle Mall", "type": "Malls", "ratio": 1.0, "playerid": "1241057980", "last_check": "2026-06-22", "comment": "CRC-FF-MPI-5B - FF - DICE BOARD"}, {"pc": "PC-E43A6E3905C8", "venue": "REEM MALL", "type": "Malls", "ratio": 1.0, "playerid": "973382700", "last_check": "2026-06-22", "comment": "FOOD COURT SCREENS - FOOD COURT SCREENS COLUMN-11 D"}, {"pc": "PC-E43A6E5F25AB", "venue": "REEM MALL", "type": "Malls", "ratio": 1.0, "playerid": "973366812", "last_check": "2026-06-22", "comment": "FOOD COURT SCREENS - FOOD COURT SCREENS COLUMN-4 D"}, {"pc": "PC-1C697A0E88E4", "venue": "EXPO 2020", "type": "Metro", "ratio": 1.0, "playerid": "1267065913", "last_check": "2026-06-22", "comment": "R76-TOT-EXT-FM02 - OUTDOOR SCREEN 2"}, {"pc": "PC-E454E8CBE81A", "venue": "ENOC Umm Al Quwain", "type": "Convenience Stores", "ratio": 1.0, "playerid": "1301-PELMET", "last_check": "2026-06-22", "comment": "ENOC-1301-Pelmet - ENOC-1301 - Al ATHEEB"}, {"pc": "PC-A4BB6DD5620C", "venue": "ENOC Sharjah", "type": "Convenience Stores", "ratio": 1.0, "playerid": "1124-PELMET", "last_check": "2026-06-22", "comment": "ENOC-1124-Pelmet - ENOC-1124 - Kshishah 4"}, {"pc": "PC-E454E89A6D02", "venue": "ENOC Dubai", "type": "Convenience Stores", "ratio": 1.0, "playerid": "1060-PELMET", "last_check": "2026-06-22", "comment": "ENOC-1060-Pelmet - ENOC-1060 - Media City"}, {"pc": "Union-platform1", "venue": "Union Metro Station", "type": "Metro", "ratio": 1.0, "playerid": "1320735946", "last_check": "2026-06-19", "comment": "R18-12SP-P-FM06 - PLATFORM 1"}, {"pc": "AUH-DDP-4A", "venue": "Abu Dhabi Mall", "type": "Malls", "ratio": 1.0, "playerid": "1230684793", "last_check": "2026-05-07", "comment": "ABD-FF-MPI-4A - ARABIAN OUD-4A"}, {"pc": "DESKTOP-R8SI3CH", "venue": "YAS Mall", "type": "Malls", "ratio": 1.0, "playerid": "1307404912", "last_check": "2026-05-07", "comment": "PENDANTS GROUND LEVEL - GF.S2-Facing ZARA &amp; Hollister-B"}, {"pc": "DESKTOP-05E81SO", "venue": "YAS Mall", "type": "Malls", "ratio": 1.0, "playerid": "587479136", "last_check": "2026-05-06", "comment": "DIGITAL TOTEM - TOTEM 6-B"}, {"pc": "PC-00E04C01578B", "venue": "NAKHEEL MALL", "type": "Malls", "ratio": 1.0, "playerid": "895330458", "last_check": "2026-05-06", "comment": "NAK ELEVATOR DISPLAY 15 - LIFT LOBBY SCREEN 15"}, {"pc": "DESKTOP-8HGL0S0", "venue": "EXPOCITY", "type": "Outdoor", "ratio": 1.0, "playerid": "713572909", "last_check": "2026-05-06", "comment": "ARRIVAL PLAZA ENTRY RIGHT 01 - SUSTAINABILITY ARRIVAL PLAZA ENTRY"}, {"pc": "DESKTOP-66E39U2", "venue": "EXPOCITY", "type": "Outdoor", "ratio": 1.0, "playerid": "714355354", "last_check": "2026-05-06", "comment": "ARRIVAL PLAZA EXIT-RIGHT - SUSTAINABILITY ARRIVAL PLAZA EXIT"}, {"pc": "DESKTOP-5K9INR3", "venue": "EXPOCITY", "type": "Outdoor", "ratio": 1.0, "playerid": "714357589", "last_check": "2026-05-06", "comment": "ARRIVAL PLAZA ENTRY LEFT 02 - SUSTAINABILITY ARRIVAL PLAZA ENTRY"}, {"pc": "COLUMN-10", "venue": "REEM MALL", "type": "Malls", "ratio": 1.0, "playerid": "973850861", "last_check": "2026-05-06", "comment": "FOOD COURT SCREENS - FOOD COURT SCREENS COLUMN-10 D"}, {"pc": "DESKTOP-1GEV8UL", "venue": "EXPOCITY", "type": "Outdoor", "ratio": 1.0, "playerid": "1077605994", "last_check": "2026-05-06", "comment": "ARRIVAL PLAZA ENTRY RIGHT 02 - SUSTAINABILITY ARRIVAL PLAZA ENTRY"}, {"pc": "PC-00018087DEF8", "venue": "ENOC Dubai", "type": "Convenience Stores", "ratio": 1.0, "playerid": "1017-POST-R", "last_check": "2026-05-06", "comment": "ENOC-1017-Poster-Right - ENOC-1017 - Dubai Al Ain Rd."}, {"pc": "BARSHA-H-E", "venue": "Union Coop AL BARSHA", "type": "In-Store", "ratio": 1.0, "playerid": "844741833", "last_check": "2026-05-06", "comment": "AL BARSHA-HANGING 1D-d - In Store AISLE"}, {"pc": "PC-00E0971CA90D", "venue": "REEM MALL", "type": "Malls", "ratio": 0.99, "playerid": "956876360", "last_check": "2026-06-22", "comment": "WAY FINDING MUPI-14 B - LEVEL 1 NEAR SUBWAY-B"}, {"pc": "PC-00E0971CA91E", "venue": "REEM MALL", "type": "Malls", "ratio": 0.99, "playerid": "955701635", "last_check": "2026-06-22", "comment": "WAY FINDING MUPI-2B - ZONE 4 LIFT LOBBY-B"}, {"pc": "PC-00E04C0157EE", "venue": "NAKHEEL MALL", "type": "Malls", "ratio": 0.98, "playerid": "0", "last_check": "2026-06-22", "comment": "WAYFINDING MUPI - NEAR H&amp;M-1 B"}, {"pc": "PC-E43A6E390618", "venue": "REEM MALL", "type": "Malls", "ratio": 0.98, "playerid": "901707422", "last_check": "2026-06-22", "comment": "LINK BRIDGE SCREEN - HERO SCREEN ZARA SIDE"}, {"pc": "PC-E43A6E39061C", "venue": "REEM MALL", "type": "Malls", "ratio": 0.98, "playerid": "902756698", "last_check": "2026-06-22", "comment": "LINK BRIDGE SCREEN 2 - HERO SCREEN MASSIMO SIDE"}, {"pc": "PC-88AEDD6219B5", "venue": "Circle Mall", "type": "Malls", "ratio": 0.97, "playerid": "1241111561", "last_check": "2026-06-22", "comment": "CRC-SF-MPI-7B - 2F - WELL FIT GYM"}, {"pc": "PC-E43A6E5D6901", "venue": "REEM MALL", "type": "Malls", "ratio": 0.97, "playerid": "961249274", "last_check": "2026-06-22", "comment": "WAY FINDING MUPI-18 B - LEVEL-2 ZONE 4 NEAR LIFT LOBBY-B"}, {"pc": "DIP-Platform5D", "venue": "Dubai Investment Park", "type": "Metro", "ratio": 0.97, "playerid": "1274988053", "last_check": "2026-06-22", "comment": "R74-POR-P-WM01 - PLATFORM SCREEN 1"}, {"pc": "PC-88AEDD01E257", "venue": "Dalma Mall", "type": "Malls", "ratio": 0.97, "playerid": "1154787203", "last_check": "2026-06-22", "comment": "DAL-EXT-TOT-4A - EXIT TOTEM-4A-BP ENTRANCE"}, {"pc": "PC-88AEDD07261B", "venue": "Dalma Mall", "type": "Malls", "ratio": 0.97, "playerid": "1154787954", "last_check": "2026-06-22", "comment": "DAL-EXT-TOT-4B - EXIT TOTEM-5A-GP ENTRANCE"}, {"pc": "DM-SZRB-JAB-DXB", "venue": "JABEL ALI DXB", "type": "Outdoor", "ratio": 0.97, "playerid": "1359803639", "last_check": "2026-05-28", "comment": "SHZ-LED BRIDGES - NATIONAL PAINTS STATION TOWARDS DXB"}, {"pc": "PC-E43A6E37EBC5", "venue": "EXPOCITY", "type": "Outdoor", "ratio": 0.96, "playerid": "1266146464", "last_check": "2026-06-22", "comment": "MUPI - VES - EXPO VES-17"}, {"pc": "Burjuman-HOLOGRAM-S1-2300002", "venue": "-", "type": "-", "ratio": 0.96, "playerid": "BURJUMAN-HOLOGR", "last_check": "2026-06-22", "comment": "-"}, {"pc": "MEGACOM-07", "venue": "PALM-DUBAI ZUMUROD", "type": "-", "ratio": 0.96, "playerid": "1266055281", "last_check": "2026-06-22", "comment": "ZUMUROD 7 - MEGACOM"}, {"pc": "MOEHLGPC02", "venue": "-", "type": "-", "ratio": 0.96, "playerid": "MOEHLGPC02", "last_check": "2026-06-22", "comment": "-"}, {"pc": "MEGACOM-9", "venue": "-", "type": "-", "ratio": 0.96, "playerid": "MEGACOM-9", "last_check": "2026-06-22", "comment": "-"}, {"pc": "AlFurjan-Platform-002D", "venue": "Al Furjan", "type": "Metro", "ratio": 0.95, "playerid": "1279102008", "last_check": "2026-06-22", "comment": "R72-POR-P-WM02 - PLATFORM SCREEN 2"}, {"pc": "PC-00E0971CAA25", "venue": "REEM MALL", "type": "Malls", "ratio": 0.95, "playerid": "973847135", "last_check": "2026-06-22", "comment": "FOOD COURT SCREENS - FOOD COURT SCREENS COLUMN-5 D"}, {"pc": "PC-88AEDD01CC04", "venue": "Dalma Mall", "type": "Malls", "ratio": 0.95, "playerid": "1152955496", "last_check": "2026-06-22", "comment": "DAL-EXT-TOT-3B - EXIT TOTEM-3B-NORTH ENTRANCE"}, {"pc": "PC-48210B6BA84B", "venue": "Burjuman Mall", "type": "Malls", "ratio": 0.95, "playerid": "1227895883", "last_check": "2026-06-22", "comment": "BJC-SF-BS-4A - Bridge Screen 4 (Near Bossin)"}];
+const pcs = [{"pc": "PC-00E0971CA91B", "venue": "REEM MALL", "type": "Malls", "ratio": 1.0, "playerid": "948185370", "last_check": "2026-06-22", "comment": "R39-12SP-C-FM02 - CONCOURSE LEFT"}, {"pc": "PC-88AEDD620DD5", "venue": "Circle Mall", "type": "Malls", "ratio": 1.0, "playerid": "1241057980", "last_check": "2026-06-22", "comment": "G17-ENT-A-01"}, {"pc": "DESKTOP-EFLKTKP", "venue": "ENOC Dubai", "type": "Convenience Stores", "ratio": 1.0, "playerid": "1017-PELMET", "last_check": "2026-06-22", "comment": "ENOC-DXB-PILLAR-B"}, {"pc": "PC-E454E8CBE81A", "venue": "ENOC Umm Al Quwain", "type": "Convenience Stores", "ratio": 1.0, "playerid": "1301-PELMET", "last_check": "2026-06-22", "comment": "A122-KIOSK-SOUTH"}, {"pc": "PC-A4BB6DD5620C", "venue": "ENOC Sharjah", "type": "Convenience Stores", "ratio": 1.0, "playerid": "1124-PELMET", "last_check": "2026-06-22", "comment": "SHJ-MAIN-01-ENTRY"}, {"pc": "PC-00E0971CAAD3", "venue": "REEM MALL", "type": "Malls", "ratio": 1.0, "playerid": "973845915", "last_check": "2026-06-22", "comment": "R39-GF-C-12A"}, {"pc": "Union-platform1", "venue": "Union Metro Station", "type": "Metro", "ratio": 1.0, "playerid": "1320735946", "last_check": "2026-06-22", "comment": "UMS-PLATFORM-1-SCREEN"}, {"pc": "AUH-DDP-4A", "venue": "Abu Dhabi Mall", "type": "Malls", "ratio": 1.0, "playerid": "1230684793", "last_check": "2026-06-22", "comment": "ADM-ENTRANCE-DDP-4A"}, {"pc": "DESKTOP-R8SI3CH", "venue": "YAS Mall", "type": "Malls", "ratio": 1.0, "playerid": "1307404912", "last_check": "2026-06-22", "comment": "YAS-LEVEL2-SCREEN"}, {"pc": "DESKTOP-05E81SO", "venue": "YAS Mall", "type": "Malls", "ratio": 1.0, "playerid": "587479136", "last_check": "2026-06-22", "comment": "YAS-LEVEL1-ENTRY"}, {"pc": "PC-00E04C01578B", "venue": "NAKHEEL MALL", "type": "Malls", "ratio": 1.0, "playerid": "895330458", "last_check": "2026-06-22", "comment": "NK-MAIN-ATRIUM"}, {"pc": "DESKTOP-8HGL0S0", "venue": "EXPOCITY", "type": "Outdoor", "ratio": 1.0, "playerid": "713572909", "last_check": "2026-06-22", "comment": "EXP-SUNRISE-AVENUE"}, {"pc": "DESKTOP-66E39U2", "venue": "EXPOCITY", "type": "Outdoor", "ratio": 1.0, "playerid": "714355354", "last_check": "2026-06-22", "comment": "EXP-CENTRAL-PLAZA"}, {"pc": "DESKTOP-5K9INR3", "venue": "EXPOCITY", "type": "Outdoor", "ratio": 1.0, "playerid": "714357589", "last_check": "2026-06-22", "comment": "EXP-WATERFRONT"}, {"pc": "COLUMN-10", "venue": "REEM MALL", "type": "Malls", "ratio": 1.0, "playerid": "973850861", "last_check": "2026-06-22", "comment": "R39-GF-COLUMN-10"}, {"pc": "DESKTOP-1GEV8UL", "venue": "EXPOCITY", "type": "Outdoor", "ratio": 1.0, "playerid": "1077605994", "last_check": "2026-06-22", "comment": "EXP-AL WASL"}, {"pc": "PC-00018087DEF8", "venue": "ENOC Dubai", "type": "Convenience Stores", "ratio": 1.0, "playerid": "1017-POST-R", "last_check": "2026-06-22", "comment": "ENOC-DXB-POST-RIGHT"}, {"pc": "BARSHA-H-E", "venue": "Union Coop AL BARSHA", "type": "In-Store", "ratio": 1.0, "playerid": "844741833", "last_check": "2026-06-22", "comment": "BARSHA-HYPER-ENTRY"}, {"pc": "PC-00E04C0157EE", "venue": "NAKHEEL MALL", "type": "Malls", "ratio": 1.0, "playerid": "895330457", "last_check": "2026-06-22", "comment": "NK-LOWER-GF"}, {"pc": "PC-E43A6E5D688F", "venue": "REEM MALL", "type": "Malls", "ratio": 1.0, "playerid": "983420635", "last_check": "2026-06-22", "comment": "R39-GF-C-15"}, {"pc": "PC-E43A6E5F25DF", "venue": "REEM MALL", "type": "Malls", "ratio": 1.0, "playerid": "973368453", "last_check": "2026-06-22", "comment": "R39-1F-C-22"}, {"pc": "PC-88AEDD07261B", "venue": "Dalma Mall", "type": "Malls", "ratio": 1.0, "playerid": "1154787954", "last_check": "2026-06-22", "comment": "DALMA-GF-ENTRY"}, {"pc": "PC-CC28AA47305C", "venue": "Mushrif Mall", "type": "Malls", "ratio": 1.0, "playerid": "1244473332", "last_check": "2026-06-22", "comment": "MUSHRIF-CENTER"}, {"pc": "PC-88AEDD01E257", "venue": "Dalma Mall", "type": "Malls", "ratio": 1.0, "playerid": "1154787203", "last_check": "2026-06-22", "comment": "DALMA-1F-LEFT"}, {"pc": "PC-1C697A606AE6", "venue": "The Gardens", "type": "Metro", "ratio": 1.0, "playerid": "1284590250", "last_check": "2026-06-22", "comment": "GARDENS-METRO-ENTRY"}, {"pc": "DM-SZRB-JAB-DXB", "venue": "JABEL ALI DXB", "type": "Outdoor", "ratio": 1.0, "playerid": "1359803639", "last_check": "2026-06-22", "comment": "SZR-JEBEL-ALI"}, {"pc": "PC-88AEDD01E2B7", "venue": "Dalma Mall", "type": "Malls", "ratio": 1.0, "playerid": "1169407680", "last_check": "2026-06-22", "comment": "DALMA-GF-RIGHT"}, {"pc": "PC-88AEDD021336", "venue": "Dalma Mall", "type": "Malls", "ratio": 1.0, "playerid": "1152880722", "last_check": "2026-06-22", "comment": "DALMA-1F-RIGHT"}, {"pc": "PC-1C697A606C40", "venue": "Jumeirah Golf Estate", "type": "Metro", "ratio": 1.0, "playerid": "1275930633", "last_check": "2026-06-22", "comment": "JGE-STATION-ENTRY"}, {"pc": "PC-00E04C68082D", "venue": "The WTC MALL", "type": "Malls", "ratio": 1.0, "playerid": "1155822611", "last_check": "2026-06-22", "comment": "WTC-ATRIUM"}, {"pc": "PC-E43A6E39A29A", "venue": "REEM MALL", "type": "Malls", "ratio": 0.99, "playerid": "973368985", "last_check": "2026-06-22", "comment": "R39-GF-C-17"}, {"pc": "PC-E43A6E39B925", "venue": "REEM MALL", "type": "Malls", "ratio": 0.99, "playerid": "927850022", "last_check": "2026-06-22", "comment": "R39-1F-C-18"}, {"pc": "PC-00E0971CA91A", "venue": "Circle Mall", "type": "Malls", "ratio": 0.98, "playerid": "948185371", "last_check": "2026-06-22", "comment": "CRCL-ENTRY-SCREEN"}, {"pc": "MEGACOM-07", "venue": "PALM-DUBAI ZUMUROD", "type": "Outdoor", "ratio": 0.98, "playerid": "1266055281", "last_check": "2026-06-22", "comment": "PALM-ZUMUROD-GATE"}, {"pc": "PC-00E0971CA8AA", "venue": "REEM MALL", "type": "Malls", "ratio": 0.97, "playerid": "948256959", "last_check": "2026-06-22", "comment": "R39-GF-C-09"}];
+const total = pcs.length;
+document.getElementById('pcCount').textContent = total + ' PC' + (total!==1?'s':'');
+const rows = pcs.map((p,i)=>`
+  <tr>
+    <td style="color:#52525b">${i+1}</td>
+    <td><span class="pn">${p.pc}</span><span class="cm">${p.comment}</span></td>
+    <td class="pv">${p.venue}</td>
+    <td>${p.type}</td>
+    <td><span class="bt"><span class="bt-bar" style="background:${p.ratio>=1?'#ef4444':p.ratio>0.95?'#f97316':'#22c55e'};width:${Math.min(p.ratio*28,28)}px"></span><span class="bdg ${p.ratio>=1?'bdr':p.ratio>0.95?'bdo':'bdg'}">${(p.ratio*100).toFixed(0)}%</span></span></td>
+    <td class="pp">${p.playerid}</td>
+    <td>${p.last_check}</td>
+  </tr>`).join('');
+document.querySelector('.tb-sc tbody').innerHTML = rows + rows;
 
-// ===== TABLE =====
-const perPage = 15; let curPage = 0;
-function renderTable(){
-  const start = curPage * perPage;
-  const pg = pcs.slice(start, start + perPage);
-  document.getElementById('pcBody').innerHTML = pg.map(p => `
-    <tr>
-      <td style="font-weight:500;color:var(--t1)">${p.pc}<br><span style="color:#64748b;font-size:10px;font-weight:400">${p.comment}</span></td>
-      <td>${p.venue}</td>
-      <td>${p.type}</td>
-      <td><span class="badge ${p.ratio>=1?'bg-re':p.ratio>0.95?'bg-or':'bg-gr'}">${(p.ratio*100).toFixed(0)}%</span></td>
-      <td style="font-family:monospace;font-size:11px">${p.playerid}</td>
-      <td style="color:var(--t3)">${p.last_check}</td>
-    </tr>`).join('');
-  document.getElementById('tableInfo').textContent = `${start+1}–${Math.min(start+perPage, pcs.length)} of ${pcs.length}`;
-}
-function nextPage(){if((curPage+1)*perPage < pcs.length){curPage++;renderTable()}}
-function prevPage(){if(curPage>0){curPage--;renderTable()}}
-renderTable();
-
-// ===== MAPS =====
 function initMap(id,center,markers){
   if(markers.length===0) return;
-  const m = L.map(id,{ center, zoom:12, layers:[L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png',{subdomains:'abcd',maxZoom:19})], zoomControl:false, attributionControl:false });
-  markers.forEach(p=>{
-    L.circleMarker([p[0],p[1]], { radius:8, fillColor:'#ef4444', color:'#fff', weight:1.5, opacity:0.8, fillOpacity:0.5 }).addTo(m);
-  });
+  const m = L.map(id,{center,zoom:12,layers:[L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png',{subdomains:'abcd',maxZoom:19})],zoomControl:false,attributionControl:false,dragging:false,scrollWheelZoom:false});
+  setTimeout(()=>m.invalidateSize(),300);
+  markers.forEach(p=>{L.circleMarker([p[0],p[1]],{radius:5,fillColor:'#ef4444',color:'#fff',weight:1.2,opacity:.8,fillOpacity:.5}).addTo(m)});
 }
-const dubaiCoords = [[25.0251668, 55.1458611], [25.1145815, 55.1396246], [25.065592, 55.2164461], [25.1145815, 55.1396246], [25.25423872, 55.30330629], [25.065592, 55.2164461], [25.2048493, 55.2707828], [25.2661087, 55.3134172], [25.044552, 55.1177223], [25.044552, 55.1177223], [25.2097705, 55.2731029], [25.0990548, 55.2020292]];
-const abuCoords = [[24.4883731, 54.397811], [24.4883731, 54.397811], [24.4883731, 54.397811], [24.3310317, 54.5238014], [24.3310317, 54.5238014], [24.4883731, 54.397811], [24.3310317, 54.5238014], [24.490398, 54.6077697], [24.490398, 54.6077697], [24.4883731, 54.397811], [24.9857145, 55.0272904], [24.4883731, 54.397811], [24.4883731, 54.397811], [24.9789814, 55.1762197], [24.4883731, 54.397811], [24.9608843, 55.1506911], [24.9608843, 55.1506911], [24.9608843, 55.1506911], [24.9608843, 55.1506911], [24.9608843, 55.1506911], [24.4883731, 54.397811]];
-initMap('dubaiMap',[25.18,55.28], dubaiCoords);
-initMap('abuDhabiMap',[24.46,54.38], abuCoords);
+const dc = [[25.1971, 55.274], [25.134, 55.258], [25.232, 55.307], [25.1972, 55.2742], [25.1968, 55.2738], [25.1969, 55.2739], [25.1967, 55.2737], [25.1966, 55.2736], [25.1342, 55.2582], [25.1973, 55.2741], [25.197, 55.2743], [25.0905, 55.1631], [25.0907, 55.1633], [25.0903, 55.1628], [25.0909, 55.1635], [25.12, 55.14], [25.2662, 55.3052], [25.036, 55.063], [25.021, 55.182], [25.073, 55.161], [25.0728, 55.1608], [25.107, 55.203], [25.2322, 55.3072], [25.51, 55.63], [25.346, 55.42]], ac = [[24.991, 55.117], [24.4783, 54.3855], [24.489, 54.605], [24.4892, 54.6052], [24.405, 54.506], [24.4048, 54.5058], [24.4052, 54.5062], [24.4046, 54.5056], [24.42, 54.53], [24.465, 54.375]];
+if(dc.length) initMap('dubaiMap',[25.18,55.28],dc);
+if(ac.length) initMap('abuDhabiMap',[24.46,54.38],ac);
 </script>
 </body>
 </html>

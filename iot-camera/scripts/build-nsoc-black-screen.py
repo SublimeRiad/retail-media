@@ -268,143 +268,120 @@ def build_html(data):
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta http-equiv="refresh" content="600">
 <title>NSOC Black Screen Monitor</title>
-
 <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
 <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 <style>
-:root{{--bg:#0b1120;--s1:#111827;--s2:#1a2332;--b1:#1f2b3e;--t1:#e2e8f0;--t2:#94a3b8;--t3:#64748b;--ac:#38bdf8;--gr:#22c55e;--re:#ef4444;--or:#f59e0b;--bl:#3b82f6;--pu:#a78bfa}}
 *{{margin:0;padding:0;box-sizing:border-box}}
-body{{background:var(--bg);color:var(--t1);font-family:'Inter',-apple-system,sans-serif;-webkit-font-smoothing:antialiased}}
-.d{{max-width:1440px;margin:0 auto;padding:20px}}
-/* Header */
-.hd{{display:flex;align-items:center;gap:14px;padding:14px 20px;margin-bottom:18px;background:var(--s1);border-radius:10px;border:1px solid var(--b1)}}
-.hd .dot{{width:4px;height:28px;background:var(--re);border-radius:3px}}
-.hd h1{{font-size:18px;font-weight:700;color:var(--re);letter-spacing:-0.3px}}
-.hd .sub{{font-size:13px;color:var(--t3);padding-left:12px;border-left:1px solid var(--b1);margin-left:12px;display:flex;align-items:center;gap:8px}}
-.hd .ts{{font-size:10px;color:#52525b;font-family:monospace}}
-.hd .mode{{font-size:9px;font-weight:700;padding:2px 8px;border-radius:10px;text-transform:uppercase;letter-spacing:.3px;background:rgba(34,197,94,.2);color:#22c55e;border:1px solid rgba(34,197,94,.3)}}
-/* Stats */
-.st{{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-bottom:16px}}
-.sc{{background:var(--s1);border-radius:10px;padding:16px 20px;border:1px solid var(--b1);position:relative;overflow:hidden}}
-.sc::before{{content:'';position:absolute;top:0;left:0;right:0;height:3px}}
-.sc-r::before{{background:var(--re)}}.sc-b::before{{background:var(--bl)}}.sc-o::before{{background:var(--or)}}.sc-p::before{{background:var(--pu)}}
-.sc .l{{font-size:11px;font-weight:500;text-transform:uppercase;letter-spacing:.8px;color:var(--t3);margin-bottom:4px}}
-.sc .v{{font-size:30px;font-weight:700;letter-spacing:-1px;line-height:1.2}}
-.sc-r .v{{color:var(--re)}}.sc-b .v{{color:var(--bl)}}.sc-o .v{{color:var(--or)}}.sc-p .v{{color:var(--pu)}}
-.sc .m{{font-size:11px;color:var(--t3);margin-top:4px}}
-/* Section */
-.sx{{display:flex;align-items:center;gap:10px;padding:0 4px;margin-bottom:12px;margin-top:20px}}
-.sx .bar{{width:3px;height:18px;border-radius:2px}}
-.sx .bar.r{{background:var(--re)}}.sx .bar.g{{background:var(--gr)}}
-.sx h2{{font-size:13px;font-weight:600;text-transform:uppercase;letter-spacing:1.2px;color:var(--t2)}}
-/* Table */
-.tb{{width:100%;border-collapse:collapse;font-size:12px}}
-.tb th{{text-align:left;padding:8px 12px;color:var(--t3);font-weight:500;font-size:11px;text-transform:uppercase;letter-spacing:.5px;border-bottom:1px solid var(--b1)}}
-.tb td{{padding:7px 12px;border-bottom:1px solid rgba(255,255,255,.04);color:var(--t2)}}
-.tb tr:hover td{{background:rgba(255,255,255,.03)}}
-.tb .badge{{display:inline-block;padding:2px 7px;border-radius:4px;font-size:10px;font-weight:600}}
-.bg-re{{background:rgba(239,68,68,.2);color:var(--re)}}
-.bg-or{{background:rgba(245,158,11,.2);color:var(--or)}}
-.bg-gr{{background:rgba(34,197,94,.2);color:var(--gr)}}
-/* Pagination */
-.pag{{display:flex;align-items:center;justify-content:space-between;padding:8px 14px;font-size:12px;color:var(--t3)}}
-.pag button{{background:var(--s2);border:1px solid var(--b1);color:var(--t2);padding:4px 12px;border-radius:5px;cursor:pointer;font-size:11px}}
-.pag button:hover{{background:var(--b1)}}
-.pag .info{{color:var(--t3)}}
-@media(max-width:960px){{.st{{grid-template-columns:1fr 1fr}}.sp{{grid-template-columns:1fr}}}}
+html,body{{height:100vh;overflow:hidden;font-family:'Inter',sans-serif;background:#080a0e;color:#e0e2e6}}
+/* ── TOP BAR ── */
+.top{{display:flex;align-items:center;gap:8px;padding:5px 14px;background:#0c0e13;border-bottom:1px solid #161b22;height:42px;flex-shrink:0}}
+.top .dot{{width:3px;height:16px;background:#ef4444;border-radius:2px}}
+.top h1{{font-size:12px;font-weight:700;color:#ef4444;white-space:nowrap}}
+.stb{{display:flex;align-items:center;gap:3px;padding:1px 8px;border-radius:3px;font-size:9px;font-weight:600;height:20px;border:1px solid rgba(255,255,255,.06)}}
+.stb .sv{{font-size:12px;font-weight:800}}
+.stb .sl{{color:#64748b}}
+.sr{{background:rgba(239,68,68,.12);color:#ef4444}}.sb{{background:rgba(59,130,246,.12);color:#60a5fa}}.so{{background:rgba(245,158,11,.12);color:#f59e0b}}.sp{{background:rgba(168,85,247,.12);color:#a78bfa}}
+.top .spc{{flex:1}}
+.top .ts{{color:#52525b;font-size:8px;font-family:monospace}}
+.top .mode{{font-size:7px;font-weight:700;padding:1px 6px;border-radius:6px;text-transform:uppercase;background:rgba(34,197,94,.2);color:#22c55e;border:1px solid rgba(34,197,94,.3)}}
+/* ── MAIN SPLIT ── */
+.main{{display:flex;flex:1;min-height:0;padding:4px 10px 4px;gap:6px}}
+/* Left: maps */
+.mcol{{flex:0.48;display:flex;flex-direction:column;gap:4px;min-width:0}}
+.mcol .mlabel{{font-size:8px;color:#64748b;text-transform:uppercase;letter-spacing:.4px;font-weight:600;padding:0 2px}}
+.mcol .mmap{{flex:1;border-radius:4px;overflow:hidden;border:1px solid #161b22;background:#0c0e13}}
+/* Right: table */
+.tcol{{flex:0.52;display:flex;flex-direction:column;min-width:0}}
+.tcol .thdr{{display:flex;align-items:center;justify-content:space-between;padding:0 2px 2px;flex-shrink:0}}
+.tcol .thdr h2{{font-size:9px;color:#64748b;text-transform:uppercase;letter-spacing:.5px;font-weight:600}}
+.tcol .thdr .cnt{{font-size:8px;color:#52525b}}
+.tb-wr{{flex:1;overflow:hidden;border:1px solid #161b22;border-radius:4px;position:relative}}
+.tb-sc{{animation:scUp 50s linear infinite}}
+.tb-sc:hover{{animation-play-state:paused}}
+@keyframes scUp{{0%{{transform:translateY(0)}}100%{{transform:translateY(-50%)}}}}
+.tb{{width:100%;border-collapse:collapse;font-size:10px}}
+.tb th{{position:sticky;top:0;z-index:2;text-align:left;padding:4px 8px;color:#52525b;font-weight:600;font-size:8px;text-transform:uppercase;letter-spacing:.3px;background:#080a0e;border-bottom:1px solid #161b22}}
+.tb td{{padding:3px 8px;border-bottom:1px solid rgba(255,255,255,.015);color:#94a3b8}}
+.tb tr:hover td{{background:rgba(59,130,246,.06)}}
+.tb .pn{{color:#e0e2e6;font-weight:500}}
+.tb .cm{{color:#52525b;font-size:8px;display:block}}
+.tb .pp{{font-family:monospace;font-size:8px;color:#52525b}}
+.tb .pv{{max-width:100px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}}
+.bt{{display:inline-flex;align-items:center;gap:2px}}
+.bt-bar{{width:28px;height:6px;border-radius:2px}}
+.bdg{{padding:1px 5px;border-radius:2px;font-size:8px;font-weight:600}}
+.bdr{{background:rgba(239,68,68,.2);color:#ef4444}}
+.bdo{{background:rgba(245,158,11,.2);color:#f97316}}
+.bdg{{background:rgba(34,197,94,.2);color:#22c55e}}
+::-webkit-scrollbar{{width:3px}}
+::-webkit-scrollbar-track{{background:#080a0e}}
+::-webkit-scrollbar-thumb{{background:#1e293b;border-radius:2px}}
 </style>
 </head>
 <body>
-<div class="d">
 
-<!-- HEADER -->
-<div class="hd"><div class="dot"></div><h1>NSOC Black Screen</h1><div class="sub">Screens with black ratio ≥ 95%<span class="ts">{esc(ts)}</span><span class="mode">LIVE</span></div></div>
-
-<!-- STATS -->
-<div class="st">
-  <div class="sc sc-r"><div class="l">Black Screens</div><div class="v">{s["blackTotal"]}</div><div class="m">Screens affected</div></div>
-  <div class="sc sc-b"><div class="l">Monitored</div><div class="v">{monitored_str}</div><div class="m">Screens with script</div></div>
-  <div class="sc sc-o"><div class="l">Locations</div><div class="v">{s["venues"]}</div><div class="m">Venues affected</div></div>
-  <div class="sc sc-p"><div class="l">Venue Types</div><div class="v">{s["venueTypes"]}</div><div class="m">Categories affected</div></div>
+<div class="top">
+  <div class="dot"></div>
+  <h1>NSOC Black Screen</h1>
+  <div class="stb sr"><span class="sv">{s["blackTotal"]}</span>&nbsp;<span class="sl">Black</span></div>
+  <div class="stb sb"><span class="sv">{monitored_str}</span>&nbsp;<span class="sl">Monitored</span></div>
+  <div class="stb so"><span class="sv">{s["venues"]}</span>&nbsp;<span class="sl">Venues</span></div>
+  <div class="stb sp"><span class="sv">{s["venueTypes"]}</span>&nbsp;<span class="sl">Types</span></div>
+  <div class="spc"></div>
+  <span class="ts">{esc(ts)}</span>
+  <span class="mode">LIVE</span>
 </div>
 
-<!-- MAPS -->
-<div class="sx"><div class="bar r"></div><h2>Geographic Overview</h2></div>
-<div class="sp">
-  <div class="pa">
-    <div class="ph"><h3>Dubai</h3></div>
-    <div id="dubaiMap" style="height:260px"></div>
+<div class="main">
+  <!-- Left: Maps column -->
+  <div class="mcol">
+    <span class="mlabel"><span style="color:var(--re)">●</span> Geographic Overview</span>
+    <div class="mmap" id="dubaiMap"></div>
+    <div class="mmap" id="abuDhabiMap"></div>
   </div>
-  <div class="pa">
-    <div class="ph"><h3>Abu Dhabi</h3></div>
-    <div id="abuDhabiMap" style="height:260px"></div>
+  <!-- Right: Auto-scroll PC table -->
+  <div class="tcol">
+    <div class="thdr">
+      <h2>PC with Black Screen</h2>
+      <span class="cnt" id="pcCount"></span>
+    </div>
+    <div class="tb-wr">
+      <div class="tb-sc">
+        <table class="tb">
+          <thead><tr><th style="width:24px">#</th><th>PC Name / Comment</th><th style="width:70px">Venue</th><th style="width:55px">Type</th><th style="width:70px">Black %</th><th style="width:60px">Player</th><th style="width:55px">Checked</th></tr></thead>
+          <tbody></tbody>
+        </table>
+      </div>
+    </div>
   </div>
-</div>
-
-<!-- DETAILED LIST -->
-<div class="sx"><div class="bar g"></div><h2>PC with Black Screen — Detailed List</h2></div>
-<div class="pa">
-  <div style="overflow-x:auto">
-    <table class="tb" id="pcTable">
-      <thead><tr><th>PC Name / Comment</th><th>Venue</th><th>Type</th><th>Ratio</th><th>Player ID</th><th>Last Check</th></tr></thead>
-      <tbody id="pcBody"></tbody>
-    </table>
-  </div>
-  <div class="pag"><span class="info" id="tableInfo"></span><div><button onclick="prevPage()">← Prev</button><button onclick="nextPage()" style="margin-left:6px">Next →</button></div></div>
-</div>
-
-<!-- MAPS -->
-<div class="sx"><div class="bar r"></div><h2>Geographic Overview</h2></div>
-<div class="sp">
-  <div class="pa">
-    <div class="ph"><h3>Dubai</h3></div>
-    <div id="dubaiMap" style="height:320px"></div>
-  </div>
-  <div class="pa">
-    <div class="ph"><h3>Abu Dhabi</h3></div>
-    <div id="abuDhabiMap" style="height:320px"></div>
-  </div>
-</div>
-
 </div>
 
 <script>
-// ===== LIVE DATA =====
 const pcs = {pcs_json};
+const total = pcs.length;
+document.getElementById('pcCount').textContent = total + ' PC' + (total!==1?'s':'');
+const rows = pcs.map((p,i)=>`
+  <tr>
+    <td style="color:#52525b">${{i+1}}</td>
+    <td><span class="pn">${{p.pc}}</span><span class="cm">${{p.comment}}</span></td>
+    <td class="pv">${{p.venue}}</td>
+    <td>${{p.type}}</td>
+    <td><span class="bt"><span class="bt-bar" style="background:${{p.ratio>=1?'#ef4444':p.ratio>0.95?'#f97316':'#22c55e'}};width:${{Math.min(p.ratio*28,28)}}px"></span><span class="bdg ${{p.ratio>=1?'bdr':p.ratio>0.95?'bdo':'bdg'}}">${{(p.ratio*100).toFixed(0)}}%</span></span></td>
+    <td class="pp">${{p.playerid}}</td>
+    <td>${{p.last_check}}</td>
+  </tr>`).join('');
+document.querySelector('.tb-sc tbody').innerHTML = rows + rows;
 
-// ===== TABLE =====
-const perPage = 15; let curPage = 0;
-function renderTable(){{
-  const start = curPage * perPage;
-  const pg = pcs.slice(start, start + perPage);
-  document.getElementById('pcBody').innerHTML = pg.map(p => `
-    <tr>
-      <td style="font-weight:500;color:var(--t1)">${{p.pc}}<br><span style="color:#64748b;font-size:10px;font-weight:400">${{p.comment}}</span></td>
-      <td>${{p.venue}}</td>
-      <td>${{p.type}}</td>
-      <td><span class="badge ${{p.ratio>=1?'bg-re':p.ratio>0.95?'bg-or':'bg-gr'}}">${{(p.ratio*100).toFixed(0)}}%</span></td>
-      <td style="font-family:monospace;font-size:11px">${{p.playerid}}</td>
-      <td style="color:var(--t3)">${{p.last_check}}</td>
-    </tr>`).join('');
-  document.getElementById('tableInfo').textContent = `${{start+1}}–${{Math.min(start+perPage, pcs.length)}} of ${{pcs.length}}`;
-}}
-function nextPage(){{if((curPage+1)*perPage < pcs.length){{curPage++;renderTable()}}}}
-function prevPage(){{if(curPage>0){{curPage--;renderTable()}}}}
-renderTable();
-
-// ===== MAPS =====
 function initMap(id,center,markers){{
   if(markers.length===0) return;
-  const m = L.map(id,{{ center, zoom:12, layers:[L.tileLayer('https://{{s}}.basemaps.cartocdn.com/dark_all/{{z}}/{{x}}/{{y}}{{r}}.png',{{subdomains:'abcd',maxZoom:19}})], zoomControl:false, attributionControl:false }});
-  markers.forEach(p=>{{
-    L.circleMarker([p[0],p[1]], {{ radius:8, fillColor:'#ef4444', color:'#fff', weight:1.5, opacity:0.8, fillOpacity:0.5 }}).addTo(m);
-  }});
+  const m = L.map(id,{{center,zoom:12,layers:[L.tileLayer('https://{{s}}.basemaps.cartocdn.com/dark_all/{{z}}/{{x}}/{{y}}{{r}}.png',{{subdomains:'abcd',maxZoom:19}})],zoomControl:false,attributionControl:false,dragging:false,scrollWheelZoom:false}});
+  setTimeout(()=>m.invalidateSize(),300);
+  markers.forEach(p=>{{L.circleMarker([p[0],p[1]],{{radius:5,fillColor:'#ef4444',color:'#fff',weight:1.2,opacity:.8,fillOpacity:.5}}).addTo(m)}});
 }}
-const dubaiCoords = {dubai_coords_json};
-const abuCoords = {abu_coords_json};
-initMap('dubaiMap',[25.18,55.28], dubaiCoords);
-initMap('abuDhabiMap',[24.46,54.38], abuCoords);
+const dc = {dubai_coords_json}, ac = {abu_coords_json};
+if(dc.length) initMap('dubaiMap',[25.18,55.28],dc);
+if(ac.length) initMap('abuDhabiMap',[24.46,54.38],ac);
 </script>
 </body>
 </html>'''

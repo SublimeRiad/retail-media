@@ -381,7 +381,7 @@ function initMap(id,center,markers){{
       m.fitBounds(g.getBounds(),{{padding:[15,15],maxZoom:10}});
     }}catch(e){{}}
   }},800);
-  setTimeout(()=>{{try{{m.fitBounds(g.getBounds(),{{padding:[20,20],maxZoom:10}})}}catch(e){{}}}},500);
+
 }}
 const dc = {dubai_coords_json}, ac = {abu_coords_json};
 initMap('dubaiMap',[25.18,55.28],dc);

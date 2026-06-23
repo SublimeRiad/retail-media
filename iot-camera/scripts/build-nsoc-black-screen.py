@@ -318,7 +318,7 @@ html,body{{height:100vh;overflow:hidden;font-family:'Inter',-apple-system,sans-s
   </div>
   <div class="tb-wr">
     <table class="tb">
-      <thead><tr><th style="width:30px">#</th><th>PC Name</th><th>Venue</th><th style="width:80px">Type</th><th style="width:100px">Black %</th><th style="width:80px">Player ID</th><th style="width:80px">Last Check</th></tr></thead>
+      <thead><tr><th style="width:30px">#</th><th>PC Name / Comment</th><th>Venue</th><th style="width:80px">Type</th><th style="width:100px">Black %</th><th style="width:80px">Player ID</th><th style="width:80px">Last Check</th></tr></thead>
       <tbody id="pcBody"></tbody>
     </table>
   </div>
@@ -335,7 +335,7 @@ document.getElementById('pcCount').textContent = pcs.length + ' PC' + (pcs.lengt
 document.getElementById('pcBody').innerHTML = pcs.map((p,i) => `
   <tr>
     <td style="color:#52525b">${{i+1}}</td>
-    <td class="pc-n">${{p.pc}}</td>
+    <td class="pc-n">${{p.pc}}<br><span style="color:#52525b;font-size:9px">${{p.comment}}</span></td>
     <td class="pc-ven">${{p.venue}}</td>
     <td>${{p.type}}</td>
     <td><span class="bt"><span class="bt-bar" style="background:${{p.ratio>=1?'#ef4444':p.ratio>0.95?'#f97316':'#22c55e'}};width:${{Math.min(p.ratio*36,36)}}px"></span><span class="badge ${{p.ratio>=1?'bg-re':p.ratio>0.95?'bg-or':'bg-gr'}}">${{(p.ratio*100).toFixed(0)}}%</span></span></td>

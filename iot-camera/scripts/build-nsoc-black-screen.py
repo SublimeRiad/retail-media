@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """Build nsoc-black-screen.html — query Grafana API, embed live data.
-Output: old layout with Chart.js charts, Leaflet maps, paginated table."""
+Output: Leaflet maps (Dubai + Abu Dhabi), paginated table with comment field."""
 import json, os, urllib.request, datetime, math
 
 # ── Auth ───────────────────────────────────
@@ -234,31 +234,6 @@ def build_html(data):
     # Monitored: show count if available (from API), fallback '—'
     monitored_str = str(s['monitored']) if s['monitored'] else '—'
 
-    # Build venue bar chart data (sorted by count desc, top 12)
-    venue_counts = {}
-    for pc in pcs:
-        v = pc['venue']
-        if v and v != '-':
-            venue_counts[v] = venue_counts.get(v, 0) + 1
-    venue_sorted = sorted(venue_counts.items(), key=lambda x: -x[1])[:12]
-    venue_labels_json = json.dumps([esc(v[0]) for v in venue_sorted])
-    venue_data_json = json.dumps([v[1] for v in venue_sorted])
-
-    # Build type doughnut data
-    type_counts = {}
-    for pc in pcs:
-        t = pc['type']
-        if t and t != '-':
-            type_counts[t] = type_counts.get(t, 0) + 1
-    type_sorted = sorted(type_counts.items(), key=lambda x: -x[1])
-    type_labels_json = json.dumps([esc(t[0]) for t in type_sorted])
-    type_data_json = json.dumps([t[1] for t in type_sorted])
-
-    # Type background colors
-    TC = {'Convenience Stores':'#22c55e','In-Store':'#ec4899','Malls':'#3b82f6','Outdoor':'#f59e0b','Metro':'#a78bfa'}
-    type_colors = [TC.get(t[0], '#64748b') for t in type_sorted]
-    type_colors_json = json.dumps(type_colors)
-
     # Build PC table JSON data
     pcs_json = json.dumps([{
         'pc': esc(p['pc']),
@@ -293,7 +268,7 @@ def build_html(data):
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta http-equiv="refresh" content="600">
 <title>NSOC Black Screen Monitor</title>
-<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.7/dist/chart.umd.min.js"></script>
+
 <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
 <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
@@ -323,15 +298,6 @@ body{{background:var(--bg);color:var(--t1);font-family:'Inter',-apple-system,san
 .sx .bar{{width:3px;height:18px;border-radius:2px}}
 .sx .bar.r{{background:var(--re)}}.sx .bar.g{{background:var(--gr)}}
 .sx h2{{font-size:13px;font-weight:600;text-transform:uppercase;letter-spacing:1.2px;color:var(--t2)}}
-/* Split */
-.sp{{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:16px}}
-/* Panel */
-.pa{{background:var(--s1);border-radius:10px;overflow:hidden;border:1px solid var(--b1)}}
-.pa .ph{{display:flex;align-items:center;justify-content:space-between;padding:10px 14px;border-bottom:1px solid var(--b1)}}
-.pa .ph h3{{font-size:12px;font-weight:600;color:var(--t2);text-transform:uppercase;letter-spacing:.5px}}
-.pa .pb{{padding:6px}}
-/* Charts */
-.cw{{position:relative;height:220px;width:100%}}
 /* Table */
 .tb{{width:100%;border-collapse:collapse;font-size:12px}}
 .tb th{{text-align:left;padding:8px 12px;color:var(--t3);font-weight:500;font-size:11px;text-transform:uppercase;letter-spacing:.5px;border-bottom:1px solid var(--b1)}}
@@ -363,16 +329,16 @@ body{{background:var(--bg);color:var(--t1);font-family:'Inter',-apple-system,san
   <div class="sc sc-p"><div class="l">Venue Types</div><div class="v">{s["venueTypes"]}</div><div class="m">Categories affected</div></div>
 </div>
 
-<!-- BY VENUE & TYPE -->
-<div class="sx"><div class="bar r"></div><h2>Breakdown</h2></div>
+<!-- MAPS -->
+<div class="sx"><div class="bar r"></div><h2>Geographic Overview</h2></div>
 <div class="sp">
   <div class="pa">
-    <div class="ph"><h3>Black Screens by Venue</h3></div>
-    <div class="cw"><canvas id="venueChart"></canvas></div>
+    <div class="ph"><h3>Dubai</h3></div>
+    <div id="dubaiMap" style="height:260px"></div>
   </div>
   <div class="pa">
-    <div class="ph"><h3>By Venue Type</h3></div>
-    <div class="cw"><canvas id="typeChart"></canvas></div>
+    <div class="ph"><h3>Abu Dhabi</h3></div>
+    <div id="abuDhabiMap" style="height:260px"></div>
   </div>
 </div>
 
@@ -407,10 +373,6 @@ body{{background:var(--bg);color:var(--t1);font-family:'Inter',-apple-system,san
 // ===== LIVE DATA =====
 const pcs = {pcs_json};
 
-// ===== STATS =====
-const uniqueVenues = new Set(pcs.filter(p=>p.venue!=='-'&&p.venue!=='—').map(p=>p.venue));
-const uniqueTypes = new Set(pcs.filter(p=>p.type!=='-'&&p.type!=='—').map(p=>p.type));
-
 // ===== TABLE =====
 const perPage = 15; let curPage = 0;
 function renderTable(){{
@@ -430,39 +392,6 @@ function renderTable(){{
 function nextPage(){{if((curPage+1)*perPage < pcs.length){{curPage++;renderTable()}}}}
 function prevPage(){{if(curPage>0){{curPage--;renderTable()}}}}
 renderTable();
-
-// ===== VENUE CHART =====
-const venueCounts = {{}};
-pcs.forEach(p => {{ if(p.venue!=='-'&&p.venue!=='—') venueCounts[p.venue] = (venueCounts[p.venue]||0) + 1 }});
-const sorted = Object.entries(venueCounts).sort((a,b)=>b[1]-a[1]).slice(0,12);
-new Chart(document.getElementById('venueChart'), {{
-  type:'bar',
-  data:{{ labels:sorted.map(s=>s[0]), datasets:[{{label:'Black Screens', data:sorted.map(s=>s[1]), backgroundColor:['#ef4444','#f59e0b','#3b82f6','#22c55e','#a78bfa','#ec4899','#06b6d4','#f97316','#8b5cf6','#14b8a6','#e11d48','#84cc16'], borderRadius:4 }}] }},
-  options:{{
-    indexAxis:'y', responsive:true, maintainAspectRatio:false,
-    plugins:{{legend:{{display:false}}}},
-    scales:{{
-      x:{{grid:{{color:'rgba(255,255,255,.04)'}}, ticks:{{color:'#64748b',font:{{size:10}}}}, beginAtZero:true }},
-      y:{{grid:{{display:false}}, ticks:{{color:'#64748b',font:{{size:10}}}} }}
-    }}
-  }}
-}});
-
-// ===== TYPE CHART =====
-const typeCounts = {{}};
-pcs.forEach(p => {{ if(p.type!=='-'&&p.type!=='—') typeCounts[p.type] = (typeCounts[p.type]||0)+1 }});
-const typeSorted = Object.entries(typeCounts).sort((a,b)=>b[1]-a[1]);
-const typeColors = {{'Convenience Stores':'#22c55e','In-Store':'#ec4899','Malls':'#3b82f6','Outdoor':'#f59e0b','Metro':'#a78bfa'}};
-new Chart(document.getElementById('typeChart'), {{
-  type:'doughnut',
-  data:{{ labels:typeSorted.map(s=>s[0]), datasets:[{{ data:typeSorted.map(s=>s[1]), backgroundColor:typeSorted.map(s=>typeColors[s[0]]||'#64748b'), borderWidth:0 }}] }},
-  options:{{
-    responsive:true, maintainAspectRatio:false,
-    plugins:{{
-      legend:{{ position:'right', labels:{{ color:'#94a3b8', font:{{size:11}}, boxWidth:10, padding:12 }} }}
-    }}
-  }}
-}});
 
 // ===== MAPS =====
 function initMap(id,center,markers){{

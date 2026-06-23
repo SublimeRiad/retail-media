@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta http-equiv="refresh" content="600">
 <title>NSOC Black Screen Monitor</title>
-<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.7/dist/chart.umd.min.js"></script>
+
 <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
 <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
@@ -35,15 +35,6 @@ body{background:var(--bg);color:var(--t1);font-family:'Inter',-apple-system,sans
 .sx .bar{width:3px;height:18px;border-radius:2px}
 .sx .bar.r{background:var(--re)}.sx .bar.g{background:var(--gr)}
 .sx h2{font-size:13px;font-weight:600;text-transform:uppercase;letter-spacing:1.2px;color:var(--t2)}
-/* Split */
-.sp{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:16px}
-/* Panel */
-.pa{background:var(--s1);border-radius:10px;overflow:hidden;border:1px solid var(--b1)}
-.pa .ph{display:flex;align-items:center;justify-content:space-between;padding:10px 14px;border-bottom:1px solid var(--b1)}
-.pa .ph h3{font-size:12px;font-weight:600;color:var(--t2);text-transform:uppercase;letter-spacing:.5px}
-.pa .pb{padding:6px}
-/* Charts */
-.cw{position:relative;height:220px;width:100%}
 /* Table */
 .tb{width:100%;border-collapse:collapse;font-size:12px}
 .tb th{text-align:left;padding:8px 12px;color:var(--t3);font-weight:500;font-size:11px;text-transform:uppercase;letter-spacing:.5px;border-bottom:1px solid var(--b1)}
@@ -65,7 +56,7 @@ body{background:var(--bg);color:var(--t1);font-family:'Inter',-apple-system,sans
 <div class="d">
 
 <!-- HEADER -->
-<div class="hd"><div class="dot"></div><h1>NSOC Black Screen</h1><div class="sub">Screens with black ratio ≥ 95%<span class="ts">2026-06-23 01:12 UTC</span><span class="mode">LIVE</span></div></div>
+<div class="hd"><div class="dot"></div><h1>NSOC Black Screen</h1><div class="sub">Screens with black ratio ≥ 95%<span class="ts">2026-06-23 01:26 UTC</span><span class="mode">LIVE</span></div></div>
 
 <!-- STATS -->
 <div class="st">
@@ -75,16 +66,16 @@ body{background:var(--bg);color:var(--t1);font-family:'Inter',-apple-system,sans
   <div class="sc sc-p"><div class="l">Venue Types</div><div class="v">5</div><div class="m">Categories affected</div></div>
 </div>
 
-<!-- BY VENUE & TYPE -->
-<div class="sx"><div class="bar r"></div><h2>Breakdown</h2></div>
+<!-- MAPS -->
+<div class="sx"><div class="bar r"></div><h2>Geographic Overview</h2></div>
 <div class="sp">
   <div class="pa">
-    <div class="ph"><h3>Black Screens by Venue</h3></div>
-    <div class="cw"><canvas id="venueChart"></canvas></div>
+    <div class="ph"><h3>Dubai</h3></div>
+    <div id="dubaiMap" style="height:260px"></div>
   </div>
   <div class="pa">
-    <div class="ph"><h3>By Venue Type</h3></div>
-    <div class="cw"><canvas id="typeChart"></canvas></div>
+    <div class="ph"><h3>Abu Dhabi</h3></div>
+    <div id="abuDhabiMap" style="height:260px"></div>
   </div>
 </div>
 
@@ -117,11 +108,7 @@ body{background:var(--bg);color:var(--t1);font-family:'Inter',-apple-system,sans
 
 <script>
 // ===== LIVE DATA =====
-const pcs = [{"pc": "PC-00E0971CA91B", "venue": "REEM MALL", "type": "Malls", "ratio": 1.0, "playerid": "948185370", "last_check": "2026-06-22", "comment": "R39-12SP-C-FM02 - CONCOURSE LEFT"}, {"pc": "DESKTOP-EFLKTKP", "venue": "ENOC Dubai", "type": "Convenience Stores", "ratio": 1.0, "playerid": "1017-PELMET", "last_check": "2026-06-22", "comment": "ENOC-DXB-PILLAR-B"}, {"pc": "PC-E454E8CBE81A", "venue": "ENOC Umm Al Quwain", "type": "Convenience Stores", "ratio": 1.0, "playerid": "1301-PELMET", "last_check": "2026-06-22", "comment": "A122-KIOSK-S"}, {"pc": "PC-A4BB6DD5620C", "venue": "ENOC Sharjah", "type": "Convenience Stores", "ratio": 1.0, "playerid": "1124-PELMET", "last_check": "2026-06-22", "comment": "SHJ-MAIN-01"}];
-
-// ===== STATS =====
-const uniqueVenues = new Set(pcs.filter(p=>p.venue!=='-'&&p.venue!=='—').map(p=>p.venue));
-const uniqueTypes = new Set(pcs.filter(p=>p.type!=='-'&&p.type!=='—').map(p=>p.type));
+const pcs = [{"pc": "PC-00E0971CA91B", "venue": "REEM MALL", "type": "Malls", "ratio": 1.0, "playerid": "948185370", "last_check": "2026-06-22", "comment": "R39-12SP-C-FM02 - CONCOURSE LEFT"}, {"pc": "DESKTOP-EFLKTKP", "venue": "ENOC Dubai", "type": "Convenience Stores", "ratio": 1.0, "playerid": "1017-PELMET", "last_check": "2026-06-22", "comment": "ENOC-DXB-PILLAR-B"}, {"pc": "PC-E454E8CBE81A", "venue": "ENOC Umm Al Quwain", "type": "Convenience Stores", "ratio": 0.98, "playerid": "1301-PELMET", "last_check": "2026-06-22", "comment": "A122-KIOSK-S"}];
 
 // ===== TABLE =====
 const perPage = 15; let curPage = 0;
@@ -143,39 +130,6 @@ function nextPage(){if((curPage+1)*perPage < pcs.length){curPage++;renderTable()
 function prevPage(){if(curPage>0){curPage--;renderTable()}}
 renderTable();
 
-// ===== VENUE CHART =====
-const venueCounts = {};
-pcs.forEach(p => { if(p.venue!=='-'&&p.venue!=='—') venueCounts[p.venue] = (venueCounts[p.venue]||0) + 1 });
-const sorted = Object.entries(venueCounts).sort((a,b)=>b[1]-a[1]).slice(0,12);
-new Chart(document.getElementById('venueChart'), {
-  type:'bar',
-  data:{ labels:sorted.map(s=>s[0]), datasets:[{label:'Black Screens', data:sorted.map(s=>s[1]), backgroundColor:['#ef4444','#f59e0b','#3b82f6','#22c55e','#a78bfa','#ec4899','#06b6d4','#f97316','#8b5cf6','#14b8a6','#e11d48','#84cc16'], borderRadius:4 }] },
-  options:{
-    indexAxis:'y', responsive:true, maintainAspectRatio:false,
-    plugins:{legend:{display:false}},
-    scales:{
-      x:{grid:{color:'rgba(255,255,255,.04)'}, ticks:{color:'#64748b',font:{size:10}}, beginAtZero:true },
-      y:{grid:{display:false}, ticks:{color:'#64748b',font:{size:10}} }
-    }
-  }
-});
-
-// ===== TYPE CHART =====
-const typeCounts = {};
-pcs.forEach(p => { if(p.type!=='-'&&p.type!=='—') typeCounts[p.type] = (typeCounts[p.type]||0)+1 });
-const typeSorted = Object.entries(typeCounts).sort((a,b)=>b[1]-a[1]);
-const typeColors = {'Convenience Stores':'#22c55e','In-Store':'#ec4899','Malls':'#3b82f6','Outdoor':'#f59e0b','Metro':'#a78bfa'};
-new Chart(document.getElementById('typeChart'), {
-  type:'doughnut',
-  data:{ labels:typeSorted.map(s=>s[0]), datasets:[{ data:typeSorted.map(s=>s[1]), backgroundColor:typeSorted.map(s=>typeColors[s[0]]||'#64748b'), borderWidth:0 }] },
-  options:{
-    responsive:true, maintainAspectRatio:false,
-    plugins:{
-      legend:{ position:'right', labels:{ color:'#94a3b8', font:{size:11}, boxWidth:10, padding:12 } }
-    }
-  }
-});
-
 // ===== MAPS =====
 function initMap(id,center,markers){
   if(markers.length===0) return;
@@ -184,7 +138,7 @@ function initMap(id,center,markers){
     L.circleMarker([p[0],p[1]], { radius:8, fillColor:'#ef4444', color:'#fff', weight:1.5, opacity:0.8, fillOpacity:0.5 }).addTo(m);
   });
 }
-const dubaiCoords = [[25.197, 55.274]];
+const dubaiCoords = [[25.197, 55.274], [25.203, 55.278]];
 const abuCoords = [];
 initMap('dubaiMap',[25.18,55.28], dubaiCoords);
 initMap('abuDhabiMap',[24.46,54.38], abuCoords);

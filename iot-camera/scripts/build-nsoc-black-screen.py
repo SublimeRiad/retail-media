@@ -245,18 +245,13 @@ def build_html(data):
         'comment': esc(p.get('comment', '-'))
     } for p in pcs])
 
-    # Split coordinates into Dubai vs Abu Dhabi
-    dubai_markers = []
-    abu_markers = []
+    # Combine all coordinates into one map
+    all_markers = []
     for c in coords:
         if c['lat'] and c['lng']:
-            if c['lat'] >= 25.0:  # Dubai approximate
-                dubai_markers.append([c['lat'], c['lng']])
-            else:
-                abu_markers.append([c['lat'], c['lng']])
+            all_markers.append([c['lat'], c['lng']])
 
-    dubai_coords_json = json.dumps(dubai_markers)
-    abu_coords_json = json.dumps(abu_markers)
+    all_coords_json = json.dumps(all_markers)
 
     # Timestamp
     ts = datetime.datetime.utcnow().strftime('%Y-%m-%d %H:%M UTC')
@@ -275,12 +270,12 @@ def build_html(data):
 *{{margin:0;padding:0;box-sizing:border-box}}
 html,body{{height:100vh;overflow:hidden;font-family:'Inter',sans-serif;background:#080a0e;color:#e0e2e6}}
 /* ── TOP BAR ── */
-.top{{display:flex;align-items:center;gap:8px;padding:5px 14px;background:#0c0e13;border-bottom:1px solid #161b22;height:42px;flex-shrink:0}}
+.top{{display:flex;align-items:center;gap:12px;padding:6px 16px;background:#0c0e13;border-bottom:1px solid #161b22;height:52px;flex-shrink:0}}
 .top .dot{{width:3px;height:16px;background:#ef4444;border-radius:2px}}
 .top h1{{font-size:12px;font-weight:700;color:#ef4444;white-space:nowrap}}
-.stb{{display:flex;align-items:center;gap:3px;padding:1px 8px;border-radius:3px;font-size:9px;font-weight:600;height:20px;border:1px solid rgba(255,255,255,.06)}}
-.stb .sv{{font-size:12px;font-weight:800}}
-.stb .sl{{color:#64748b}}
+.stb{{display:flex;align-items:center;gap:5px;padding:3px 12px;border-radius:5px;font-size:11px;font-weight:600;height:28px;border:1px solid rgba(255,255,255,.08)}}
+.stb .sv{{font-size:20px;font-weight:800}}
+.stb .sl{{color:#64748b;font-size:10px}}
 .sr{{background:rgba(239,68,68,.12);color:#ef4444}}.sb{{background:rgba(59,130,246,.12);color:#60a5fa}}.so{{background:rgba(245,158,11,.12);color:#f59e0b}}.sp{{background:rgba(168,85,247,.12);color:#a78bfa}}
 .top .spc{{flex:1}}
 .top .ts{{color:#52525b;font-size:8px;font-family:monospace}}
@@ -337,8 +332,7 @@ html,body{{height:100vh;overflow:hidden;font-family:'Inter',sans-serif;backgroun
   <!-- Left: Maps column -->
   <div class="mcol">
     <span class="mlabel"><span style="color:var(--re)">●</span> Geographic Overview</span>
-    <div class="mmap" id="dubaiMap"></div>
-    <div class="mmap" id="abuDhabiMap"></div>
+    <div class="mmap" id="combinedMap"></div>
   </div>
   <!-- Right: Auto-scroll PC table -->
   <div class="tcol">
@@ -375,13 +369,14 @@ document.querySelector('.tb-sc tbody').innerHTML = rows + rows;
 
 function initMap(id,center,markers){{
   if(markers.length===0) return;
-  const m = L.map(id,{{center,zoom:12,layers:[L.tileLayer('https://{{s}}.basemaps.cartocdn.com/dark_all/{{z}}/{{x}}/{{y}}{{r}}.png',{{subdomains:'abcd',maxZoom:19}})],zoomControl:false,attributionControl:false,dragging:false,scrollWheelZoom:false}});
+  const m = L.map(id,{{center,zoom:9,layers:[L.tileLayer('https://{{s}}.basemaps.cartocdn.com/dark_all/{{z}}/{{x}}/{{y}}{{r}}.png',{{subdomains:'abcd',maxZoom:19}})],zoomControl:false,attributionControl:false,dragging:false,scrollWheelZoom:false}});
   setTimeout(()=>m.invalidateSize(),300);
-  markers.forEach(p=>{{L.circleMarker([p[0],p[1]],{{radius:5,fillColor:'#ef4444',color:'#fff',weight:1.2,opacity:.8,fillOpacity:.5}}).addTo(m)}});
+  const g=L.featureGroup([]);
+  markers.forEach(p=>{{const mk=L.circleMarker([p[0],p[1]],{{radius:6,fillColor:'#ef4444',color:'#fff',weight:1.5,opacity:.8,fillOpacity:.5}}).addTo(m);g.addLayer(mk)}});
+  setTimeout(()=>{{try{{m.fitBounds(g.getBounds(),{{padding:[20,20],maxZoom:10}})}}catch(e){{}}}},500);
 }}
-const dc = {dubai_coords_json}, ac = {abu_coords_json};
-if(dc.length) initMap('dubaiMap',[25.18,55.28],dc);
-if(ac.length) initMap('abuDhabiMap',[24.46,54.38],ac);
+const allCoords = {all_coords_json};
+initMap('combinedMap',[24.9,54.9],allCoords);
 </script>
 </body>
 </html>'''

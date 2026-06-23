@@ -273,7 +273,7 @@ def build_html(data):
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 <style>
 *{{margin:0;padding:0;box-sizing:border-box}}
-html,body{{height:100vh;overflow:hidden;font-family:'Inter',sans-serif;background:#080a0e;color:#e0e2e6}}
+html,body{{height:100vh;overflow:hidden;font-family:'Inter',sans-serif;background:#080a0e;color:#e0e2e6;display:flex;flex-direction:column}}
 /* ── TOP BAR ── */
 .top{{display:flex;align-items:center;gap:12px;padding:6px 16px;background:#0c0e13;border-bottom:1px solid #161b22;height:52px;flex-shrink:0}}
 .top .dot{{width:3px;height:16px;background:#ef4444;border-radius:2px}}
@@ -286,7 +286,7 @@ html,body{{height:100vh;overflow:hidden;font-family:'Inter',sans-serif;backgroun
 .top .ts{{color:#52525b;font-size:8px;font-family:monospace}}
 .top .mode{{font-size:7px;font-weight:700;padding:1px 6px;border-radius:6px;text-transform:uppercase;background:rgba(34,197,94,.2);color:#22c55e;border:1px solid rgba(34,197,94,.3)}}
 /* ── MAIN SPLIT ── */
-.main{{display:flex;flex:1;min-height:0;padding:4px 10px 4px;gap:6px;height:1px}}
+.main{{display:flex;flex:1;min-height:0;padding:4px 10px 4px;gap:6px}}
 /* Left: maps */
 .mcol{{flex:0.48;display:flex;flex-direction:column;gap:4px;min-width:0}}
 .mcol .mlabel{{font-size:8px;color:#64748b;text-transform:uppercase;letter-spacing:.4px;font-weight:600;padding:0 2px}}

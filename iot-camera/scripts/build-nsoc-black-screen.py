@@ -292,9 +292,7 @@ html,body{{height:100vh;overflow:hidden;font-family:'Inter',sans-serif;backgroun
 .tcol .thdr h2{{font-size:9px;color:#64748b;text-transform:uppercase;letter-spacing:.5px;font-weight:600}}
 .tcol .thdr .cnt{{font-size:8px;color:#52525b}}
 .tb-wr{{flex:1;overflow:hidden;border:1px solid #161b22;border-radius:4px;position:relative}}
-.tb-sc{{animation:scUp 50s linear infinite}}
-.tb-sc:hover{{animation-play-state:paused}}
-@keyframes scUp{{0%{{transform:translateY(0)}}100%{{transform:translateY(-50%)}}}}
+.tb-sc{{overflow-y:auto;height:100%}}
 .tb{{width:100%;border-collapse:collapse;font-size:10px}}
 .tb th{{position:sticky;top:0;z-index:2;text-align:left;padding:4px 8px;color:#52525b;font-weight:600;font-size:8px;text-transform:uppercase;letter-spacing:.3px;background:#080a0e;border-bottom:1px solid #161b22}}
 .tb td{{padding:3px 8px;border-bottom:1px solid rgba(255,255,255,.015);color:#94a3b8}}
@@ -365,14 +363,19 @@ const rows = pcs.map((p,i)=>`
     <td class="pp">${{p.playerid}}</td>
     <td>${{p.last_check}}</td>
   </tr>`).join('');
-document.querySelector('.tb-sc tbody').innerHTML = rows + rows;
+document.querySelector('.tb-sc tbody').innerHTML = rows;
 
 function initMap(id,center,markers){{
   if(markers.length===0) return;
   const m = L.map(id,{{center,zoom:9,layers:[L.tileLayer('https://{{s}}.basemaps.cartocdn.com/dark_all/{{z}}/{{x}}/{{y}}{{r}}.png',{{subdomains:'abcd',maxZoom:19}})],zoomControl:false,attributionControl:false,dragging:false,scrollWheelZoom:false}});
-  setTimeout(()=>m.invalidateSize(),300);
-  const g=L.featureGroup([]);
-  markers.forEach(p=>{{const mk=L.circleMarker([p[0],p[1]],{{radius:6,fillColor:'#ef4444',color:'#fff',weight:1.5,opacity:.8,fillOpacity:.5}}).addTo(m);g.addLayer(mk)}});
+  setTimeout(()=>m.invalidateSize(),500);
+  setTimeout(()=>{{
+    try{{
+      const g=L.featureGroup(markers.map(p=>L.circleMarker([p[0],p[1]],{{radius:6,fillColor:'#ef4444',color:'#fff',weight:1.5,opacity:.8,fillOpacity:.5}})));
+      g.eachLayer(l=>l.addTo(m));
+      m.fitBounds(g.getBounds(),{{padding:[15,15],maxZoom:10}});
+    }}catch(e){{}}
+  }},800);
   setTimeout(()=>{{try{{m.fitBounds(g.getBounds(),{{padding:[20,20],maxZoom:10}})}}catch(e){{}}}},500);
 }}
 const allCoords = {all_coords_json};

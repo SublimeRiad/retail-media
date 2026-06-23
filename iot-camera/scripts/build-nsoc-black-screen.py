@@ -245,13 +245,18 @@ def build_html(data):
         'comment': esc(p.get('comment', '-'))
     } for p in pcs])
 
-    # Combine all coordinates into one map
-    all_markers = []
+    # Split coordinates into Dubai vs Abu Dhabi
+    dubai_markers = []
+    abu_markers = []
     for c in coords:
         if c['lat'] and c['lng']:
-            all_markers.append([c['lat'], c['lng']])
+            if c['lat'] >= 25.0:
+                dubai_markers.append([c['lat'], c['lng']])
+            else:
+                abu_markers.append([c['lat'], c['lng']])
 
-    all_coords_json = json.dumps(all_markers)
+    dubai_coords_json = json.dumps(dubai_markers)
+    abu_coords_json = json.dumps(abu_markers)
 
     # Timestamp
     ts = datetime.datetime.utcnow().strftime('%Y-%m-%d %H:%M UTC')
@@ -291,8 +296,8 @@ html,body{{height:100vh;overflow:hidden;font-family:'Inter',sans-serif;backgroun
 .tcol .thdr{{display:flex;align-items:center;justify-content:space-between;padding:0 2px 2px;flex-shrink:0}}
 .tcol .thdr h2{{font-size:9px;color:#64748b;text-transform:uppercase;letter-spacing:.5px;font-weight:600}}
 .tcol .thdr .cnt{{font-size:8px;color:#52525b}}
-.tb-wr{{flex:1;overflow:hidden;border:1px solid #161b22;border-radius:4px;position:relative}}
-.tb-sc{{overflow-y:auto;height:100%}}
+.tb-wr{{flex:1;overflow-y:auto;border:1px solid #161b22;border-radius:4px;min-height:0}}
+
 .tb{{width:100%;border-collapse:collapse;font-size:10px}}
 .tb th{{position:sticky;top:0;z-index:2;text-align:left;padding:4px 8px;color:#52525b;font-weight:600;font-size:8px;text-transform:uppercase;letter-spacing:.3px;background:#080a0e;border-bottom:1px solid #161b22}}
 .tb td{{padding:3px 8px;border-bottom:1px solid rgba(255,255,255,.015);color:#94a3b8}}
@@ -330,7 +335,8 @@ html,body{{height:100vh;overflow:hidden;font-family:'Inter',sans-serif;backgroun
   <!-- Left: Maps column -->
   <div class="mcol">
     <span class="mlabel"><span style="color:var(--re)">●</span> Geographic Overview</span>
-    <div class="mmap" id="combinedMap"></div>
+    <div class="mmap" id="dubaiMap"></div>
+    <div class="mmap" id="abuDhabiMap"></div>
   </div>
   <!-- Right: Auto-scroll PC table -->
   <div class="tcol">
@@ -339,12 +345,10 @@ html,body{{height:100vh;overflow:hidden;font-family:'Inter',sans-serif;backgroun
       <span class="cnt" id="pcCount"></span>
     </div>
     <div class="tb-wr">
-      <div class="tb-sc">
-        <table class="tb">
+      <table class="tb">
           <thead><tr><th style="width:24px">#</th><th>PC Name / Comment</th><th style="width:70px">Venue</th><th style="width:55px">Type</th><th style="width:70px">Black %</th><th style="width:60px">Player</th><th style="width:55px">Checked</th></tr></thead>
           <tbody></tbody>
         </table>
-      </div>
     </div>
   </div>
 </div>
@@ -363,7 +367,7 @@ const rows = pcs.map((p,i)=>`
     <td class="pp">${{p.playerid}}</td>
     <td>${{p.last_check}}</td>
   </tr>`).join('');
-document.querySelector('.tb-sc tbody').innerHTML = rows;
+document.querySelector('.tb-wr table tbody').innerHTML = rows;
 
 function initMap(id,center,markers){{
   if(markers.length===0) return;
@@ -378,8 +382,9 @@ function initMap(id,center,markers){{
   }},800);
   setTimeout(()=>{{try{{m.fitBounds(g.getBounds(),{{padding:[20,20],maxZoom:10}})}}catch(e){{}}}},500);
 }}
-const allCoords = {all_coords_json};
-initMap('combinedMap',[24.9,54.9],allCoords);
+const dc = {dubai_coords_json}, ac = {abu_coords_json};
+initMap('dubaiMap',[25.18,55.28],dc);
+initMap('abuDhabiMap',[24.46,54.38],ac);
 </script>
 </body>
 </html>'''

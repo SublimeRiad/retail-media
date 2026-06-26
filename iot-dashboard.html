@@ -7,8 +7,6 @@
 <style>
 *{margin:0;padding:0;box-sizing:border-box}
 body{font-family:Inter,-apple-system,BlinkMacSystemFont,sans-serif;background:#f1f5f9;color:#1e293b;min-height:100vh}
-
-/* Header */
 .hdr{background:#0f172a;padding:0 20px;height:48px;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid #1e293b}
 .hdr .left{display:flex;align-items:center;gap:12px}
 .hdr .menu{color:#64748b;cursor:pointer;font-size:20px;line-height:1}
@@ -22,7 +20,6 @@ body{font-family:Inter,-apple-system,BlinkMacSystemFont,sans-serif;background:#f
 .sub .refresh{display:flex;align-items:center;gap:6px;color:#64748b;font-size:12px;cursor:pointer;padding:4px 10px;border-radius:4px;border:1px solid #e2e8f0}
 .sub .refresh:hover{background:#f8fafc}
 
-/* Grid */
 .grid{display:grid;grid-template-columns:1fr 1fr;gap:16px;padding:16px 20px}
 .card{background:#fff;border-radius:8px;border:1px solid #e2e8f0;overflow:hidden}
 .card.full{grid-column:1/-1}
@@ -30,7 +27,6 @@ body{font-family:Inter,-apple-system,BlinkMacSystemFont,sans-serif;background:#f
 .card h3 .link{font-size:11px;font-weight:400;color:#3b82f6;cursor:pointer}
 .card h3 .link:hover{text-decoration:underline}
 
-/* Table */
 table{width:100%;border-collapse:collapse;font-size:12px}
 th{padding:8px 14px;background:#f8fafc;color:#64748b;font-size:10px;text-transform:uppercase;letter-spacing:.5px;text-align:left;font-weight:600;border-bottom:1px solid #e2e8f0}
 td{padding:8px 14px;border-bottom:1px solid #f1f5f9;font-size:12px}
@@ -50,7 +46,6 @@ tr:hover{background:#f8fafc}
 .logs{color:#3b82f6;font-size:11px;cursor:pointer}
 .logs:hover{text-decoration:underline}
 
-/* Device by location */
 .vrow{display:grid;grid-template-columns:2fr 1fr 1fr 1fr 1fr;padding:8px 14px;border-bottom:1px solid #f1f5f9;font-size:12px;align-items:center}
 .vrow:hover{background:#f8fafc}
 .vrow.header{background:#f8fafc;color:#64748b;font-size:10px;text-transform:uppercase;letter-spacing:.5px;font-weight:600;padding:8px 14px;border-bottom:1px solid #e2e8f0}
@@ -93,27 +88,87 @@ tr:hover{background:#f8fafc}
     <h3>Last 4 hours errors and warnings</h3>
     <table>
       <tr><th>Device</th><th>State</th><th>Total errors</th><th>Warnings</th></tr>
-      <tr><td><a class="mac" href="#">a1:00:5e:ed:02:bb</a></td><td><span class="st tracking">TRACKING</span></td><td><span class="err">373</span></td><td><span class="warn">240</span></td></tr>
-      <tr><td><a class="mac" href="#">a1:00:5e:ed:01:f4</a></td><td><span class="st ready">READY</span></td><td><span class="err">114</span></td><td><span class="no">0</span></td></tr>
-      <tr><td><a class="mac" href="#">a1:00:5e:ed:02:98</a></td><td><span class="st ready">READY</span></td><td><span class="err">111</span></td><td><span class="no">0</span></td></tr>
-      <tr><td><a class="mac" href="#">a1:00:5e:ed:02:26</a></td><td><span class="st ready">READY</span></td><td><span class="err">81</span></td><td><span class="no">0</span></td></tr>
-      <tr><td><a class="mac" href="#">a1:00:5e:ed:00:74</a></td><td><span class="st ready">READY</span></td><td><span class="err">74</span></td><td><span class="warn">30</span></td></tr>
-      <tr><td><a class="mac" href="#">a1:00:5e:ed:02:b0</a></td><td><span class="st tracking">TRACKING</span></td><td><span class="err">67</span></td><td><span class="warn">34</span></td></tr>
-      <tr><td><a class="mac" href="#">a1:00:5e:ed:02:0d</a></td><td><span class="st tracking">TRACKING</span></td><td><span class="err">52</span></td><td><span class="warn">29</span></td></tr>
-      <tr><td><a class="mac" href="#">a1:00:5e:ed:02:a4</a></td><td><span class="st ready">READY</span></td><td><span class="err">51</span></td><td><span class="warn">17</span></td></tr>
-      <tr><td><a class="mac" href="#">a1:00:5e:ed:02:10</a></td><td><span class="st tracking">TRACKING</span></td><td><span class="err">49</span></td><td><span class="warn">23</span></td></tr>
-      <tr><td><a class="mac" href="#">48:b0:2d:ea:5a:db</a></td><td><span class="st offline">Offline</span></td><td><span class="err">47</span></td><td><span class="no">0</span></td></tr>
-      <tr><td><a class="mac" href="#">a1:00:5e:ed:01:c2</a></td><td><span class="st ready">READY</span></td><td><span class="err">44</span></td><td><span class="warn">21</span></td></tr>
-      <tr><td><a class="mac" href="#">a1:00:5e:ed:02:86</a></td><td><span class="st ready">READY</span></td><td><span class="err">41</span></td><td><span class="warn">22</span></td></tr>
+      
+  <tr><td><a class="mac" href="#">a1:00:5e:ed:02:35</a></td>
+  <td><span class="st ready">READY</span></td>
+  <td><span class="err">371</span></td>
+  <td><span class="warn">2</span></td></tr>
+
+
+  <tr><td><a class="mac" href="#">a1:00:5e:ed:02:bb</a></td>
+  <td><span class="st tracking">TRACKING</span></td>
+  <td><span class="err">246</span></td>
+  <td><span class="warn">148</span></td></tr>
+
+
+  <tr><td><a class="mac" href="#">a1:00:5e:ed:00:74</a></td>
+  <td><span class="st ready">READY</span></td>
+  <td><span class="err">51</span></td>
+  <td><span class="warn">20</span></td></tr>
+
+
+  <tr><td><a class="mac" href="#">a1:00:5e:ed:02:a4</a></td>
+  <td><span class="st ready">READY</span></td>
+  <td><span class="err">45</span></td>
+  <td><span class="warn">13</span></td></tr>
+
+
+  <tr><td><a class="mac" href="#">a1:00:5e:ed:02:b0</a></td>
+  <td><span class="st tracking">TRACKING</span></td>
+  <td><span class="err">44</span></td>
+  <td><span class="warn">15</span></td></tr>
+
+
+  <tr><td><a class="mac" href="#">a1:00:5e:ed:02:0d</a></td>
+  <td><span class="st tracking">TRACKING</span></td>
+  <td><span class="err">37</span></td>
+  <td><span class="warn">20</span></td></tr>
+
+
+  <tr><td><a class="mac" href="#">a1:00:5e:ed:02:91</a></td>
+  <td><span class="st tracking">TRACKING</span></td>
+  <td><span class="err">36</span></td>
+  <td><span class="warn">20</span></td></tr>
+
+
+  <tr><td><a class="mac" href="#">3c:6d:66:03:ac:a5</a></td>
+  <td><span class="st ready">READY</span></td>
+  <td><span class="err">34</span></td>
+  <td><span class="warn">1</span></td></tr>
+
+
+  <tr><td><a class="mac" href="#">a1:00:5e:ed:01:be</a></td>
+  <td><span class="st tracking">TRACKING</span></td>
+  <td><span class="err">33</span></td>
+  <td><span class="warn">18</span></td></tr>
+
+
+  <tr><td><a class="mac" href="#">a1:00:5e:ed:02:b5</a></td>
+  <td><span class="st ready">READY</span></td>
+  <td><span class="err">32</span></td>
+  <td><span class="warn">21</span></td></tr>
+
+
+  <tr><td><a class="mac" href="#">a1:00:5e:ed:01:c2</a></td>
+  <td><span class="st ready">READY</span></td>
+  <td><span class="err">32</span></td>
+  <td><span class="warn">11</span></td></tr>
+
+
+  <tr><td><a class="mac" href="#">48:b0:2d:eb:36:7f</a></td>
+  <td><span class="st ready">READY</span></td>
+  <td><span class="err">32</span></td>
+  <td><span class="warn">1</span></td></tr>
+
     </table>
     <div class="pagination">
       <span>Items per page: 12</span>
-      <span>1 – 12 of 548</span>
+      <span>1 – 12 of 550</span>
       <div class="pbtn">
         <button disabled>‹</button>
         <button disabled>‹‹</button>
-        <button>›</button>
-        <button>››</button>
+        <button disabled>›</button>
+        <button disabled>››</button>
       </div>
     </div>
   </div>
@@ -123,27 +178,92 @@ tr:hover{background:#f8fafc}
     <h3>Devices that may need attention <span class="link">See in devices list →</span></h3>
     <table>
       <tr><th>Device</th><th>State</th><th>Last seen</th><th>Cmds</th><th>Links</th></tr>
-      <tr><td><a class="mac" href="#">a1:00:5e:ed:00:37</a></td><td><span class="st offline">Offline</span></td><td><span class="age">2d 23h 36m ago.</span></td><td><span class="err">1</span></td><td><span class="logs">Logs</span></td></tr>
-      <tr><td><a class="mac" href="#">48:b0:2d:eb:16:ff</a></td><td><span class="st offline">Offline</span></td><td><span class="age">1d 13h 41m ago.</span></td><td class="no">0</td><td><span class="logs">Logs</span></td></tr>
-      <tr><td><a class="mac" href="#">48:b0:2d:eb:17:d9</a></td><td><span class="st offline">Offline</span></td><td><span class="age">1d 13h 41m ago.</span></td><td class="no">0</td><td><span class="logs">Logs</span></td></tr>
-      <tr><td><a class="mac" href="#">48:b0:2d:ea:5a:db</a></td><td><span class="st offline">Offline</span></td><td><span class="age">1h 55m ago.</span></td><td class="no">0</td><td><span class="logs">Logs</span></td></tr>
-      <tr><td><a class="mac" href="#">48:b0:2d:eb:17:11</a></td><td><span class="st offline">Offline</span></td><td><span class="age">2h 48m ago.</span></td><td class="no">0</td><td><span class="logs">Logs</span></td></tr>
-      <tr><td><a class="mac" href="#">3c:6d:66:03:b0:8d</a></td><td><span class="st offline">Offline</span></td><td><span class="age">2h 48m ago.</span></td><td class="no">0</td><td><span class="logs">Logs</span></td></tr>
-      <tr><td><a class="mac" href="#">48:b0:2d:eb:36:45</a></td><td><span class="st offline">Offline</span></td><td><span class="age">2h 48m ago.</span></td><td class="no">0</td><td><span class="logs">Logs</span></td></tr>
-      <tr><td><a class="mac" href="#">48:b0:2d:eb:16:3d</a></td><td><span class="st offline">Offline</span></td><td><span class="age">2h 48m ago.</span></td><td class="no">0</td><td><span class="logs">Logs</span></td></tr>
-      <tr><td><a class="mac" href="#">48:b0:2d:eb:16:fa</a></td><td><span class="st offline">Offline</span></td><td><span class="age">3h 39m ago.</span></td><td class="no">0</td><td><span class="logs">Logs</span></td></tr>
-      <tr><td><a class="mac" href="#">48:b0:2d:ea:56:d2</a></td><td><span class="st offline">Offline</span></td><td><span class="age">4h 37m ago.</span></td><td class="no">0</td><td><span class="logs">Logs</span></td></tr>
-      <tr><td><a class="mac" href="#">48:b0:2d:eb:16:ef</a></td><td><span class="st offline">Offline</span></td><td><span class="age">10h 38m ago.</span></td><td class="no">0</td><td><span class="logs">Logs</span></td></tr>
-      <tr><td><a class="mac" href="#">48:b0:2d:eb:36:74</a></td><td><span class="st offline">Offline</span></td><td><span class="age">16h 33m ago.</span></td><td class="no">0</td><td><span class="logs">Logs</span></td></tr>
+      
+  <tr><td><a class="mac" href="#">a1:00:5e:ed:02:8a</a></td>
+  <td><span class="st offline">OFFLINE</span></td>
+  <td><span class="age">1d 20h 45m ago.</span></td>
+  <td><span class="no">0</span></td>
+  <td><span class="logs">Logs</span></td></tr>
+
+
+  <tr><td><a class="mac" href="#">a1:00:5e:ed:02:8b</a></td>
+  <td><span class="st offline">OFFLINE</span></td>
+  <td><span class="age">1d 20h 45m ago.</span></td>
+  <td><span class="no">0</span></td>
+  <td><span class="logs">Logs</span></td></tr>
+
+
+  <tr><td><a class="mac" href="#">a1:00:5e:ed:00:2c</a></td>
+  <td><span class="st offline">OFFLINE</span></td>
+  <td><span class="age">1d 20h 49m ago.</span></td>
+  <td><span class="no">0</span></td>
+  <td><span class="logs">Logs</span></td></tr>
+
+
+  <tr><td><a class="mac" href="#">a1:00:5e:ed:02:b8</a></td>
+  <td><span class="st offline">OFFLINE</span></td>
+  <td><span class="age">2d 3h 26m ago.</span></td>
+  <td><span class="err">248</span></td>
+  <td><span class="logs">Logs</span></td></tr>
+
+
+  <tr><td><a class="mac" href="#">3c:6d:66:03:b0:8d</a></td>
+  <td><span class="st offline">OFFLINE</span></td>
+  <td><span class="age">3h 56m ago.</span></td>
+  <td><span class="no">0</span></td>
+  <td><span class="logs">Logs</span></td></tr>
+
+
+  <tr><td><a class="mac" href="#">48:b0:2d:eb:17:11</a></td>
+  <td><span class="st offline">OFFLINE</span></td>
+  <td><span class="age">3h 56m ago.</span></td>
+  <td><span class="no">0</span></td>
+  <td><span class="logs">Logs</span></td></tr>
+
+
+  <tr><td><a class="mac" href="#">48:b0:2d:eb:36:45</a></td>
+  <td><span class="st offline">OFFLINE</span></td>
+  <td><span class="age">3h 56m ago.</span></td>
+  <td><span class="no">0</span></td>
+  <td><span class="logs">Logs</span></td></tr>
+
+
+  <tr><td><a class="mac" href="#">48:b0:2d:eb:16:3d</a></td>
+  <td><span class="st offline">OFFLINE</span></td>
+  <td><span class="age">3h 56m ago.</span></td>
+  <td><span class="no">0</span></td>
+  <td><span class="logs">Logs</span></td></tr>
+
+
+  <tr><td><a class="mac" href="#">a1:00:5e:ed:01:78</a></td>
+  <td><span class="st offline">OFFLINE</span></td>
+  <td><span class="age">5h 2m ago.</span></td>
+  <td><span class="no">0</span></td>
+  <td><span class="logs">Logs</span></td></tr>
+
+
+  <tr><td><a class="mac" href="#">a1:00:5e:ed:02:3f</a></td>
+  <td><span class="st offline">OFFLINE</span></td>
+  <td><span class="age">5h 2m ago.</span></td>
+  <td><span class="no">0</span></td>
+  <td><span class="logs">Logs</span></td></tr>
+
+
+  <tr><td><a class="mac" href="#">3c:6d:66:03:b1:1d</a></td>
+  <td><span class="st offline">OFFLINE</span></td>
+  <td><span class="age">1d 0h 25m ago.</span></td>
+  <td><span class="err">1</span></td>
+  <td><span class="logs">Logs</span></td></tr>
+
     </table>
     <div class="pagination">
       <span>Items per page: 12</span>
-      <span>1 – 12 of 14</span>
+      <span>1 – 11 of 11</span>
       <div class="pbtn">
         <button disabled>‹</button>
         <button disabled>‹‹</button>
-        <button>›</button>
-        <button>››</button>
+        <button disabled>›</button>
+        <button disabled>››</button>
       </div>
     </div>
   </div>
@@ -154,32 +274,180 @@ tr:hover{background:#f8fafc}
     <div class="vrow header">
       <span>Venue</span><span>J3011</span><span>JNX30</span><span>JNX42</span><span>Total Nb. of IOTs</span>
     </div>
-    <div class="vrow"><span class="vname">Hypermedia</span><span class="vcnt">5</span><span class="vcnt zero">0</span><span class="vcnt zero">0</span><span class="vcnt">6</span></div>
-    <div class="vrow"><span class="vname">MODON</span><span class="vcnt zero">0</span><span class="vcnt zero">0</span><span class="vcnt zero">0</span><span class="vcnt">1</span></div>
-    <div class="vrow"><span class="vname">Test Bench</span><span class="vcnt">2</span><span class="vcnt zero">0</span><span class="vcnt zero">0</span><span class="vcnt">2</span></div>
-    <div class="vrow"><span class="vname">Outdoor - EXPOCITY</span><span class="vcnt">25</span><span class="vcnt zero">0</span><span class="vcnt zero">0</span><span class="vcnt">25</span></div>
-    <div class="vrow"><span class="vname" style="font-weight:700">In-Store - Union Coop UMM SUQEIM</span><span class="vcnt" style="font-weight:700;color:#16a34a">27</span><span class="vcnt zero">0</span><span class="vcnt zero">0</span><span class="vcnt" style="font-weight:700">27</span></div>
-    <div class="vrow"><span class="vname">Metro - Jebel Ali</span><span class="vcnt">2</span><span class="vcnt zero">0</span><span class="vcnt zero">0</span><span class="vcnt">2</span></div>
-    <div class="vrow"><span class="vname">Metro - Centrepoint</span><span class="vcnt zero">0</span><span class="vcnt zero">0</span><span class="vcnt">4</span><span class="vcnt">4</span></div>
-    <div class="vrow"><span class="vname">Metro - Airport Terminal 3</span><span class="vcnt zero">0</span><span class="vcnt zero">0</span><span class="vcnt">3</span><span class="vcnt">3</span></div>
-    <div class="vrow"><span class="vname">Metro - Equiti</span><span class="vcnt">2</span><span class="vcnt zero">0</span><span class="vcnt zero">0</span><span class="vcnt">2</span></div>
-    <div class="vrow"><span class="vname">Metro - OnPassive</span><span class="vcnt">2</span><span class="vcnt zero">0</span><span class="vcnt zero">0</span><span class="vcnt">2</span></div>
-    <div class="vrow"><span class="vname">Metro - Mall of the Emirates</span><span class="vcnt">4</span><span class="vcnt">1</span><span class="vcnt zero">0</span><span class="vcnt">5</span></div>
-    <div class="vrow"><span class="vname">Metro - Burjuman</span><span class="vcnt">5</span><span class="vcnt zero">0</span><span class="vcnt zero">0</span><span class="vcnt">5</span></div>
+    <div class="vrow"><span class="vname" >Hypermedia</span>
+    <span class="vcnt">5</span>
+    <span class="vcnt zero">0</span>
+    <span class="vcnt zero">0</span>
+    <span class="vcnt">6</span></div>
+<div class="vrow"><span class="vname" >MODON</span>
+    <span class="vcnt zero">0</span>
+    <span class="vcnt zero">0</span>
+    <span class="vcnt zero">0</span>
+    <span class="vcnt">1</span></div>
+<div class="vrow"><span class="vname" >Test Bench</span>
+    <span class="vcnt">2</span>
+    <span class="vcnt zero">0</span>
+    <span class="vcnt zero">0</span>
+    <span class="vcnt">2</span></div>
+<div class="vrow"><span class="vname" >Outdoor - EXPOCITY</span>
+    <span class="vcnt">25</span>
+    <span class="vcnt zero">0</span>
+    <span class="vcnt zero">0</span>
+    <span class="vcnt">25</span></div>
+<div class="vrow"><span class="vname" style="font-weight:700">In-Store - Union Coop UMM SUQEIM</span>
+    <span class="vcnt">27</span>
+    <span class="vcnt zero">0</span>
+    <span class="vcnt zero">0</span>
+    <span class="vcnt">27</span></div>
+<div class="vrow"><span class="vname" >Metro - Jebel Ali</span>
+    <span class="vcnt">2</span>
+    <span class="vcnt zero">0</span>
+    <span class="vcnt zero">0</span>
+    <span class="vcnt">2</span></div>
+<div class="vrow"><span class="vname" >Metro - Centrepoint</span>
+    <span class="vcnt zero">0</span>
+    <span class="vcnt zero">0</span>
+    <span class="vcnt">4</span>
+    <span class="vcnt">4</span></div>
+<div class="vrow"><span class="vname" >Metro - Airport Terminal 3</span>
+    <span class="vcnt zero">0</span>
+    <span class="vcnt zero">0</span>
+    <span class="vcnt">3</span>
+    <span class="vcnt">3</span></div>
+<div class="vrow"><span class="vname" >Metro - Equiti</span>
+    <span class="vcnt">2</span>
+    <span class="vcnt zero">0</span>
+    <span class="vcnt zero">0</span>
+    <span class="vcnt">2</span></div>
+<div class="vrow"><span class="vname" >Metro - OnPassive</span>
+    <span class="vcnt">2</span>
+    <span class="vcnt zero">0</span>
+    <span class="vcnt zero">0</span>
+    <span class="vcnt">2</span></div>
+<div class="vrow"><span class="vname" >Metro - Mall of the Emirates</span>
+    <span class="vcnt">4</span>
+    <span class="vcnt">1</span>
+    <span class="vcnt zero">0</span>
+    <span class="vcnt">5</span></div>
+<div class="vrow"><span class="vname" >Metro - Burjuman</span>
+    <span class="vcnt">5</span>
+    <span class="vcnt zero">0</span>
+    <span class="vcnt zero">0</span>
+    <span class="vcnt">5</span></div>
+<div class="vrow"><span class="vname" >Retail Media Demo Store</span>
+    <span class="vcnt">1</span>
+    <span class="vcnt zero">0</span>
+    <span class="vcnt zero">0</span>
+    <span class="vcnt">2</span></div>
+<div class="vrow"><span class="vname" >Virgin</span>
+    <span class="vcnt">2</span>
+    <span class="vcnt zero">0</span>
+    <span class="vcnt zero">0</span>
+    <span class="vcnt">2</span></div>
+<div class="vrow"><span class="vname" >Demo Kit Store</span>
+    <span class="vcnt">1</span>
+    <span class="vcnt zero">0</span>
+    <span class="vcnt zero">0</span>
+    <span class="vcnt">1</span></div>
+<div class="vrow"><span class="vname" >Azerion GoldBach Austria</span>
+    <span class="vcnt">1</span>
+    <span class="vcnt zero">0</span>
+    <span class="vcnt zero">0</span>
+    <span class="vcnt">1</span></div>
+<div class="vrow"><span class="vname" >Dubai Festival City</span>
+    <span class="vcnt">26</span>
+    <span class="vcnt zero">0</span>
+    <span class="vcnt zero">0</span>
+    <span class="vcnt">26</span></div>
+<div class="vrow"><span class="vname" style="font-weight:700">Union Coop AL WARQA</span>
+    <span class="vcnt">33</span>
+    <span class="vcnt zero">0</span>
+    <span class="vcnt zero">0</span>
+    <span class="vcnt">33</span></div>
+<div class="vrow"><span class="vname" >Dubai Festival Plaza</span>
+    <span class="vcnt">8</span>
+    <span class="vcnt zero">0</span>
+    <span class="vcnt zero">0</span>
+    <span class="vcnt">8</span></div>
+<div class="vrow"><span class="vname" >LULU AL WAHDA</span>
+    <span class="vcnt">43</span>
+    <span class="vcnt zero">0</span>
+    <span class="vcnt zero">0</span>
+    <span class="vcnt">43</span></div>
+<div class="vrow"><span class="vname" >Malls - Al Furjan east Pavillion</span>
+    <span class="vcnt">2</span>
+    <span class="vcnt zero">0</span>
+    <span class="vcnt zero">0</span>
+    <span class="vcnt">2</span></div>
+<div class="vrow"><span class="vname" >Malls - Al Furjan west Pavillion</span>
+    <span class="vcnt">2</span>
+    <span class="vcnt zero">0</span>
+    <span class="vcnt zero">0</span>
+    <span class="vcnt">2</span></div>
+<div class="vrow"><span class="vname" >Malls - Burjuman Mall</span>
+    <span class="vcnt zero">0</span>
+    <span class="vcnt zero">0</span>
+    <span class="vcnt">5</span>
+    <span class="vcnt">5</span></div>
+<div class="vrow"><span class="vname" >Malls - International City Pavillion</span>
+    <span class="vcnt">2</span>
+    <span class="vcnt zero">0</span>
+    <span class="vcnt zero">0</span>
+    <span class="vcnt">2</span></div>
+<div class="vrow"><span class="vname" >Malls - Discovery Gardens Pavillion</span>
+    <span class="vcnt">1</span>
+    <span class="vcnt">1</span>
+    <span class="vcnt zero">0</span>
+    <span class="vcnt">2</span></div>
+<div class="vrow"><span class="vname" >Malls - WAFi Mall</span>
+    <span class="vcnt">5</span>
+    <span class="vcnt zero">0</span>
+    <span class="vcnt">23</span>
+    <span class="vcnt">28</span></div>
+<div class="vrow"><span class="vname" >Malls - Dragon Mart-1</span>
+    <span class="vcnt">3</span>
+    <span class="vcnt zero">0</span>
+    <span class="vcnt zero">0</span>
+    <span class="vcnt">3</span></div>
+<div class="vrow"><span class="vname" >Malls - Dragon Mart-2</span>
+    <span class="vcnt">9</span>
+    <span class="vcnt zero">0</span>
+    <span class="vcnt zero">0</span>
+    <span class="vcnt">9</span></div>
+<div class="vrow"><span class="vname" >Malls - Circle Mall</span>
+    <span class="vcnt">14</span>
+    <span class="vcnt zero">0</span>
+    <span class="vcnt zero">0</span>
+    <span class="vcnt">14</span></div>
+<div class="vrow"><span class="vname" >Malls - Jumeriah Park East Pavillion</span>
+    <span class="vcnt">1</span>
+    <span class="vcnt">1</span>
+    <span class="vcnt zero">0</span>
+    <span class="vcnt">2</span></div>
+<div class="vrow"><span class="vname" >Malls - Jumeriah Park Pavillion</span>
+    <span class="vcnt">2</span>
+    <span class="vcnt zero">0</span>
+    <span class="vcnt zero">0</span>
+    <span class="vcnt">2</span></div>
+<div class="vrow"><span class="vname" >Malls - Al Hamra Mall</span>
+    <span class="vcnt">11</span>
+    <span class="vcnt zero">0</span>
+    <span class="vcnt zero">0</span>
+    <span class="vcnt">11</span></div>
     <div class="pagination">
-      <span>Items per page: 12</span>
-      <span>1 – 12 of 81</span>
+      <span>Items per page: 32</span>
+      <span>1 – 32 of 32</span>
       <div class="pbtn">
         <button disabled>‹</button>
         <button disabled>‹‹</button>
-        <button>›</button>
-        <button>››</button>
+        <button disabled>›</button>
+        <button disabled>››</button>
       </div>
     </div>
   </div>
 
 </div>
 
-<div class="ft">IOT Admin Console (v4.1) · AiOO Tech Dubai © · Updated 26/06/2026 00:43:13</div>
+<div class="ft">IOT Admin Console (v4.1) · AiOO Tech Dubai © · Live data · 26/06/2026 00:49:55</div>
 </body>
 </html>

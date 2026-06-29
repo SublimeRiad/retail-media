@@ -1,0 +1,263 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<meta http-equiv="refresh" content="600">
+<title>IOT Dashboard — Wall Display</title>
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:Inter,-apple-system,BlinkMacSystemFont,sans-serif;background:#0d1117;color:#e2e8f0;min-height:100vh;padding:0}
+
+.hdr{padding:16px 24px;border-bottom:1px solid #1e293b;display:flex;align-items:center;justify-content:space-between}
+.hdr h1{font-size:18px;font-weight:600;color:#e2e8f0}
+.hdr .ts{color:#52525b;font-size:11px;font-family:monospace}
+
+.summary{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;padding:16px 24px}
+.sc{background:#161b22;border-radius:10px;border:1px solid #1e293b;padding:14px 16px;text-align:center}
+.sc .sv{font-size:32px;font-weight:800;line-height:1.2}
+.sc .sl{font-size:11px;color:#64748b;margin-top:4px;text-transform:uppercase;letter-spacing:.5px}
+.sc.b .sv{color:#60a5fa}.sc.g .sv{color:#4ade80}.sc.r .sv{color:#f87171}.sc.p .sv{color:#a78bfa}
+
+.grid{display:grid;grid-template-columns:2fr 1fr 1fr;gap:16px;padding:0 24px}
+
+.chart-card{background:#161b22;border-radius:12px;border:1px solid #1e293b;overflow:hidden}
+.chart-card .ch{display:flex;align-items:center;justify-content:space-between;padding:14px 18px;border-bottom:1px solid #1e293b}
+.chart-card .ch h3{font-size:12px;font-weight:600;color:#e2e8f0}
+.chart-card .ch .ch-sub{font-size:10px;color:#64748b}
+.chart-body{padding:16px}
+
+.chart-wrap{display:flex;align-items:center;gap:24px;justify-content:center}
+.chart-svg{width:160px;height:160px;flex-shrink:0}
+.legend{display:flex;flex-direction:column;gap:8px;min-width:90px}
+.leg-item{display:flex;align-items:center;gap:8px;font-size:12px}
+.leg-dot{width:10px;height:10px;border-radius:3px;flex-shrink:0}
+.leg-label{color:#94a3b8;flex:1}
+.leg-val{font-weight:700;font-size:14px;color:#e2e8f0}
+.leg-pct{font-size:9px;color:#52525b;margin-left:3px}
+
+/* State bars */
+.state-list{display:flex;flex-direction:column;gap:10px;padding:4px 2px}
+.st-row{display:flex;align-items:center;gap:10px;font-size:12px}
+.st-ind{width:10px;height:10px;border-radius:3px;flex-shrink:0}
+.st-ind.st-tr{background:#3b82f6}
+.st-ind.st-rd{background:#22c55e}
+.st-ind.st-id{background:#facc15}
+.st-ind.st-of{background:#ef4444}
+.st-info{display:flex;align-items:center;gap:4px;min-width:150px}
+.st-lbl{color:#94a3b8;font-weight:600;min-width:62px;font-size:11px}
+.st-num{font-weight:700;color:#e2e8f0;font-size:14px;min-width:28px;text-align:right}
+.st-pct{font-size:9px;color:#52525b;min-width:32px}
+.st-bar{flex:1;height:10px;background:#1e293b;border-radius:5px;overflow:hidden}
+.st-fill{height:100%;border-radius:5px;transition:width .5s}
+
+/* Top venues */
+.top-list{display:flex;flex-direction:column;gap:8px}
+
+/* Offline table */
+.table-wrap{padding:16px 24px 24px}
+.tc{background:#161b22;border-radius:12px;border:1px solid #1e293b;overflow:hidden}
+.thdr{padding:14px 18px;font-size:13px;font-weight:600;color:#fca5a5;border-bottom:1px solid #1e293b;display:flex;align-items:center;justify-content:space-between}
+.thdr .sub{color:#64748b;font-size:11px;font-weight:400}
+table{width:100%;border-collapse:collapse;font-size:12px}
+th{padding:10px 16px;color:#64748b;font-size:9px;text-transform:uppercase;letter-spacing:.5px;text-align:left;font-weight:600;border-bottom:1px solid #1e293b;background:#0f172a}
+td{padding:10px 16px;border-bottom:1px solid #1e293b}
+tr:last-child td{border-bottom:none}
+tr:hover{background:#1c2333}
+.mac{font-family:'SF Mono',Consolas,monospace;color:#60a5fa;font-size:12px;font-weight:500}
+.st{font-size:9px;padding:2px 8px;border-radius:4px;font-weight:600;display:inline-block}
+.st.of{background:#450a0a;color:#f87171;border:1px solid #7f1d1d}
+.age{color:#64748b;font-size:11px}
+.cmds{font-size:11px;color:#64748b}
+.cmds .err{color:#f87171;font-weight:700}
+
+.ft{text-align:center;padding:18px;color:#1e293b;font-size:9px}
+
+@media(max-width:1000px){
+  .grid{grid-template-columns:1fr;padding:0 12px}
+  .summary{grid-template-columns:repeat(2,1fr);padding:12px}
+  .table-wrap{padding:12px}
+}
+@media(min-width:1800px){
+  .chart-svg{width:200px;height:200px}
+  .grid{padding:0 32px;gap:20px}
+  .summary{padding:16px 32px}
+  .table-wrap{padding:16px 32px 24px}
+}
+</style>
+</head>
+<body>
+
+<div class="hdr">
+  <h1>IOT Dashboard — AiOO Tech</h1>
+  <div class="ts">29/06/2026 12:23:13</div>
+</div>
+
+<div class="summary">
+  <div class="sc b"><div class="sv">546</div><div class="sl">Total devices</div></div>
+  <div class="sc g"><div class="sv">537</div><div class="sl">Online</div></div>
+  <div class="sc r"><div class="sv">9</div><div class="sl">Offline</div></div>
+  <div class="sc p"><div class="sv">80</div><div class="sl">Venues</div></div>
+</div>
+
+<div class="grid">
+  <div class="chart-card">
+    <div class="ch"><h3>Devices by platform</h3><span class="ch-sub">366 J3011 · 5 JNX30 · 171 JNX42</span></div>
+    <div class="chart-body">
+      <div class="chart-wrap">
+        <div class="chart-svg"><svg viewBox="0 0 240 240" style="width:100%;height:100%"><circle cx="120" cy="120" r="90" fill="none" stroke="#06b6d4" stroke-width="35" stroke-dasharray="379.0624982023728 186.42417944378997" stroke-dashoffset="0" transform="rotate(-90 120 120)"/><circle cx="120" cy="120" r="90" fill="none" stroke="#22c55e" stroke-width="35" stroke-dasharray="5.178449428994165 560.3082282171686" stroke-dashoffset="-379.0624982023728" transform="rotate(-90 120 120)"/><circle cx="120" cy="120" r="90" fill="none" stroke="#3b82f6" stroke-width="35" stroke-dasharray="177.10297047160043 388.38370717456235" stroke-dashoffset="-384.24094763136696" transform="rotate(-90 120 120)"/><circle cx="120" cy="120" r="90" fill="none" stroke="#27272a" stroke-width="35" stroke-dasharray="4.142759543195331 561.3439181029675" stroke-dashoffset="-561.3439181029673" transform="rotate(-90 120 120)"/><circle cx="120" cy="120" r="90" fill="none" stroke="#27272a" stroke-width="35" stroke-dasharray="4.142759543195331 561.3439181029675" stroke-dashoffset="-565.4866776461627" transform="rotate(-90 120 120)"/><text x="120" y="112" text-anchor="middle" fill="#e2e8f0" font-size="28" font-weight="800">546</text><text x="120" y="134" text-anchor="middle" fill="#64748b" font-size="11">devices</text></svg></div>
+        <div class="legend"><div class="leg-item"><div class="leg-dot" style="background:#06b6d4"></div><span class="leg-label">J3011</span><span class="leg-val">366<span class="leg-pct">67.0%</span></span></div><div class="leg-item"><div class="leg-dot" style="background:#22c55e"></div><span class="leg-label">JNX30</span><span class="leg-val">5<span class="leg-pct">0.9%</span></span></div><div class="leg-item"><div class="leg-dot" style="background:#3b82f6"></div><span class="leg-label">JNX42</span><span class="leg-val">171<span class="leg-pct">31.3%</span></span></div><div class="leg-item"><div class="leg-dot" style="background:#27272a"></div><span class="leg-label">Other</span><span class="leg-val">4<span class="leg-pct">0.7%</span></span></div></div>
+      </div>
+    </div>
+  </div>
+  <div class="chart-card">
+    <div class="ch"><h3>Device by state</h3><span class="ch-sub">546 total</span></div>
+    <div class="chart-body">
+      <div class="state-list">
+        <div class="st-row">
+          <div class="st-ind st-tr"></div>
+          <div class="st-info">
+            <span class="st-lbl">TRACKING</span>
+            <span class="st-num">~400</span>
+            <span class="st-pct">73.3%</span>
+          </div>
+          <div class="st-bar"><div class="st-fill" style="width:73.3%;background:#3b82f6"></div></div>
+        </div>
+        <div class="st-row">
+          <div class="st-ind st-rd"></div>
+          <div class="st-info">
+            <span class="st-lbl">READY</span>
+            <span class="st-num">~100</span>
+            <span class="st-pct">18.3%</span>
+          </div>
+          <div class="st-bar"><div class="st-fill" style="width:18.3%;background:#22c55e"></div></div>
+        </div>
+        <div class="st-row">
+          <div class="st-ind st-id"></div>
+          <div class="st-info">
+            <span class="st-lbl">IDLE</span>
+            <span class="st-num">~37</span>
+            <span class="st-pct">6.8%</span>
+          </div>
+          <div class="st-bar"><div class="st-fill" style="width:6.8%;background:#facc15"></div></div>
+        </div>
+        <div class="st-row">
+          <div class="st-ind st-of"></div>
+          <div class="st-info">
+            <span class="st-lbl">OFFLINE</span>
+            <span class="st-num">9</span>
+            <span class="st-pct">1.6%</span>
+          </div>
+          <div class="st-bar"><div class="st-fill" style="width:1.6%;background:#ef4444"></div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="chart-card">
+    <div class="ch"><h3>Top venues</h3><span class="ch-sub">Top 5</span></div>
+    <div class="chart-body">
+      <div class="top-list">
+        
+        <div class="leg-item">
+          <div class="leg-dot" style="background:#06b6d4"></div>
+          <span class="leg-label">REEM MALL</span>
+          <span class="leg-val">46</span>
+        </div>
+        <div class="leg-item">
+          <div class="leg-dot" style="background:#22c55e"></div>
+          <span class="leg-label">LULU AL WAHDA</span>
+          <span class="leg-val">43</span>
+        </div>
+        <div class="leg-item">
+          <div class="leg-dot" style="background:#3b82f6"></div>
+          <span class="leg-label">YAS Mall</span>
+          <span class="leg-val">42</span>
+        </div>
+        <div class="leg-item">
+          <div class="leg-dot" style="background:#facc15"></div>
+          <span class="leg-label">Union Coop AL WARQA</span>
+          <span class="leg-val">33</span>
+        </div>
+        <div class="leg-item">
+          <div class="leg-dot" style="background:#a855f7"></div>
+          <span class="leg-label">WAFi Mall</span>
+          <span class="leg-val">28</span>
+        </div>
+        <div class="leg-item" style="opacity:0.5">
+          <div class="leg-dot" style="background:#27272a"></div>
+          <span class="leg-label">Other (75 venues)</span>
+          <span class="leg-val">354</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<div class="table-wrap">
+  <div class="tc">
+    <div class="thdr">⚠ Offline devices needing attention <span class="sub">9 devices</span></div>
+    <table>
+      <tr><th>Device</th><th>Venue</th><th>State</th><th>Last seen</th><th>Cmds</th></tr>
+      <tr>
+    <td><span class="mac">a1:00:5e:ed:02:bc</span></td>
+    <td>Al Warqa</td>
+    <td><span class="st of">OFFLINE</span></td>
+    <td class="age">1d 7h 6m ago.</td>
+    <td class="cmds"><span class="err">230</span></td>
+  </tr><tr>
+    <td><span class="mac">a1:00:5e:ed:02:8c</span></td>
+    <td>Al Warqa</td>
+    <td><span class="st of">OFFLINE</span></td>
+    <td class="age">1d 7h 6m ago.</td>
+    <td class="cmds"><span class="err">272</span></td>
+  </tr><tr>
+    <td><span class="mac">a1:00:5e:ed:00:15</span></td>
+    <td>—</td>
+    <td><span class="st of">OFFLINE</span></td>
+    <td class="age">1d 8h 0m ago.</td>
+    <td class="cmds">0</td>
+  </tr><tr>
+    <td><span class="mac">a1:00:5e:ed:02:d3</span></td>
+    <td>—</td>
+    <td><span class="st of">OFFLINE</span></td>
+    <td class="age">1d 12h 35m ago.</td>
+    <td class="cmds">0</td>
+  </tr><tr>
+    <td><span class="mac">a1:00:5e:ed:02:8a</span></td>
+    <td>—</td>
+    <td><span class="st of">OFFLINE</span></td>
+    <td class="age">1d 22h 8m ago.</td>
+    <td class="cmds"><span class="err">1</span></td>
+  </tr><tr>
+    <td><span class="mac">a1:00:5e:ed:00:1f</span></td>
+    <td>—</td>
+    <td><span class="st of">OFFLINE</span></td>
+    <td class="age">2d 12h 0m ago.</td>
+    <td class="cmds"><span class="err">2</span></td>
+  </tr><tr>
+    <td><span class="mac">a1:00:5e:ed:02:ad</span></td>
+    <td>Umm Suqeim</td>
+    <td><span class="st of">OFFLINE</span></td>
+    <td class="age">3h 16m ago.</td>
+    <td class="cmds"><span class="err">2</span></td>
+  </tr><tr>
+    <td><span class="mac">48:b0:2d:eb:16:95</span></td>
+    <td>—</td>
+    <td><span class="st of">OFFLINE</span></td>
+    <td class="age">7h 0m ago.</td>
+    <td class="cmds">0</td>
+  </tr><tr>
+    <td><span class="mac">a1:00:5e:ed:00:7a</span></td>
+    <td>—</td>
+    <td><span class="st of">OFFLINE</span></td>
+    <td class="age">8h 0m ago.</td>
+    <td class="cmds">0</td>
+  </tr>
+    </table>
+  </div>
+</div>
+
+<div class="ft">IOT Admin Console · AiOO Tech Dubai © · Live data · 29/06/2026 12:23:13</div>
+</body>
+</html>

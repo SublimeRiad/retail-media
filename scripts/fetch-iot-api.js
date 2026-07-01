@@ -62,10 +62,20 @@ async function main() {
   }
   const locations = Object.values(venueMap).sort((a, b) => b.total - a.total);
 
-  // Attention devices: offline + tracking state
+  // Attention devices: most recently offline (matches admin console ~12)
   const attentionDevices = devices
     .filter(d => (d.state || '').toLowerCase() === 'offline')
-    .slice(0, 50)
+    .sort((a, b) => {
+      // Parse DD/MM/YYYY HH:mm:ss — most recent first
+      const parseDate = (s) => {
+        if (!s) return 0;
+        const m = s.match(/(\d+)\/(\d+)\/(\d+)\s+(\d+):(\d+):(\d+)/);
+        if (!m) return 0;
+        return new Date(m[3], m[2]-1, m[1], m[4], m[5], m[6]).getTime();
+      };
+      return parseDate(b.last_seen) - parseDate(a.last_seen);
+    })
+    .slice(0, 12)
     .map(d => ({
       device: d.aioo_id,
       state: d.state || '',
@@ -117,6 +127,13 @@ async function main() {
       offline: totalOffline,
       online: totalOnline,
       attention: attentionDevices.length,
+    },
+    stateBreakdown: {
+      ready: stateCount['Ready'] || 0,
+      tracking: stateCount['Tracking'] || 0,
+      idle: stateCount['Idle'] || 0,
+      offline: stateCount['Offline'] || 0,
+      unknown: stateCount['Unknown'] || 0,
     },
     offlineByVenue,
   };

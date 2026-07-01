@@ -23,42 +23,39 @@ function esc(s) { return s ? String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;'
 const locations = data.locations || [];
 const rawDevices = data.attentionDevices || [];
 
-let totalDevices = 0, totalJ3011 = 0, totalJNX30 = 0, totalJNX42 = 0;
+let sumLocations = 0, totalJ3011 = 0, totalJNX30 = 0, totalJNX42 = 0;
 for (const loc of locations) {
-  totalDevices += loc.total || 0;
+  sumLocations += loc.total || 0;
   totalJ3011 += loc.j3011 || 0;
   totalJNX30 += loc.jnx30 || 0;
   totalJNX42 += loc.jnx42 || 0;
 }
 
-const totalOffline = rawDevices.length;
-const totalOnline = totalDevices - totalOffline;
+// Use real counts from Devices page (more accurate than locations sum)
+const totalDeviceCount = (data.deviceCounts && data.deviceCounts.total) || sumLocations;
+const trueOffline = (data.deviceCounts && data.deviceCounts.offline) || rawDevices.length;
+const totalOffline = trueOffline;
+const totalOnline = totalDeviceCount - totalOffline;
 
-// State breakdown
-// We don't have exact TRACKING/READY/IDLE from scrape, so estimate from total split
-const estTracking = Math.round(totalOnline * 0.73);
-const estReady = Math.round(totalOnline * 0.18);
-const estIdle = totalOnline - estTracking - estReady;
+// State breakdown — use real data from API
+const sb = data.stateBreakdown || {};
+const stateReady = sb.ready || 0;
+const stateTracking = sb.tracking || 0;
+const stateIdle = sb.idle || 0;
+const stateUnknown = sb.unknown || 0;
 
-// Group attention devices by venue using MAC mapping
-const VENUE_MACS = {
-  'Umm Suqeim': ['ba','b9','b8','b7','b5','b4','b3','b2','ae','ad','ac','ab','a4','9e','96'],
-  'Al Warqa': ['be','bc','bb','b0','92','91','90','8f','8e','8d','8c','89','88','86','84'],
-  'Lulu Al Wahda': ['af','a8','a7','a5','a3','a2','a1','a0','9f','98','97','28','27','26','25'],
-};
-
-function getOfflineVenue(mac) {
-  const parts = mac.split(':');
-  if (parts.length === 6 && parts[4] === '02') {
-    for (const [v, macs] of Object.entries(VENUE_MACS)) {
-      if (macs.includes(parts[5])) return v;
+// Build MAC→venue lookup from real scrape data
+const macToVenue = {};
+if (data.offlineByVenue) {
+  for (const [venue, devs] of Object.entries(data.offlineByVenue)) {
+    for (const d of devs) {
+      if (d.device) macToVenue[d.device] = venue;
     }
   }
-  return '—';
 }
 
 const offlineRows = rawDevices.map(d => {
-  const venue = getOfflineVenue(d.device);
+  const venue = macToVenue[d.device] || '—';
   return `<tr>
     <td><span class="mac">${esc(d.device)}</span></td>
     <td>${esc(venue)}</td>
@@ -81,12 +78,12 @@ function donutSvg(segments, cx=120, cy=120, r=90, ir=55) {
     offset -= len;
   });
   const platformSum = totalJ3011 + totalJNX30 + totalJNX42;
-  const unassigned = totalDevices - platformSum;
+  const unassigned = totalDeviceCount - platformSum;
   if (unassigned > 0) {
-    const ulen = (unassigned / totalDevices) * circ;
+    const ulen = (unassigned / totalDeviceCount) * circ;
     slices += `<circle cx="${cx}" cy="${cy}" r="${r}" fill="none" stroke="#27272a" stroke-width="${r - ir}" stroke-dasharray="${ulen} ${circ - ulen}" stroke-dashoffset="${offset}" transform="rotate(-90 ${cx} ${cy})"/>`;
   }
-  return `<svg viewBox="0 0 240 240" style="width:100%;height:100%">${slices}<text x="${cx}" y="${cy - 8}" text-anchor="middle" fill="#e2e8f0" font-size="28" font-weight="800">${totalDevices}</text><text x="${cx}" y="${cy + 14}" text-anchor="middle" fill="#64748b" font-size="11">devices</text></svg>`;
+  return `<svg viewBox="0 0 240 240" style="width:100%;height:100%">${slices}<text x="${cx}" y="${cy - 8}" text-anchor="middle" fill="#e2e8f0" font-size="28" font-weight="800">${totalDeviceCount}</text><text x="${cx}" y="${cy + 14}" text-anchor="middle" fill="#64748b" font-size="11">devices</text></svg>`;
 }
 
 function legend(data) {
@@ -104,8 +101,8 @@ const platformData = [
 ];
 
 const platformTotal = totalJ3011 + totalJNX30 + totalJNX42;
-if (totalDevices - platformTotal > 0) {
-  platformData.push({ label: 'Other', value: totalDevices - platformTotal, color: '#27272a' });
+if (totalDeviceCount - platformTotal > 0) {
+  platformData.push({ label: 'Other', value: totalDeviceCount - platformTotal, color: '#27272a' });
 }
 
 // Top 5 venues
@@ -215,7 +212,7 @@ tr:hover{background:#1c2333}
 </div>
 
 <div class="summary">
-  <div class="sc b"><div class="sv">${totalDevices}</div><div class="sl">Total devices</div></div>
+  <div class="sc b"><div class="sv">${totalDeviceCount}</div><div class="sl">Total devices</div></div>
   <div class="sc g"><div class="sv">${totalOnline}</div><div class="sl">Online</div></div>
   <div class="sc r"><div class="sv">${totalOffline}</div><div class="sl">Offline</div></div>
   <div class="sc p"><div class="sv">${locations.length}</div><div class="sl">Venues</div></div>
@@ -232,44 +229,44 @@ tr:hover{background:#1c2333}
     </div>
   </div>
   <div class="chart-card">
-    <div class="ch"><h3>Device by state</h3><span class="ch-sub">${totalDevices} total</span></div>
+    <div class="ch"><h3>Device by state</h3><span class="ch-sub">${totalDeviceCount} total</span></div>
     <div class="chart-body">
       <div class="state-list">
         <div class="st-row">
           <div class="st-ind st-tr"></div>
           <div class="st-info">
             <span class="st-lbl">TRACKING</span>
-            <span class="st-num">${estTracking}</span>
-            <span class="st-pct">${(estTracking/totalDevices*100).toFixed(1)}%</span>
+            <span class="st-num">${stateTracking}</span>
+            <span class="st-pct">${(stateTracking/totalDeviceCount*100).toFixed(1)}%</span>
           </div>
-          <div class="st-bar"><div class="st-fill" style="width:${(estTracking/totalDevices*100).toFixed(1)}%;background:#3b82f6"></div></div>
+          <div class="st-bar"><div class="st-fill" style="width:${(stateTracking/totalDeviceCount*100).toFixed(1)}%;background:#3b82f6"></div></div>
         </div>
         <div class="st-row">
           <div class="st-ind st-rd"></div>
           <div class="st-info">
             <span class="st-lbl">READY</span>
-            <span class="st-num">${estReady}</span>
-            <span class="st-pct">${(estReady/totalDevices*100).toFixed(1)}%</span>
+            <span class="st-num">${stateReady}</span>
+            <span class="st-pct">${(stateReady/totalDeviceCount*100).toFixed(1)}%</span>
           </div>
-          <div class="st-bar"><div class="st-fill" style="width:${(estReady/totalDevices*100).toFixed(1)}%;background:#22c55e"></div></div>
+          <div class="st-bar"><div class="st-fill" style="width:${(stateReady/totalDeviceCount*100).toFixed(1)}%;background:#22c55e"></div></div>
         </div>
         <div class="st-row">
           <div class="st-ind st-id"></div>
           <div class="st-info">
             <span class="st-lbl">IDLE</span>
-            <span class="st-num">${estIdle}</span>
-            <span class="st-pct">${(estIdle/totalDevices*100).toFixed(1)}%</span>
+            <span class="st-num">${stateIdle}</span>
+            <span class="st-pct">${(stateIdle/totalDeviceCount*100).toFixed(1)}%</span>
           </div>
-          <div class="st-bar"><div class="st-fill" style="width:${(estIdle/totalDevices*100).toFixed(1)}%;background:#facc15"></div></div>
+          <div class="st-bar"><div class="st-fill" style="width:${(stateIdle/totalDeviceCount*100).toFixed(1)}%;background:#facc15"></div></div>
         </div>
         <div class="st-row">
           <div class="st-ind st-of"></div>
           <div class="st-info">
             <span class="st-lbl">OFFLINE</span>
             <span class="st-num">${totalOffline}</span>
-            <span class="st-pct">${(totalOffline/totalDevices*100).toFixed(1)}%</span>
+            <span class="st-pct">${(totalOffline/totalDeviceCount*100).toFixed(1)}%</span>
           </div>
-          <div class="st-bar"><div class="st-fill" style="width:${(totalOffline/totalDevices*100).toFixed(1)}%;background:#ef4444"></div></div>
+          <div class="st-bar"><div class="st-fill" style="width:${(totalOffline/totalDeviceCount*100).toFixed(1)}%;background:#ef4444"></div></div>
         </div>
       </div>
     </div>
@@ -287,7 +284,7 @@ tr:hover{background:#1c2333}
         <div class="leg-item" style="opacity:0.5">
           <div class="leg-dot" style="background:#27272a"></div>
           <span class="leg-label">Other (${locations.length - topLocations.length} venues)</span>
-          <span class="leg-val">${totalDevices - topLocations.reduce((a, l) => a + (l.total || 0), 0)}</span>
+          <span class="leg-val">${totalDeviceCount - topLocations.reduce((a, l) => a + (l.total || 0), 0)}</span>
         </div>
       </div>
     </div>
@@ -297,7 +294,7 @@ tr:hover{background:#1c2333}
 ${totalOffline > 0 ? `
 <div class="table-wrap">
   <div class="tc">
-    <div class="thdr">⚠ Offline devices needing attention <span class="sub">${totalOffline} device${totalOffline !== 1 ? 's' : ''}</span></div>
+    <div class="thdr">⚠ Devices needing attention <span class="sub">${rawDevices.length} device${rawDevices.length !== 1 ? 's' : ''}</span></div>
     <table>
       <tr><th>Device</th><th>Venue</th><th>State</th><th>Last seen</th><th>Cmds</th></tr>
       ${offlineRows}
@@ -310,4 +307,4 @@ ${totalOffline > 0 ? `
 </html>`;
 
 fs.writeFileSync(OUTPUT, html);
-console.log(`OK - ${(Buffer.byteLength(html) / 1024).toFixed(0)} KB — ${totalDevices} devices, ${totalOffline} offline, ${locations.length} venues`);
+console.log(`OK - ${(Buffer.byteLength(html) / 1024).toFixed(0)} KB — ${totalDeviceCount} devices, ${totalOffline} offline, ${locations.length} venues`);

@@ -27,9 +27,7 @@ node build-rmstatus.js || { notify "❌ RM Dashboard" "build-rmstatus FAILED" 8;
 cp /tmp/rmstatus-light/rmstatus.html /tmp/rm-push/retailmedia.html
 
 # 3. Generate IoT Admin dashboard (from scraped data)
-echo "[3/4] Building iot-dashboard.html..."
-node build-iot-dash.js || { notify "❌ RM Dashboard" "build-iot-dash FAILED" 8; exit 1; }
-cp /tmp/rmstatus-light/iot-dashboard.html /tmp/rm-push/
+# iot-dashboard.html removed (not needed)
 
 # 4. Generate Wall dashboard (from scraped data)
 echo "[4/4] Building wall-dashboard.html..."
@@ -50,7 +48,7 @@ python3 /home/iots/.openclaw/workspace/iot-camera/scripts/build-cron-status.py |
 
 # 6. Push all to GitHub (filenames match GitHub URLs)
 cd /tmp/rm-push
-git add retailmedia.html iot-dashboard.html wall-dashboard.html retailer.html cron-status.html
+git add retailmedia.html wall-dashboard.html retailer.html cron-status.html
 git commit -m "Auto-update $(date '+%Y-%m-%d %H:%M')" || true
 git pull origin master --rebase || true
 git push origin master

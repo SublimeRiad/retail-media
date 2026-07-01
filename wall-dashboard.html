@@ -38,19 +38,8 @@ body{font-family:Inter,-apple-system,BlinkMacSystemFont,sans-serif;background:#0
 
 /* Category bars */
 .cat-list{display:flex;flex-direction:column;gap:8px}
-.state-list{display:flex;flex-direction:column;gap:10px;padding:4px 2px}
-.st-row{display:flex;align-items:center;gap:10px;font-size:12px}
-.st-ind{width:10px;height:10px;border-radius:3px;flex-shrink:0}
-.st-ind.st-tr{background:#3b82f6}
-.st-ind.st-rd{background:#22c55e}
-.st-ind.st-id{background:#facc15}
-.st-ind.st-of{background:#ef4444}
-.st-info{display:flex;align-items:center;gap:4px;min-width:150px}
-.st-lbl{color:#94a3b8;font-weight:600;min-width:62px;font-size:11px}
-.st-num{font-weight:700;color:#e2e8f0;font-size:14px;min-width:28px;text-align:right}
-.st-pct{font-size:9px;color:#52525b;min-width:32px}
-.st-bar{flex:1;height:10px;background:#1e293b;border-radius:5px;overflow:hidden}
-.st-fill{height:100%;border-radius:5px;transition:width .5s}
+/* Category bars */
+.cat-list{display:flex;flex-direction:column;gap:8px}
 .cc-row{display:flex;align-items:center;gap:10px;font-size:12px}
 .cc-name{display:flex;align-items:center;gap:5px;min-width:120px;color:#94a3b8}
 .cc-dot{width:8px;height:8px;border-radius:2px;flex-shrink:0}
@@ -60,6 +49,7 @@ body{font-family:Inter,-apple-system,BlinkMacSystemFont,sans-serif;background:#0
 
 /* Top venues */
 .top-list{display:flex;flex-direction:column;gap:8px}
+.top-platform-pills{display:flex;flex-wrap:wrap;gap:4px;margin-top:10px;padding-top:8px;border-top:1px solid #1e293b;justify-content:center}
 
 /* Offline table */
 .table-wrap{padding:16px 24px 24px}
@@ -97,7 +87,7 @@ tr:hover{background:#1c2333}
 
 <div class="hdr">
   <h1>IOT Dashboard — AiOO Tech</h1>
-  <div class="ts">01/07/2026 23:43:13</div>
+  <div class="ts">01/07/2026 23:45:59</div>
 </div>
 
 <div class="summary">
@@ -120,81 +110,21 @@ tr:hover{background:#1c2333}
   <div class="chart-card">
     <div class="ch"><h3>Device by state</h3><span class="ch-sub">555 total</span></div>
     <div class="chart-body">
-      <div class="state-list">
-        <div class="st-row">
-          <div class="st-ind st-tr"></div>
-          <div class="st-info">
-            <span class="st-lbl">TRACKING</span>
-            <span class="st-num">13</span>
-            <span class="st-pct">2.3%</span>
-          </div>
-          <div class="st-bar"><div class="st-fill" style="width:2.3%;background:#3b82f6"></div></div>
-        </div>
-        <div class="st-row">
-          <div class="st-ind st-rd"></div>
-          <div class="st-info">
-            <span class="st-lbl">READY</span>
-            <span class="st-num">402</span>
-            <span class="st-pct">72.4%</span>
-          </div>
-          <div class="st-bar"><div class="st-fill" style="width:72.4%;background:#22c55e"></div></div>
-        </div>
-        <div class="st-row">
-          <div class="st-ind st-id"></div>
-          <div class="st-info">
-            <span class="st-lbl">IDLE</span>
-            <span class="st-num">3</span>
-            <span class="st-pct">0.5%</span>
-          </div>
-          <div class="st-bar"><div class="st-fill" style="width:0.5%;background:#facc15"></div></div>
-        </div>
-        <div class="st-row">
-          <div class="st-ind st-of"></div>
-          <div class="st-info">
-            <span class="st-lbl">OFFLINE</span>
-            <span class="st-num">136</span>
-            <span class="st-pct">24.5%</span>
-          </div>
-          <div class="st-bar"><div class="st-fill" style="width:24.5%;background:#ef4444"></div></div>
-        </div>
+      <div class="chart-wrap">
+        <div class="chart-svg"><svg viewBox="0 0 240 240" style="width:100%;height:100%"><circle cx="120" cy="120" r="90" fill="none" stroke="#3b82f6" stroke-width="35" stroke-dasharray="13.24563389081102 552.2410437553517" stroke-dashoffset="0" transform="rotate(-90 120 120)"/><circle cx="120" cy="120" r="90" fill="none" stroke="#22c55e" stroke-width="35" stroke-dasharray="409.5957557004639 155.8909219456989" stroke-dashoffset="-13.24563389081102" transform="rotate(-90 120 120)"/><circle cx="120" cy="120" r="90" fill="none" stroke="#facc15" stroke-width="35" stroke-dasharray="3.0566847440333125 562.4299929021295" stroke-dashoffset="-422.8413895912749" transform="rotate(-90 120 120)"/><circle cx="120" cy="120" r="90" fill="none" stroke="#ef4444" stroke-width="35" stroke-dasharray="138.56970839617682 426.916969249986" stroke-dashoffset="-425.8980743353082" transform="rotate(-90 120 120)"/><circle cx="120" cy="120" r="90" fill="none" stroke="#52525b" stroke-width="35" stroke-dasharray="1.0188949146777708 564.467782731485" stroke-dashoffset="-564.467782731485" transform="rotate(-90 120 120)"/><circle cx="120" cy="120" r="90" fill="none" stroke="#27272a" stroke-width="35" stroke-dasharray="4.075579658711083 561.4110979874517" stroke-dashoffset="-565.4866776461628" transform="rotate(-90 120 120)"/><text x="120" y="112" text-anchor="middle" fill="#e2e8f0" font-size="28" font-weight="800">555</text><text x="120" y="134" text-anchor="middle" fill="#64748b" font-size="11">devices</text></svg></div>
+        <div class="legend"><div class="leg-item"><div class="leg-dot" style="background:#3b82f6"></div><span class="leg-label">Tracking</span><span class="leg-val">13<span class="leg-pct">2.3%</span></span></div><div class="leg-item"><div class="leg-dot" style="background:#22c55e"></div><span class="leg-label">Ready</span><span class="leg-val">402<span class="leg-pct">72.4%</span></span></div><div class="leg-item"><div class="leg-dot" style="background:#facc15"></div><span class="leg-label">Idle</span><span class="leg-val">3<span class="leg-pct">0.5%</span></span></div><div class="leg-item"><div class="leg-dot" style="background:#ef4444"></div><span class="leg-label">Offline</span><span class="leg-val">136<span class="leg-pct">24.5%</span></span></div><div class="leg-item"><div class="leg-dot" style="background:#52525b"></div><span class="leg-label">Unknown</span><span class="leg-val">1<span class="leg-pct">0.2%</span></span></div></div>
       </div>
     </div>
   </div>
   <div class="chart-card">
-    <div class="ch"><h3>Top venues</h3><span class="ch-sub">Top 5</span></div>
+    <div class="ch"><h3>Top venues · by platform</h3><span class="ch-sub">Top 5 venues</span></div>
     <div class="chart-body">
-      <div class="top-list">
-        
-        <div class="leg-item">
-          <div class="leg-dot" style="background:#06b6d4"></div>
-          <span class="leg-label">REEM MALL</span>
-          <span class="leg-val">46</span>
-        </div>
-        <div class="leg-item">
-          <div class="leg-dot" style="background:#22c55e"></div>
-          <span class="leg-label">LULU AL WAHDA</span>
-          <span class="leg-val">43</span>
-        </div>
-        <div class="leg-item">
-          <div class="leg-dot" style="background:#3b82f6"></div>
-          <span class="leg-label">YAS Mall</span>
-          <span class="leg-val">42</span>
-        </div>
-        <div class="leg-item">
-          <div class="leg-dot" style="background:#facc15"></div>
-          <span class="leg-label">Union Coop AL WARQA</span>
-          <span class="leg-val">33</span>
-        </div>
-        <div class="leg-item">
-          <div class="leg-dot" style="background:#a855f7"></div>
-          <span class="leg-label">Dubai Festival City</span>
-          <span class="leg-val">32</span>
-        </div>
-        <div class="leg-item" style="opacity:0.5">
-          <div class="leg-dot" style="background:#27272a"></div>
-          <span class="leg-label">Other (76 venues)</span>
-          <span class="leg-val">359</span>
-        </div>
+      <div class="chart-wrap">
+        <div class="chart-svg"><svg viewBox="0 0 240 240" style="width:100%;height:100%"><circle cx="120" cy="120" r="90" fill="none" stroke="#06b6d4" stroke-width="35" stroke-dasharray="349.1014693631923 216.3852082829705" stroke-dashoffset="0" transform="rotate(-90 120 120)"/><circle cx="120" cy="120" r="90" fill="none" stroke="#22c55e" stroke-width="35" stroke-dasharray="0 565.4866776461628" stroke-dashoffset="-349.1014693631923" transform="rotate(-90 120 120)"/><circle cx="120" cy="120" r="90" fill="none" stroke="#3b82f6" stroke-width="35" stroke-dasharray="216.38520828297044 349.10146936319234" stroke-dashoffset="-349.1014693631923" transform="rotate(-90 120 120)"/><circle cx="120" cy="120" r="90" fill="none" stroke="#27272a" stroke-width="35" stroke-dasharray="4.075579658711083 561.4110979874517" stroke-dashoffset="-565.4866776461627" transform="rotate(-90 120 120)"/><text x="120" y="112" text-anchor="middle" fill="#e2e8f0" font-size="28" font-weight="800">555</text><text x="120" y="134" text-anchor="middle" fill="#64748b" font-size="11">devices</text></svg></div>
+        <div class="legend"><div class="leg-item"><div class="leg-dot" style="background:#06b6d4"></div><span class="leg-label">J3011</span><span class="leg-val">121<span class="leg-pct">61.7%</span></span></div><div class="leg-item"><div class="leg-dot" style="background:#22c55e"></div><span class="leg-label">JNX30</span><span class="leg-val">0<span class="leg-pct">0.0%</span></span></div><div class="leg-item"><div class="leg-dot" style="background:#3b82f6"></div><span class="leg-label">JNX42</span><span class="leg-val">75<span class="leg-pct">38.3%</span></span></div></div>
+      </div>
+      <div style="display:flex;flex-wrap:wrap;gap:4px;margin-top:10px;padding-top:8px;border-top:1px solid #1e293b;justify-content:center">
+        <span style="font-size:10px;color:#64748b;background:#111827;padding:2px 8px;border-radius:4px;border:1px solid #1e293b"><span style="color:#06b6d4;font-weight:600">●</span> REEM MALL <span style="color:#e2e8f0;font-weight:600">46</span></span><span style="font-size:10px;color:#64748b;background:#111827;padding:2px 8px;border-radius:4px;border:1px solid #1e293b"><span style="color:#22c55e;font-weight:600">●</span> LULU AL WAHDA <span style="color:#e2e8f0;font-weight:600">43</span></span><span style="font-size:10px;color:#64748b;background:#111827;padding:2px 8px;border-radius:4px;border:1px solid #1e293b"><span style="color:#3b82f6;font-weight:600">●</span> YAS Mall <span style="color:#e2e8f0;font-weight:600">42</span></span><span style="font-size:10px;color:#64748b;background:#111827;padding:2px 8px;border-radius:4px;border:1px solid #1e293b"><span style="color:#facc15;font-weight:600">●</span> Union Coop AL WARQA <span style="color:#e2e8f0;font-weight:600">33</span></span><span style="font-size:10px;color:#64748b;background:#111827;padding:2px 8px;border-radius:4px;border:1px solid #1e293b"><span style="color:#a855f7;font-weight:600">●</span> Dubai Festival City <span style="color:#e2e8f0;font-weight:600">32</span></span>
       </div>
     </div>
   </div>
@@ -283,6 +213,6 @@ tr:hover{background:#1c2333}
   </div>
 </div>
 
-<div class="ft">IOT Admin Console · AiOO Tech Dubai © · Live data · 01/07/2026 23:43:13</div>
+<div class="ft">IOT Admin Console · AiOO Tech Dubai © · Live data · 01/07/2026 23:45:59</div>
 </body>
 </html>

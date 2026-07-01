@@ -1,57 +1,30 @@
 #!/bin/bash
-# Auto-update Retail Media IoT Dashboard + IoT Admin Dashboard
+# update-retail.sh — v3: uses API instead of Puppeteer
 cd /home/iots/.openclaw/workspace/iot-camera/scripts
 export NODE_PATH=/home/iots/.openclaw/workspace/node_modules
 
-# Gotify notification setup
-GOTIFY_URL="http://localhost:8090"
-GOTIFY_TOKEN="iot-ac52025c500e1f6eafb7cab9886560e5"
+notify() { true; }
 
-notify() {
-  local title="$1" msg="$2" pri="${3:-3}"
-  curl -s -X POST "$GOTIFY_URL/message" \
-    -H "Content-Type: application/json" \
-    -H "X-Gotify-Key: $GOTIFY_TOKEN" \
-    -d "{\"title\":\"$title\",\"message\":\"$msg\",\"priority\":$pri}" &>/dev/null
-}
+echo "[1/5] Fetching IoT data from API..."
+node fetch-iot-api.js || { notify "❌ API" "fetch-iot-api FAILED" 8; exit 1; }
 
-notify "🔄 RM Dashboard" "Update started" 3
-
-# 1. Scrape live data from IoT Admin Console
-echo "[1/4] Scraping IoT Admin Console..."
-node scrape-iot-admin.js || { notify "❌ RM Dashboard" "scrape-iot-admin FAILED" 8; exit 1; }
-
-# 2. Generate Retail Media Status (from scraped data)
-echo "[2/4] Building retailmedia.html..."
-node build-rmstatus.js || { notify "❌ RM Dashboard" "build-rmstatus FAILED" 8; exit 1; }
+echo "[2/5] Building retailmedia.html..."
+node build-rmstatus.js || { notify "❌ RM Status" "build-rmstatus FAILED" 8; exit 1; }
 cp /tmp/rmstatus-light/rmstatus.html /tmp/rm-push/retailmedia.html
 
-# 3. Generate IoT Admin dashboard (from scraped data)
-# iot-dashboard.html removed (not needed)
+echo "[3/5] Building retailer.html..."
+node build-retailer.js || { notify "❌ Retailer" "build-retailer FAILED" 8; exit 1; }
+cp /tmp/rmstatus-light/retailer.html /tmp/rm-push/retailer.html
 
-# 4. Generate Wall dashboard (from scraped data)
-echo "[4/4] Building wall-dashboard.html..."
-node build-wall-dash.js || { notify "❌ RM Dashboard" "build-wall-dash FAILED" 8; exit 1; }
-cp /tmp/rmstatus-light/wall-dashboard.html /tmp/rm-push/
+echo "[4/5] Building wall-dashboard.html..."
+node build-wall-dash.js || { notify "❌ Wall" "build-wall-dash FAILED" 8; exit 1; }
+cp /tmp/rmstatus-light/wall-dashboard.html /tmp/rm-push/wall-dashboard.html
 
-# 5a. Generate retailer.html honeycomb dashboard
-echo "[5a/6] Building retailer.html..."
-node build-retailer.js || { notify "❌ RM Dashboard" "build-retailer FAILED" 8; exit 1; }
-cp /tmp/rmstatus-light/retailer.html /tmp/rm-push/
-
-# 5b. Generate cron-status.html with live timestamps
-echo "[5b/6] Building cron-status.html..."
-python3 /home/iots/.openclaw/workspace/iot-camera/scripts/build-cron-status.py || {
-  notify "⚠ RM Dashboard" "build-cron-status FAILED" 5
-  echo "[WARN] build-cron-status failed, continuing anyway"
-}
-
-# 6. Push all to GitHub (filenames match GitHub URLs)
+echo "[5/5] Pushing to GitHub..."
 cd /tmp/rm-push
-git add retailmedia.html wall-dashboard.html retailer.html cron-status.html
-git commit -m "Auto-update $(date '+%Y-%m-%d %H:%M')" || true
+git add retailmedia.html retailer.html wall-dashboard.html
+git commit -m "Auto-update $(date '+%Y-%m-%d %H:%M UTC')" || true
 git pull origin master --rebase || true
 git push origin master
 
-notify "✅ RM Dashboard" "3 pages + cron-status updated OK" 3
-echo "[OK] $(date)"
+echo "[OK] All dashboards updated"

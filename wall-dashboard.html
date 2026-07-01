@@ -47,9 +47,6 @@ body{font-family:Inter,-apple-system,BlinkMacSystemFont,sans-serif;background:#0
 .cc-bar{flex:1;height:8px;background:#1e293b;border-radius:4px;overflow:hidden}
 .cc-fill{height:100%;border-radius:4px;transition:width .5s}
 
-/* Top venues */
-.top-list{display:flex;flex-direction:column;gap:8px}
-.top-platform-pills{display:flex;flex-wrap:wrap;gap:4px;margin-top:10px;padding-top:8px;border-top:1px solid #1e293b;justify-content:center}
 
 /* Offline table */
 .table-wrap{padding:16px 24px 24px}
@@ -87,7 +84,7 @@ tr:hover{background:#1c2333}
 
 <div class="hdr">
   <h1>IOT Dashboard — AiOO Tech</h1>
-  <div class="ts">01/07/2026 23:53:13</div>
+  <div class="ts">01/07/2026 23:57:13</div>
 </div>
 
 <div class="summary">
@@ -99,15 +96,6 @@ tr:hover{background:#1c2333}
 
 <div class="grid">
   <div class="chart-card">
-    <div class="ch"><h3>Devices by platform</h3><span class="ch-sub">381 J3011 · 0 JNX30 · 170 JNX42</span></div>
-    <div class="chart-body">
-      <div class="chart-wrap">
-        <div class="chart-svg"><svg viewBox="0 0 240 240" style="width:100%;height:100%"><circle cx="120" cy="120" r="90" fill="none" stroke="#06b6d4" stroke-width="35" stroke-dasharray="388.19896249223063 177.28771515393214" stroke-dashoffset="0" transform="rotate(-90 120 120)"/><circle cx="120" cy="120" r="90" fill="none" stroke="#22c55e" stroke-width="35" stroke-dasharray="0 565.4866776461628" stroke-dashoffset="-388.19896249223063" transform="rotate(-90 120 120)"/><circle cx="120" cy="120" r="90" fill="none" stroke="#3b82f6" stroke-width="35" stroke-dasharray="173.21213549522102 392.2745421509418" stroke-dashoffset="-388.19896249223063" transform="rotate(-90 120 120)"/><circle cx="120" cy="120" r="90" fill="none" stroke="#27272a" stroke-width="35" stroke-dasharray="4.075579658711083 561.4110979874517" stroke-dashoffset="-561.4110979874516" transform="rotate(-90 120 120)"/><circle cx="120" cy="120" r="90" fill="none" stroke="#27272a" stroke-width="35" stroke-dasharray="4.075579658711083 561.4110979874517" stroke-dashoffset="-565.4866776461627" transform="rotate(-90 120 120)"/><text x="120" y="112" text-anchor="middle" fill="#e2e8f0" font-size="28" font-weight="800">555</text><text x="120" y="134" text-anchor="middle" fill="#64748b" font-size="11">devices</text></svg></div>
-        <div class="legend"><div class="leg-item"><div class="leg-dot" style="background:#06b6d4"></div><span class="leg-label">J3011</span><span class="leg-val">381<span class="leg-pct">68.6%</span></span></div><div class="leg-item"><div class="leg-dot" style="background:#22c55e"></div><span class="leg-label">JNX30</span><span class="leg-val">0<span class="leg-pct">0.0%</span></span></div><div class="leg-item"><div class="leg-dot" style="background:#3b82f6"></div><span class="leg-label">JNX42</span><span class="leg-val">170<span class="leg-pct">30.6%</span></span></div><div class="leg-item"><div class="leg-dot" style="background:#27272a"></div><span class="leg-label">Other</span><span class="leg-val">4<span class="leg-pct">0.7%</span></span></div></div>
-      </div>
-    </div>
-  </div>
-  <div class="chart-card">
     <div class="ch"><h3>Device by state</h3><span class="ch-sub">555 total</span></div>
     <div class="chart-body">
       <div class="chart-wrap">
@@ -117,14 +105,49 @@ tr:hover{background:#1c2333}
     </div>
   </div>
   <div class="chart-card">
-    <div class="ch"><h3>Top venues · by platform</h3><span class="ch-sub">Top 5 venues</span></div>
+    <div class="ch"><h3>All devices by platform</h3><span class="ch-sub">381 J3011 · 0 JNX30 · 170 JNX42</span></div>
     <div class="chart-body">
       <div class="chart-wrap">
-        <div class="chart-svg"><svg viewBox="0 0 240 240" style="width:100%;height:100%"><circle cx="120" cy="120" r="90" fill="none" stroke="#06b6d4" stroke-width="35" stroke-dasharray="349.1014693631923 216.3852082829705" stroke-dashoffset="0" transform="rotate(-90 120 120)"/><circle cx="120" cy="120" r="90" fill="none" stroke="#22c55e" stroke-width="35" stroke-dasharray="0 565.4866776461628" stroke-dashoffset="-349.1014693631923" transform="rotate(-90 120 120)"/><circle cx="120" cy="120" r="90" fill="none" stroke="#3b82f6" stroke-width="35" stroke-dasharray="216.38520828297044 349.10146936319234" stroke-dashoffset="-349.1014693631923" transform="rotate(-90 120 120)"/><circle cx="120" cy="120" r="90" fill="none" stroke="#27272a" stroke-width="35" stroke-dasharray="4.075579658711083 561.4110979874517" stroke-dashoffset="-565.4866776461627" transform="rotate(-90 120 120)"/><text x="120" y="112" text-anchor="middle" fill="#e2e8f0" font-size="28" font-weight="800">555</text><text x="120" y="134" text-anchor="middle" fill="#64748b" font-size="11">devices</text></svg></div>
-        <div class="legend"><div class="leg-item"><div class="leg-dot" style="background:#06b6d4"></div><span class="leg-label">J3011</span><span class="leg-val">121<span class="leg-pct">61.7%</span></span></div><div class="leg-item"><div class="leg-dot" style="background:#22c55e"></div><span class="leg-label">JNX30</span><span class="leg-val">0<span class="leg-pct">0.0%</span></span></div><div class="leg-item"><div class="leg-dot" style="background:#3b82f6"></div><span class="leg-label">JNX42</span><span class="leg-val">75<span class="leg-pct">38.3%</span></span></div></div>
+        <div class="chart-svg"><svg viewBox="0 0 240 240" style="width:100%;height:100%"><circle cx="120" cy="120" r="90" fill="none" stroke="#06b6d4" stroke-width="35" stroke-dasharray="388.19896249223063 177.28771515393214" stroke-dashoffset="0" transform="rotate(-90 120 120)"/><circle cx="120" cy="120" r="90" fill="none" stroke="#22c55e" stroke-width="35" stroke-dasharray="0 565.4866776461628" stroke-dashoffset="-388.19896249223063" transform="rotate(-90 120 120)"/><circle cx="120" cy="120" r="90" fill="none" stroke="#3b82f6" stroke-width="35" stroke-dasharray="173.21213549522102 392.2745421509418" stroke-dashoffset="-388.19896249223063" transform="rotate(-90 120 120)"/><circle cx="120" cy="120" r="90" fill="none" stroke="#27272a" stroke-width="35" stroke-dasharray="4.075579658711083 561.4110979874517" stroke-dashoffset="-561.4110979874516" transform="rotate(-90 120 120)"/><circle cx="120" cy="120" r="90" fill="none" stroke="#27272a" stroke-width="35" stroke-dasharray="4.075579658711083 561.4110979874517" stroke-dashoffset="-565.4866776461627" transform="rotate(-90 120 120)"/><text x="120" y="112" text-anchor="middle" fill="#e2e8f0" font-size="28" font-weight="800">555</text><text x="120" y="134" text-anchor="middle" fill="#64748b" font-size="11">devices</text></svg></div>
+        <div class="legend"><div class="leg-item"><div class="leg-dot" style="background:#06b6d4"></div><span class="leg-label">J3011</span><span class="leg-val">381<span class="leg-pct">68.6%</span></span></div><div class="leg-item"><div class="leg-dot" style="background:#22c55e"></div><span class="leg-label">JNX30</span><span class="leg-val">0<span class="leg-pct">0.0%</span></span></div><div class="leg-item"><div class="leg-dot" style="background:#3b82f6"></div><span class="leg-label">JNX42</span><span class="leg-val">170<span class="leg-pct">30.6%</span></span></div><div class="leg-item"><div class="leg-dot" style="background:#27272a"></div><span class="leg-label">Other</span><span class="leg-val">4<span class="leg-pct">0.7%</span></span></div></div>
       </div>
-      <div style="display:flex;flex-wrap:wrap;gap:4px;margin-top:10px;padding-top:8px;border-top:1px solid #1e293b;justify-content:center">
-        <span style="font-size:10px;color:#64748b;background:#111827;padding:2px 8px;border-radius:4px;border:1px solid #1e293b"><span style="color:#06b6d4;font-weight:600">●</span> REEM MALL <span style="color:#e2e8f0;font-weight:600">46</span></span><span style="font-size:10px;color:#64748b;background:#111827;padding:2px 8px;border-radius:4px;border:1px solid #1e293b"><span style="color:#22c55e;font-weight:600">●</span> LULU AL WAHDA <span style="color:#e2e8f0;font-weight:600">43</span></span><span style="font-size:10px;color:#64748b;background:#111827;padding:2px 8px;border-radius:4px;border:1px solid #1e293b"><span style="color:#3b82f6;font-weight:600">●</span> YAS Mall <span style="color:#e2e8f0;font-weight:600">42</span></span><span style="font-size:10px;color:#64748b;background:#111827;padding:2px 8px;border-radius:4px;border:1px solid #1e293b"><span style="color:#facc15;font-weight:600">●</span> Union Coop AL WARQA <span style="color:#e2e8f0;font-weight:600">33</span></span><span style="font-size:10px;color:#64748b;background:#111827;padding:2px 8px;border-radius:4px;border:1px solid #1e293b"><span style="color:#a855f7;font-weight:600">●</span> Dubai Festival City <span style="color:#e2e8f0;font-weight:600">32</span></span>
+    </div>
+  </div>
+  <div class="chart-card">
+    <div class="ch"><h3>Top venues</h3><span class="ch-sub">Top 5</span></div>
+    <div class="chart-body">
+      <div class="top-list">
+        
+        <div class="leg-item">
+          <div class="leg-dot" style="background:#06b6d4"></div>
+          <span class="leg-label">REEM MALL</span>
+          <span class="leg-val">46</span>
+        </div>
+        <div class="leg-item">
+          <div class="leg-dot" style="background:#22c55e"></div>
+          <span class="leg-label">LULU AL WAHDA</span>
+          <span class="leg-val">43</span>
+        </div>
+        <div class="leg-item">
+          <div class="leg-dot" style="background:#3b82f6"></div>
+          <span class="leg-label">YAS Mall</span>
+          <span class="leg-val">42</span>
+        </div>
+        <div class="leg-item">
+          <div class="leg-dot" style="background:#facc15"></div>
+          <span class="leg-label">Union Coop AL WARQA</span>
+          <span class="leg-val">33</span>
+        </div>
+        <div class="leg-item">
+          <div class="leg-dot" style="background:#a855f7"></div>
+          <span class="leg-label">Dubai Festival City</span>
+          <span class="leg-val">32</span>
+        </div>
+        <div class="leg-item" style="opacity:0.5">
+          <div class="leg-dot" style="background:#27272a"></div>
+          <span class="leg-label">Other (76 venues)</span>
+          <span class="leg-val">359</span>
+        </div>
       </div>
     </div>
   </div>
@@ -213,6 +236,6 @@ tr:hover{background:#1c2333}
   </div>
 </div>
 
-<div class="ft">IOT Admin Console · AiOO Tech Dubai © · Live data · 01/07/2026 23:53:13</div>
+<div class="ft">IOT Admin Console · AiOO Tech Dubai © · Live data · 01/07/2026 23:57:13</div>
 </body>
 </html>

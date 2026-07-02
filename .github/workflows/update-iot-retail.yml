@@ -1,9 +1,9 @@
 name: Update All Dashboards
 
 on:
+  workflow_dispatch:
   schedule:
     - cron: '*/15 * * * *'
-  workflow_dispatch:
 
 jobs:
   build-all-dashboards:
@@ -75,3 +75,14 @@ jobs:
           fi
           git pull origin master --rebase || true
           git push
+
+      - name: Schedule next run in 10 min
+        env:
+          GH_PAT: ${{ secrets.GH_PAT }}
+        run: |
+          curl -s -X POST \
+            -H "Authorization: Bearer $GH_PAT" \
+            -H "Accept: application/vnd.github+json" \
+            -H "Content-Type: application/json" \
+            https://api.github.com/repos/SublimeRiad/retail-media/actions/workflows/update-iot-retail.yml/dispatches \
+            -d '{"ref":"master"}'

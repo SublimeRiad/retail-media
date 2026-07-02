@@ -48,7 +48,6 @@ jobs:
           echo "$NSOC_CREDS" > ~/.nsoc_creds
           echo "$GRAFANA_TOKEN" > ~/.grafana_token
           python3 iot-camera/scripts/build-nsoc-dash.py
-          python3 iot-camera/scripts/build-nsoc-status.py
           python3 iot-camera/scripts/build-nsoc-black-screen.py
 
       - name: Build cron-status.html
@@ -63,7 +62,7 @@ jobs:
           git config user.name "iot-retail-bot"
           git config user.email "iot-retail-bot@aiootech.com"
           git add retailmedia.html retailer.html wall-dashboard.html cron-status.html
-          git add Retail-Media-Nsoc-Players.html nsoc-status.html grafana-dashboards/nsoc-black-screen.html
+          git add Retail-Media-Nsoc-Players.html grafana-dashboards/nsoc-black-screen.html
           # Touch nsoc-operations-dashboard.html to force git update (client-side data)
           touch -m grafana-dashboards/nsoc-operations-dashboard.html
           git add grafana-dashboards/nsoc-operations-dashboard.html 2>/dev/null || true

@@ -20,8 +20,8 @@ jobs:
         with:
           node-version: '20'
 
-      - name: Create output directories
-        run: mkdir -p /tmp/rmstatus-light /tmp/rm-push
+      - name: Create output directory
+        run: mkdir -p /tmp/rmstatus-light
 
       - name: Fetch IoT data from API
         env:
@@ -29,24 +29,18 @@ jobs:
           AIOO_CLIENT_SECRET: ${{ secrets.AIOO_CLIENT_SECRET }}
         run: node iot-camera/scripts/fetch-iot-api.js
 
-      - name: Build retailmedia.html
-        run: node iot-camera/scripts/build-rmstatus.js
-
-      - name: Build retailer.html
-        run: node iot-camera/scripts/build-retailer.js
-
-      - name: Build wall-dashboard.html
-        run: node iot-camera/scripts/build-wall-dash.js
-
-      - name: Copy dashboards to repo
+      - name: Build dashboards
         run: |
-          cp /tmp/rmstatus-light/retailmedia.html /tmp/rm-push/retailmedia.html
-          cp /tmp/rmstatus-light/retailer.html /tmp/rm-push/retailer.html
-          cp /tmp/rmstatus-light/wall-dashboard.html /tmp/rm-push/wall-dashboard.html
+          node iot-camera/scripts/build-rmstatus.js
+          node iot-camera/scripts/build-retailer.js
+          node iot-camera/scripts/build-wall-dash.js
 
-      - name: Commit & push
+      - name: Copy & push dashboards
         run: |
-          cd /tmp/rm-push
+          cp /tmp/rmstatus-light/rmstatus.html $GITHUB_WORKSPACE/retailmedia.html
+          cp /tmp/rmstatus-light/retailer.html $GITHUB_WORKSPACE/retailer.html
+          cp /tmp/rmstatus-light/wall-dashboard.html $GITHUB_WORKSPACE/wall-dashboard.html
+          cd $GITHUB_WORKSPACE
           git config user.name "iot-retail-bot"
           git config user.email "iot-retail-bot@aiootech.com"
           git add retailmedia.html retailer.html wall-dashboard.html

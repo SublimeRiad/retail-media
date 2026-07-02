@@ -2,7 +2,7 @@ name: Update Dashboards
 
 on:
   schedule:
-    - cron: '*/30 * * * *'
+    - cron: '*/10 * * * *'
   workflow_dispatch:
 
 jobs:
@@ -37,4 +37,5 @@ jobs:
           git config user.email "nsoc-bot@retailmedia"
           git add Retail-Media-Nsoc-Players.html nsoc-status.html grafana-dashboards/nsoc-black-screen.html
           git diff --staged --quiet || git commit -m "Auto-update $(date '+%Y-%m-%d %H:%M UTC')"
+          git pull origin master --rebase || true
           git push

@@ -40,7 +40,29 @@ jobs:
           node iot-camera/scripts/build-retailer.js
           node iot-camera/scripts/build-wall-dash.js
 
+      - name: Build cron-status.html
+        run: python3 iot-camera/scripts/build-cron-status.py
+
+      - name: Push IoT dashboards
+        run: |
+          cp /tmp/rmstatus-light/rmstatus.html $GITHUB_WORKSPACE/retailmedia.html
+          cp /tmp/rmstatus-light/retailer.html $GITHUB_WORKSPACE/retailer.html
+          cp /tmp/rmstatus-light/wall-dashboard.html $GITHUB_WORKSPACE/wall-dashboard.html
+          cd $GITHUB_WORKSPACE
+          git config user.name "iot-retail-bot"
+          git config user.email "iot-retail-bot@aiootech.com"
+          git add retailmedia.html retailer.html wall-dashboard.html cron-status.html
+          if ! git diff --staged --quiet; then
+            git commit -m "Auto-update IoT dashboards $(date '+%Y-%m-%d %H:%M UTC')"
+            git pull origin master --rebase || true
+            git push
+            echo "✅ IoT dashboards pushed"
+          else
+            echo "ℹ️ No IoT changes to push"
+          fi
+
       - name: Build NSOC dashboards
+        continue-on-error: true
         env:
           NSOC_CREDS: ${{ secrets.NSOC_CREDS }}
           GRAFANA_TOKEN: ${{ secrets.GRAFANA_TOKEN }}
@@ -51,32 +73,34 @@ jobs:
           python3 iot-camera/scripts/build-nsoc-status.py
           python3 iot-camera/scripts/build-nsoc-black-screen.py
 
-      - name: Build cron-status.html
-        run: python3 iot-camera/scripts/build-cron-status.py
-
-      - name: Copy & push all dashboards
+      - name: Check if NSOC files exist
+        id: check_nsoc
         run: |
-          cp /tmp/rmstatus-light/rmstatus.html $GITHUB_WORKSPACE/retailmedia.html
-          cp /tmp/rmstatus-light/retailer.html $GITHUB_WORKSPACE/retailer.html
-          cp /tmp/rmstatus-light/wall-dashboard.html $GITHUB_WORKSPACE/wall-dashboard.html
-          cd $GITHUB_WORKSPACE
-          git config user.name "iot-retail-bot"
-          git config user.email "iot-retail-bot@aiootech.com"
-          git add retailmedia.html retailer.html wall-dashboard.html cron-status.html
-          git add Retail-Media-Nsoc-Players.html nsoc-status.html grafana-dashboards/nsoc-black-screen.html
-          # Touch nsoc-operations-dashboard.html to force git update (client-side data)
-          touch -m grafana-dashboards/nsoc-operations-dashboard.html
-          git add grafana-dashboards/nsoc-operations-dashboard.html 2>/dev/null || true
-          if git diff --staged --quiet; then
-            # Keep-alive: force a timestamp commit even if nothing changed
-            echo "keep-alive $(date '+%Y-%m-%d %H:%M:%S UTC')" > .github/keepalive.txt
-            git add .github/keepalive.txt
-            git commit -m "Keep-alive $(date '+%Y-%m-%d %H:%M UTC')"
+          if [ -f /tmp/rmstatus-light/Retail-Media-Nsoc-Players.html ] || [ -f /tmp/rmstatus-light/nsoc-status.html ] || [ -f /tmp/rmstatus-light/nsoc-black-screen.html ]; then
+            echo "exists=true" >> $GITHUB_OUTPUT
           else
-            git commit -m "Auto-update all dashboards $(date '+%Y-%m-%d %H:%M UTC')"
+            echo "exists=false" >> $GITHUB_OUTPUT
           fi
-          git pull origin master --rebase || true
-          git push
+
+      - name: Push NSOC dashboards
+        if: steps.check_nsoc.outputs.exists == 'true'
+        continue-on-error: true
+        run: |
+          cd $GITHUB_WORKSPACE
+          ls /tmp/rmstatus-light/nsoc-status.html 2>/dev/null && cp /tmp/rmstatus-light/nsoc-status.html . || true
+          ls /tmp/rmstatus-light/Retail-Media-Nsoc-Players.html 2>/dev/null && cp /tmp/rmstatus-light/Retail-Media-Nsoc-Players.html . || true
+          ls /tmp/rmstatus-light/nsoc-black-screen.html 2>/dev/null && cp /tmp/rmstatus-light/nsoc-black-screen.html ./grafana-dashboards/ 2>/dev/null || true
+          git add nsoc-status.html Retail-Media-Nsoc-Players.html grafana-dashboards/nsoc-black-screen.html 2>/dev/null || true
+          touch -m grafana-dashboards/nsoc-operations-dashboard.html 2>/dev/null
+          git add grafana-dashboards/nsoc-operations-dashboard.html 2>/dev/null || true
+          if ! git diff --staged --quiet; then
+            git commit -m "Auto-update NSOC dashboards $(date '+%Y-%m-%d %H:%M UTC')"
+            git pull origin master --rebase || true
+            git push
+            echo "✅ NSOC dashboards pushed"
+          else
+            echo "ℹ️ No NSOC changes"
+          fi
 
       - name: Schedule next run in 10 min
         env:

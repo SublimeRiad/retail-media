@@ -15,8 +15,10 @@ if (!fs.existsSync(DATA_FILE)) {
 const data = JSON.parse(fs.readFileSync(DATA_FILE, 'utf-8'));
 
 const now = new Date();
-const dateStr = now.toLocaleDateString('en-GB');
-const timeStr = now.toLocaleTimeString('en-GB');
+const dubaiDate = new Intl.DateTimeFormat('en-GB', { timeZone: 'Asia/Dubai', day: '2-digit', month: '2-digit', year: 'numeric' }).format(now);
+const dubaiTime = new Intl.DateTimeFormat('en-GB', { timeZone: 'Asia/Dubai', hour: '2-digit', minute: '2-digit', second: '2-digit', hour12: false }).format(now);
+const dateStr = dubaiDate;
+const timeStr = `${dubaiTime} GST`;
 
 function esc(s) { return s ? String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;') : ''; }
 

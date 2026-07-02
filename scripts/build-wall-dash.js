@@ -105,16 +105,34 @@ if (totalDeviceCount - platformTotal > 0) {
   platformData.push({ label: 'Other', value: totalDeviceCount - platformTotal, color: '#27272a' });
 }
 
-// Top 5 venues
-const topLocations = [...locations].sort((a, b) => b.total - a.total).slice(0, 5);
-const locColors = ['#06b6d4', '#22c55e', '#3b82f6', '#facc15', '#a855f7'];
+// State donut data
+const stateData = [
+  { label: 'Tracking', value: stateTracking, color: '#3b82f6' },
+  { label: 'Ready', value: stateReady, color: '#22c55e' },
+  { label: 'Idle', value: stateIdle, color: '#facc15' },
+  { label: 'Offline', value: totalOffline, color: '#ef4444' },
+  { label: 'Unknown', value: stateUnknown, color: '#52525b' },
+];
+
+// Camera type data
+const cameraBreakdown = data.cameraBreakdown || {};
+const camColors = { 'ZED_2I': '#06b6d4', 'ZED': '#22c55e', 'ZED_2': '#0891b2', 'RTSP': '#3b82f6', 'MULTIPLE_RTSP': '#6366f1', 'USB': '#f59e0b', 'MULTIPLE_ZED': '#14b8a6', 'MULTIPLE_USB': '#8b5cf6', 'Unknown': '#52525b' };
+const cameraData = Object.entries(cameraBreakdown).sort((a, b) => b[1] - a[1]).map(([key, val]) => ({
+  label: key.replace(/_/g, ' '),
+  value: val,
+  color: camColors[key] || '#52525b',
+}));
+
+
+
+
 
 const html = `<!DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1.0">
-<meta http-equiv="refresh" content="600">
+<meta http-equiv="refresh" content="300">
 <title>IOT Dashboard — Wall Display</title>
 <style>
 *{margin:0;padding:0;box-sizing:border-box}
@@ -149,19 +167,8 @@ body{font-family:Inter,-apple-system,BlinkMacSystemFont,sans-serif;background:#0
 
 /* Category bars */
 .cat-list{display:flex;flex-direction:column;gap:8px}
-.state-list{display:flex;flex-direction:column;gap:10px;padding:4px 2px}
-.st-row{display:flex;align-items:center;gap:10px;font-size:12px}
-.st-ind{width:10px;height:10px;border-radius:3px;flex-shrink:0}
-.st-ind.st-tr{background:#3b82f6}
-.st-ind.st-rd{background:#22c55e}
-.st-ind.st-id{background:#facc15}
-.st-ind.st-of{background:#ef4444}
-.st-info{display:flex;align-items:center;gap:4px;min-width:150px}
-.st-lbl{color:#94a3b8;font-weight:600;min-width:62px;font-size:11px}
-.st-num{font-weight:700;color:#e2e8f0;font-size:14px;min-width:28px;text-align:right}
-.st-pct{font-size:9px;color:#52525b;min-width:32px}
-.st-bar{flex:1;height:10px;background:#1e293b;border-radius:5px;overflow:hidden}
-.st-fill{height:100%;border-radius:5px;transition:width .5s}
+/* Category bars */
+.cat-list{display:flex;flex-direction:column;gap:8px}
 .cc-row{display:flex;align-items:center;gap:10px;font-size:12px}
 .cc-name{display:flex;align-items:center;gap:5px;min-width:120px;color:#94a3b8}
 .cc-dot{width:8px;height:8px;border-radius:2px;flex-shrink:0}
@@ -169,8 +176,6 @@ body{font-family:Inter,-apple-system,BlinkMacSystemFont,sans-serif;background:#0
 .cc-bar{flex:1;height:8px;background:#1e293b;border-radius:4px;overflow:hidden}
 .cc-fill{height:100%;border-radius:4px;transition:width .5s}
 
-/* Top venues */
-.top-list{display:flex;flex-direction:column;gap:8px}
 
 /* Offline table */
 .table-wrap{padding:16px 24px 24px}
@@ -208,7 +213,7 @@ tr:hover{background:#1c2333}
 
 <div class="hdr">
   <h1>IOT Dashboard — AiOO Tech</h1>
-  <div class="ts">${esc(dateStr)} ${esc(timeStr)}</div>
+  <div class="ts">${esc(dateStr)} ${esc(timeStr)} · Last update: ${esc(dateStr)} ${esc(timeStr)}</div>
 </div>
 
 <div class="summary">
@@ -220,7 +225,16 @@ tr:hover{background:#1c2333}
 
 <div class="grid">
   <div class="chart-card">
-    <div class="ch"><h3>Devices by platform</h3><span class="ch-sub">${totalJ3011} J3011 · ${totalJNX30} JNX30 · ${totalJNX42} JNX42</span></div>
+    <div class="ch"><h3>Device by state</h3><span class="ch-sub">${totalDeviceCount} total</span></div>
+    <div class="chart-body">
+      <div class="chart-wrap">
+        <div class="chart-svg">${donutSvg(stateData)}</div>
+        <div class="legend">${legend(stateData)}</div>
+      </div>
+    </div>
+  </div>
+  <div class="chart-card">
+    <div class="ch"><h3>All devices by platform</h3><span class="ch-sub">${totalJ3011} J3011 · ${totalJNX30} JNX30 · ${totalJNX42} JNX42</span></div>
     <div class="chart-body">
       <div class="chart-wrap">
         <div class="chart-svg">${donutSvg(platformData)}</div>
@@ -229,63 +243,11 @@ tr:hover{background:#1c2333}
     </div>
   </div>
   <div class="chart-card">
-    <div class="ch"><h3>Device by state</h3><span class="ch-sub">${totalDeviceCount} total</span></div>
+    <div class="ch"><h3>Device by camera type</h3><span class="ch-sub">${totalDeviceCount} devices</span></div>
     <div class="chart-body">
-      <div class="state-list">
-        <div class="st-row">
-          <div class="st-ind st-tr"></div>
-          <div class="st-info">
-            <span class="st-lbl">TRACKING</span>
-            <span class="st-num">${stateTracking}</span>
-            <span class="st-pct">${(stateTracking/totalDeviceCount*100).toFixed(1)}%</span>
-          </div>
-          <div class="st-bar"><div class="st-fill" style="width:${(stateTracking/totalDeviceCount*100).toFixed(1)}%;background:#3b82f6"></div></div>
-        </div>
-        <div class="st-row">
-          <div class="st-ind st-rd"></div>
-          <div class="st-info">
-            <span class="st-lbl">READY</span>
-            <span class="st-num">${stateReady}</span>
-            <span class="st-pct">${(stateReady/totalDeviceCount*100).toFixed(1)}%</span>
-          </div>
-          <div class="st-bar"><div class="st-fill" style="width:${(stateReady/totalDeviceCount*100).toFixed(1)}%;background:#22c55e"></div></div>
-        </div>
-        <div class="st-row">
-          <div class="st-ind st-id"></div>
-          <div class="st-info">
-            <span class="st-lbl">IDLE</span>
-            <span class="st-num">${stateIdle}</span>
-            <span class="st-pct">${(stateIdle/totalDeviceCount*100).toFixed(1)}%</span>
-          </div>
-          <div class="st-bar"><div class="st-fill" style="width:${(stateIdle/totalDeviceCount*100).toFixed(1)}%;background:#facc15"></div></div>
-        </div>
-        <div class="st-row">
-          <div class="st-ind st-of"></div>
-          <div class="st-info">
-            <span class="st-lbl">OFFLINE</span>
-            <span class="st-num">${totalOffline}</span>
-            <span class="st-pct">${(totalOffline/totalDeviceCount*100).toFixed(1)}%</span>
-          </div>
-          <div class="st-bar"><div class="st-fill" style="width:${(totalOffline/totalDeviceCount*100).toFixed(1)}%;background:#ef4444"></div></div>
-        </div>
-      </div>
-    </div>
-  </div>
-  <div class="chart-card">
-    <div class="ch"><h3>Top venues</h3><span class="ch-sub">Top 5</span></div>
-    <div class="chart-body">
-      <div class="top-list">
-        ${topLocations.map((l, i) => `
-        <div class="leg-item">
-          <div class="leg-dot" style="background:${locColors[i]}"></div>
-          <span class="leg-label">${esc(l.venue.replace('In-Store - ', '').replace('Outdoor - ', '').replace('Malls - ', ''))}</span>
-          <span class="leg-val">${l.total}</span>
-        </div>`).join('')}
-        <div class="leg-item" style="opacity:0.5">
-          <div class="leg-dot" style="background:#27272a"></div>
-          <span class="leg-label">Other (${locations.length - topLocations.length} venues)</span>
-          <span class="leg-val">${totalDeviceCount - topLocations.reduce((a, l) => a + (l.total || 0), 0)}</span>
-        </div>
+      <div class="chart-wrap">
+        <div class="chart-svg">${donutSvg(cameraData)}</div>
+        <div class="legend">${legend(cameraData)}</div>
       </div>
     </div>
   </div>

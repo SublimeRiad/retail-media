@@ -8,8 +8,8 @@ const https = require('https');
 const fs = require('fs');
 
 const API_URL = 'https://apim-eu-1.aiootech.com/v1/iot/status/current';
-const CLIENT_ID = 'b13b77ae-3d68-4560-9bf0-5de9780218b2';
-const CLIENT_SECRET = 'hsdf2sdFE5g75ze2%sgD5s4dg';
+const CLIENT_ID = process.env.AIOO_CLIENT_ID || 'b13b77ae-3d68-4560-9bf0-5de9780218b2';
+const CLIENT_SECRET = process.env.AIOO_CLIENT_SECRET || 'hsdf2sdFE5g75ze2%sgD5s4dg';
 const OUTPUT = '/tmp/rmstatus-light/iot-admin-data.json';
 
 function ensureDir(p) {
@@ -112,6 +112,13 @@ async function main() {
   const totalOffline = stateCount['Offline'] || stateCount['offline'] || 0;
   const totalOnline = devices.length - totalOffline;
 
+  // Camera type breakdown
+  const cameraBreakdown = {};
+  for (const d of devices) {
+    const ct = d.camera || 'Unknown';
+    cameraBreakdown[ct] = (cameraBreakdown[ct] || 0) + 1;
+  }
+
   const data = {
     scrapedAt: new Date().toISOString(),
     locations,
@@ -136,6 +143,7 @@ async function main() {
       unknown: stateCount['Unknown'] || 0,
     },
     offlineByVenue,
+    cameraBreakdown,
   };
 
   fs.writeFileSync(OUTPUT, JSON.stringify(data, null, 2));

@@ -1,18 +1,21 @@
 #!/usr/bin/env python3
 """Build cron-status.html — shows only dashboard-related cron runs & next executions."""
-import json, os, re
+import json, os, re, sys
 from datetime import datetime, timezone
+
+# Ensure we can import subprocess
+from subprocess import run as sub_run
 from urllib.request import Request, urlopen
 from urllib.error import HTTPError, URLError
 
-OUTPUT = "/tmp/rm-push/cron-status.html"
+OUTPUT = os.environ.get("GITHUB_WORKSPACE", "/tmp/rm-push") + "/cron-status.html"
 REPO_DIR = "/tmp/rm-push"
 GITHUB_OWNER = "SublimeRiad"
 GITHUB_REPO = "retail-media"
 
 def run(cmd, cwd=None):
     try:
-        r = __import__('subprocess').run(cmd, capture_output=True, text=True, cwd=cwd)
+        r = sub_run(cmd, capture_output=True, text=True, cwd=cwd)
         return r.stdout.strip()
     except Exception:
         return ""

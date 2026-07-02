@@ -1,4 +1,4 @@
-name: Update IoT Retail Dashboards
+name: Update All Dashboards
 
 on:
   schedule:
@@ -6,7 +6,7 @@ on:
   workflow_dispatch:
 
 jobs:
-  build-dashboards:
+  build-all-dashboards:
     runs-on: ubuntu-latest
     permissions:
       contents: write
@@ -20,6 +20,11 @@ jobs:
         with:
           node-version: '20'
 
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
       - name: Create output directory
         run: mkdir -p /tmp/rmstatus-light
 
@@ -29,21 +34,27 @@ jobs:
           AIOO_CLIENT_SECRET: ${{ secrets.AIOO_CLIENT_SECRET }}
         run: node iot-camera/scripts/fetch-iot-api.js
 
-      - name: Build dashboards
+      - name: Build IoT Retail dashboards
         run: |
           node iot-camera/scripts/build-rmstatus.js
           node iot-camera/scripts/build-retailer.js
           node iot-camera/scripts/build-wall-dash.js
 
-      - name: Set up Python
-        uses: actions/setup-python@v5
-        with:
-          python-version: '3.11'
+      - name: Build NSOC dashboards
+        env:
+          NSOC_CREDS: ${{ secrets.NSOC_CREDS }}
+          GRAFANA_TOKEN: ${{ secrets.GRAFANA_TOKEN }}
+        run: |
+          echo "$NSOC_CREDS" > ~/.nsoc_creds
+          echo "$GRAFANA_TOKEN" > ~/.grafana_token
+          python3 iot-camera/scripts/build-nsoc-dash.py
+          python3 iot-camera/scripts/build-nsoc-status.py
+          python3 iot-camera/scripts/build-nsoc-black-screen.py
 
       - name: Build cron-status.html
         run: python3 iot-camera/scripts/build-cron-status.py
 
-      - name: Copy & push dashboards
+      - name: Copy & push all dashboards
         run: |
           cp /tmp/rmstatus-light/rmstatus.html $GITHUB_WORKSPACE/retailmedia.html
           cp /tmp/rmstatus-light/retailer.html $GITHUB_WORKSPACE/retailer.html
@@ -52,6 +63,8 @@ jobs:
           git config user.name "iot-retail-bot"
           git config user.email "iot-retail-bot@aiootech.com"
           git add retailmedia.html retailer.html wall-dashboard.html cron-status.html
-          git diff --staged --quiet || git commit -m "Auto-update IoT dashboards $(date '+%Y-%m-%d %H:%M UTC')"
+          git add Retail-Media-Nsoc-Players.html nsoc-status.html grafana-dashboards/nsoc-black-screen.html
+          git add grafana-dashboards/nsoc-operations-dashboard.html 2>/dev/null || true
+          git diff --staged --quiet || git commit -m "Auto-update all dashboards $(date '+%Y-%m-%d %H:%M UTC')"
           git pull origin master --rebase || true
           git push

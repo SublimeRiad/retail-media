@@ -64,6 +64,8 @@ jobs:
           git config user.email "iot-retail-bot@aiootech.com"
           git add retailmedia.html retailer.html wall-dashboard.html cron-status.html
           git add Retail-Media-Nsoc-Players.html nsoc-status.html grafana-dashboards/nsoc-black-screen.html
+          # Touch nsoc-operations-dashboard.html to force git update (client-side data)
+          touch -m grafana-dashboards/nsoc-operations-dashboard.html
           git add grafana-dashboards/nsoc-operations-dashboard.html 2>/dev/null || true
           if git diff --staged --quiet; then
             # Keep-alive: force a timestamp commit even if nothing changed

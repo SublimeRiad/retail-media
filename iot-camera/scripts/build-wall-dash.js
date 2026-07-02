@@ -213,7 +213,7 @@ tr:hover{background:#1c2333}
 
 <div class="hdr">
   <h1>IOT Dashboard — AiOO Tech</h1>
-  <div class="ts">${esc(dateStr)} ${esc(timeStr)}</div>
+  <div class="ts">${esc(dateStr)} ${esc(timeStr)} · Last update: ${esc(dateStr)} ${esc(timeStr)}</div>
 </div>
 
 <div class="summary">

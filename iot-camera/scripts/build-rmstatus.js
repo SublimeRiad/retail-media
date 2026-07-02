@@ -235,7 +235,7 @@ body{font-family:'Inter',-apple-system,sans-serif;background:#08080e;color:#f1f5
 </head>
 <body>
 <div class="d">
-<div class="hd"><h1>Retail Media <span>· IoT Status</span></h1><div class="ts" id="ts">${esc(dateStr)}</div></div>
+<div class="hd"><h1>Retail Media <span>· IoT Status</span></h1><div style="display:flex;align-items:center;gap:12px"><div class="ts" id="ts" style="font-size:clamp(8px,0.65vw,10px);color:#52525b;font-family:monospace">Last update: ${esc(dateStr)}</div></div></div>
 
 <div class="mr">
   <div class="mi"><div class="mv">${totalDevices}</div><div class="ml">Total Devices · ${VENUES.length} venues</div></div>

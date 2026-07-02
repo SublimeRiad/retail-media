@@ -85,6 +85,10 @@ for wid_name, wf_name, wid, cron_expr, freq_label in WORKFLOWS:
         "cron": cron_expr,
         "freq": freq_label,
     }
+    # Override last run for current workflow with build time (we're inside the run)
+    if wid_name == 'update-iot-retail':
+        w_data[wid_name]['last'] = now.isoformat().replace('+00:00', 'Z')
+        w_data[wid_name]['conclusion'] = 'success'
     print(f"  {wf_name}: last={runs[0]['created_at'] if runs else 'N/A'}, status={runs[0]['conclusion'] if runs else 'N/A'}")
 
 pages_runs = github_pages_runs()

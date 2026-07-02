@@ -117,7 +117,7 @@ function loadMaps(){
       var m = L.circleMarker([p.lat,p.lng],opts).addTo(p.lat>25.1?window.dMap:window.aMap).bindTooltip('<b>'+p.n.replace('OFF_','')+'</b><br>'+p.loc,{direction:'top',className:'tt-dark'});
       if(p.lat>25.1){dMarkers.push(m)}else{aMarkers.push(m)}
     });
-    if(dMarkers.length){window.dMap.fitBounds(L.featureGroup(dMarkers).getBounds().pad(0.12));}
+    if(dMarkers.length){window.dMap.fitBounds(L.featureGroup(dMarkers).getBounds().pad(0.05));window.dMap.setZoom(Math.min(window.dMap.getZoom(),12));}
     if(aMarkers.length){window.aMap.fitBounds(L.featureGroup(aMarkers).getBounds().pad(0.12));}
   }, 300);
 }

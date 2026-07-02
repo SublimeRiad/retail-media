@@ -35,6 +35,14 @@ jobs:
           node iot-camera/scripts/build-retailer.js
           node iot-camera/scripts/build-wall-dash.js
 
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Build cron-status.html
+        run: python3 iot-camera/scripts/build-cron-status.py
+
       - name: Copy & push dashboards
         run: |
           cp /tmp/rmstatus-light/rmstatus.html $GITHUB_WORKSPACE/retailmedia.html
@@ -43,7 +51,7 @@ jobs:
           cd $GITHUB_WORKSPACE
           git config user.name "iot-retail-bot"
           git config user.email "iot-retail-bot@aiootech.com"
-          git add retailmedia.html retailer.html wall-dashboard.html
+          git add retailmedia.html retailer.html wall-dashboard.html cron-status.html
           git diff --staged --quiet || git commit -m "Auto-update IoT dashboards $(date '+%Y-%m-%d %H:%M UTC')"
           git pull origin master --rebase || true
           git push

@@ -15,7 +15,10 @@ const data = JSON.parse(fs.readFileSync(DATA_FILE, 'utf-8'));
 
 const now = new Date();
 const pad2 = n => String(n).padStart(2, '0');
-const dateStr = `${pad2(now.getDate())}/${pad2(now.getMonth()+1)}/${now.getFullYear()}, ${pad2(now.getHours())}:${pad2(now.getMinutes())}:${pad2(now.getSeconds())}`;
+const dubaiOpts = { timeZone: 'Asia/Dubai', hour12: false };
+const dubaiDate = new Intl.DateTimeFormat('en-GB', { timeZone: 'Asia/Dubai', day: '2-digit', month: '2-digit', year: 'numeric' }).format(now);
+const dubaiTime = new Intl.DateTimeFormat('en-GB', { timeZone: 'Asia/Dubai', hour: '2-digit', minute: '2-digit', second: '2-digit', hour12: false }).format(now);
+const dateStr = `${dubaiDate}, ${dubaiTime} GST`;
 
 function esc(s) { return s ? String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;') : ''; }
 

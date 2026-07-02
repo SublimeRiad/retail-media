@@ -54,9 +54,8 @@ jobs:
           git add retailmedia.html retailer.html wall-dashboard.html cron-status.html
           if ! git diff --staged --quiet; then
             git commit -m "Auto-update IoT dashboards $(date '+%Y-%m-%d %H:%M UTC')"
-            git pull origin master --rebase || true
-            git push
-            echo "✅ IoT dashboards pushed"
+            git push --force
+            echo "✅ IoT dashboards pushed (--force)"
           else
             echo "ℹ️ No IoT changes to push"
           fi
@@ -95,9 +94,8 @@ jobs:
           git add grafana-dashboards/nsoc-operations-dashboard.html 2>/dev/null || true
           if ! git diff --staged --quiet; then
             git commit -m "Auto-update NSOC dashboards $(date '+%Y-%m-%d %H:%M UTC')"
-            git pull origin master --rebase || true
-            git push
-            echo "✅ NSOC dashboards pushed"
+            git push --force
+            echo "✅ NSOC dashboards pushed (--force)"
           else
             echo "ℹ️ No NSOC changes"
           fi

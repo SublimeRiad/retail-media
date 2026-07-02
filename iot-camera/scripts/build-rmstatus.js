@@ -136,8 +136,12 @@ if (data.offlineByVenue) {
   }
 }
 
-// Attention table
-const attTotal = attention.length;
+// Attention table — filter to only retail media venues (Union Coop + Lulu)
+const retaiFiltered = attention.filter(d => {
+  const full = macToVenue[d.device] || '';
+  return /union coop|lulu/i.test(full);
+});
+const attTotal = retaiFiltered.length;
 
 function getVenueName(mac) {
   const full = macToVenue[mac];
@@ -157,7 +161,7 @@ function getParent(mac) {
   return v ? v.parent : '';
 }
 
-const attRows = attTotal > 0 ? attention.map(d => {
+const attRows = attTotal > 0 ? retaiFiltered.map(d => {
   const vn = getVenueName(d.device);
   return `    <tr>
       <td><div style="font-weight:500;color:#e2e8f0;font-size:clamp(9px,0.7vw,11px)">${esc(vn)}</div></td>

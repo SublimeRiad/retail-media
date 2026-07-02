@@ -2,7 +2,7 @@ name: Update All Dashboards
 
 on:
   schedule:
-    - cron: '*/10 * * * *'
+    - cron: '*/15 * * * *'
   workflow_dispatch:
 
 jobs:
@@ -65,6 +65,13 @@ jobs:
           git add retailmedia.html retailer.html wall-dashboard.html cron-status.html
           git add Retail-Media-Nsoc-Players.html nsoc-status.html grafana-dashboards/nsoc-black-screen.html
           git add grafana-dashboards/nsoc-operations-dashboard.html 2>/dev/null || true
-          git diff --staged --quiet || git commit -m "Auto-update all dashboards $(date '+%Y-%m-%d %H:%M UTC')"
+          if git diff --staged --quiet; then
+            # Keep-alive: force a timestamp commit even if nothing changed
+            echo "keep-alive $(date '+%Y-%m-%d %H:%M:%S UTC')" > .github/keepalive.txt
+            git add .github/keepalive.txt
+            git commit -m "Keep-alive $(date '+%Y-%m-%d %H:%M UTC')"
+          else
+            git commit -m "Auto-update all dashboards $(date '+%Y-%m-%d %H:%M UTC')"
+          fi
           git pull origin master --rebase || true
           git push

@@ -1,0 +1,54 @@
+name: Update IoT Retail Dashboards
+
+on:
+  schedule:
+    - cron: '*/10 * * * *'
+  workflow_dispatch:
+
+jobs:
+  build-dashboards:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v4
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Create output directories
+        run: mkdir -p /tmp/rmstatus-light /tmp/rm-push
+
+      - name: Fetch IoT data from API
+        env:
+          AIOO_CLIENT_ID: ${{ secrets.AIOO_CLIENT_ID }}
+          AIOO_CLIENT_SECRET: ${{ secrets.AIOO_CLIENT_SECRET }}
+        run: node iot-camera/scripts/fetch-iot-api.js
+
+      - name: Build retailmedia.html
+        run: node iot-camera/scripts/build-rmstatus.js
+
+      - name: Build retailer.html
+        run: node iot-camera/scripts/build-retailer.js
+
+      - name: Build wall-dashboard.html
+        run: node iot-camera/scripts/build-wall-dash.js
+
+      - name: Copy dashboards to repo
+        run: |
+          cp /tmp/rmstatus-light/retailmedia.html /tmp/rm-push/retailmedia.html
+          cp /tmp/rmstatus-light/retailer.html /tmp/rm-push/retailer.html
+          cp /tmp/rmstatus-light/wall-dashboard.html /tmp/rm-push/wall-dashboard.html
+
+      - name: Commit & push
+        run: |
+          cd /tmp/rm-push
+          git config user.name "iot-retail-bot"
+          git config user.email "iot-retail-bot@aiootech.com"
+          git add retailmedia.html retailer.html wall-dashboard.html
+          git diff --staged --quiet || git commit -m "Auto-update IoT dashboards $(date '+%Y-%m-%d %H:%M UTC')"
+          git push

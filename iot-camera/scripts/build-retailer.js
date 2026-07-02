@@ -131,7 +131,7 @@ function hexagonHtml(r) {
   let subtitle;
   
   if (r.isPlaceholder) {
-    storesHtml = `<div class="ph"><span class="ph-icon">📦</span><span class="ph-text">Pas de Retail pour le moment</span></div>`;
+    storesHtml = `<div class="ph"><span class="ph-icon">📦</span><span class="ph-text">No retail data</span></div>`;
     subtitle = `<span style="color:#52525b">no data</span>`;
   } else {
     storesHtml = r.storeList.map(s => {

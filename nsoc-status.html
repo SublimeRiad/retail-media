@@ -28,7 +28,7 @@ body{background:#0b1120;color:#e2e8f0;font-family:'Inter',-apple-system,sans-ser
 .sc .m{font-size:clamp(8px,0.6vw,10px);color:#64748b;margin-top:1px}
 .sc .m .s{font-size:clamp(10px,1vw,14px)}
 .sc .ts{margin-top:3px;display:flex;gap:4px;flex-wrap:wrap}
-.maps-row{display:flex;gap:clamp(3px,0.4vw,8px);flex-shrink:0;height:clamp(250px,35vh,500px)}
+.maps-row{display:flex;gap:clamp(3px,0.4vw,8px);flex-shrink:0;height:clamp(320px,52vh,700px)}
 .mp{flex:1;display:flex;flex-direction:column;background:#111827;border-radius:6px;border:1px solid #1f2b3e;overflow:hidden}
 .mp .ph{padding:clamp(2px,0.3vh,4px) clamp(6px,0.8vw,10px);border-bottom:1px solid #1f2b3e;flex-shrink:0}
 .mp .ph h3{font-size:clamp(8px,0.6vw,10px);font-weight:600;color:#94a3b8;text-transform:uppercase;letter-spacing:.3px}
@@ -112,8 +112,8 @@ function loadMaps(){
     PCS.forEach(function(p){
       var isOff = p.n.startsWith('OFF_');
       var opts = isOff
-        ? {radius:8,fillColor:'#ef4444',color:'#ff8888',weight:3,opacity:1,fillOpacity:0.9}
-        : {radius:5,fillColor:'#22c55e',color:'#4ade80',weight:2,opacity:0.8,fillOpacity:0.6};
+        ? {radius:12,fillColor:'#ef4444',color:'#ff4444',weight:3,opacity:1,fillOpacity:1.0}
+        : {radius:7,fillColor:'#22c55e',color:'#4ade80',weight:2,opacity:0.9,fillOpacity:0.7};
       var m = L.circleMarker([p.lat,p.lng],opts).addTo(p.lat>25.1?window.dMap:window.aMap).bindTooltip('<b>'+p.n.replace('OFF_','')+'</b><br>'+p.loc,{direction:'top',className:'tt-dark'});
       if(p.lat>25.1){dMarkers.push(m)}else{aMarkers.push(m)}
     });

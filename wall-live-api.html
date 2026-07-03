@@ -19,7 +19,7 @@ body{font-family:Inter,-apple-system,BlinkMacSystemFont,sans-serif;background:#0
 .sc .sl{font-size:11px;color:#64748b;margin-top:4px;text-transform:uppercase;letter-spacing:.5px}
 .sc.b .sv{color:#60a5fa}.sc.g .sv{color:#4ade80}.sc.r .sv{color:#f87171}.sc.p .sv{color:#a78bfa}
 
-.grid{display:grid;grid-template-columns:2fr 1fr 1fr;gap:16px;padding:0 24px}
+.grid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:16px;padding:0 24px}
 @media(max-width:1200px){.grid{grid-template-columns:1fr}}
 
 .chart-card{background:#161b22;border-radius:12px;border:1px solid #1e293b;overflow:hidden}
@@ -36,14 +36,6 @@ body{font-family:Inter,-apple-system,BlinkMacSystemFont,sans-serif;background:#0
 .leg-label{color:#94a3b8;flex:1}
 .leg-val{font-weight:700;font-size:14px;color:#e2e8f0}
 .leg-pct{font-size:9px;color:#52525b;margin-left:3px}
-
-.cat-list{display:flex;flex-direction:column;gap:8px}
-.cc-row{display:flex;align-items:center;gap:10px;font-size:12px}
-.cc-name{display:flex;align-items:center;gap:5px;min-width:120px;color:#94a3b8}
-.cc-dot{width:8px;height:8px;border-radius:2px;flex-shrink:0}
-.cc-val{font-weight:700;color:#e2e8f0;min-width:30px;text-align:right}
-.cc-bar{flex:1;height:8px;background:#1e293b;border-radius:4px;overflow:hidden}
-.cc-fill{height:100%;border-radius:4px;transition:width .5s}
 
 .table-wrap{padding:16px 24px 24px}
 .tc{background:#161b22;border-radius:12px;border:1px solid #1e293b;overflow:hidden}
@@ -75,12 +67,18 @@ function donutSvg(data, total) {
   let cur = 0;
   const arcs = data.map(d => {
     const pct = d.v / total;
-    const len = circ * pct;
+    const len = Math.max(circ * pct, 0.5);
     const off = -(cur / total) * circ;
     cur += pct;
     return `<circle cx="${cx}" cy="${cy}" r="${R}" fill="none" stroke="${d.c}" stroke-width="35" stroke-dasharray="${len} ${circ-len}" stroke-dashoffset="${off}" transform="rotate(-90 ${cx} ${cy})"/>`;
   }).join('');
   return `<svg viewBox="0 0 240 240"><circle cx="${cx}" cy="${cy}" r="${R}" fill="none" stroke="#27272a" stroke-width="35"/>${arcs}<text x="${cx}" y="${cy+6}" text-anchor="middle" fill="#e2e8f0" font-size="28" font-weight="800">${total}</text><text x="${cx}" y="${cy+28}" text-anchor="middle" fill="#64748b" font-size="11">devices</text></svg>`;
+}
+
+function parseDate(s) {
+  if (!s) return 0;
+  const m = s.match(/(\d+)\/(\d+)\/(\d+)\s+(\d+):(\d+):(\d+)/);
+  return m ? new Date(m[3], m[2]-1, m[1], m[4], m[5], m[6]).getTime() : 0;
 }
 
 function render(devices) {
@@ -89,15 +87,16 @@ function render(devices) {
 
   const states = {};
   const platforms = {};
-  const catColors = {'j3011':'#06b6d4','jnx30':'#3b82f6','jnx42':'#6366f1','j30':'#22c55e','unknown':'#52525b'};
-  const stateColors = {'Ready':'#4ade80','Tracking':'#3b82f6','Idle':'#facc15','Offline':'#ef4444','Unknown':'#52525b'};
-
+  const camTypes = {};
   let offline = [];
+
   for (const d of devices) {
     const s = d.state || 'Unknown';
     states[s] = (states[s]||0)+1;
     const p = (d.platform||'unknown').toLowerCase();
     platforms[p] = (platforms[p]||0)+1;
+    const c = d.camera_type || 'Unknown';
+    camTypes[c] = (camTypes[c]||0)+1;
     if (s === 'Offline') offline.push(d);
   }
 
@@ -105,24 +104,32 @@ function render(devices) {
   const offCount = states['Offline']||0;
   const onCount = total - offCount;
 
-  // Top 14 most recent offline only (like wall IOT)
-  offline.sort((a,b)=>{
-    const p=s=>{if(!s)return 0;const m=s.match(/(\d+)\/(\d+)\/(\d+)\s+(\d+):(\d+):(\d+)/);return m?new Date(m[3],m[2]-1,m[1],m[4],m[5],m[6]).getTime():0};
-    return p(b.last_seen)-p(a.last_seen);
-  });
+  // Top 14 most recent offline
+  offline.sort((a,b) => parseDate(b.last_seen) - parseDate(a.last_seen));
   const attention = offline.slice(0, 14);
+
+  // Colors
+  const stateColors = {'Ready':'#4ade80','Tracking':'#3b82f6','Idle':'#facc15','Offline':'#ef4444','Unknown':'#52525b'};
+  const platPalette = ['#06b6d4','#22c55e','#3b82f6','#6366f1','#f59e0b','#14b8a6','#8b5cf6','#0891b2','#52525b'];
+  const camPalette = ['#06b6d4','#22c55e','#3b82f6','#6366f1','#f59e0b','#14b8a6','#52525b'];
 
   // Summary cards
   document.getElementById('summary').innerHTML = [
-    {v:total,l:'Total devices',c:'b'},{v:onCount,l:'Online',c:'g'},{v:offCount,l:'Offline',c:'r'},
+    {v:total,l:'Total devices',c:'b'},{v:onCount,l:'Online',c:'g'},{v:offCount,l:'OFFLINE',c:'r'},
     {v:Object.keys(devices.reduce((a,d)=>{a[(d.venue||'').split('|')[0].trim()||'?']=1;return a},{})).length,l:'Venues',c:'b'}
   ].map(x=>`<div class="sc ${x.c}"><div class="sv">${x.v}</div><div class="sl">${x.l}</div></div>`).join('');
 
-  // State donut + platform bars
+  // State donut
   const stateOrder = ['Ready','Tracking','Idle','Offline','Unknown'];
-  const stateData = stateOrder.filter(s=>states[s]).map(s=>({l:s,v:states[s],c:stateColors[s]}));
-  const platOrder = ['j3011','jnx30','jnx42','j30','unknown'];
-  const platData = platOrder.filter(p=>platforms[p]).map(p=>({l:p, v:platforms[p], c:catColors[p]||'#52525b'}));
+  const stateData = stateOrder.filter(s=>states[s]).map(s=>({l:s, v:states[s], c:stateColors[s]}));
+
+  // Platform donut - sorted by count desc
+  const platOrder = Object.entries(platforms).sort((a,b) => b[1]-a[1]);
+  const platData = platOrder.map(([p,v],i) => ({l:p, v, c: platPalette[i % platPalette.length]}));
+
+  // Camera type donut
+  const camOrder = Object.entries(camTypes).sort((a,b) => b[1]-a[1]);
+  const camData = camOrder.map(([c,v],i) => ({l:c, v, c: camPalette[i % camPalette.length]}));
 
   document.getElementById('content').innerHTML = `
     <div class="chart-card">
@@ -135,20 +142,26 @@ function render(devices) {
       </div>
     </div>
     <div class="chart-card">
-      <div class="ch"><h3>Devices by platform</h3><span class="ch-sub">${total} total</span></div>
+      <div class="ch"><h3>All devices by platform</h3><span class="ch-sub">${total} total</span></div>
       <div class="chart-body">
-        <div class="chart-svg">${donutSvg(platData.map(d=>({v:d.v,c:d.c})), total)}</div>
+        <div class="chart-wrap">
+          <div class="chart-svg">${donutSvg(platData.map(d=>({v:d.v,c:d.c})), total)}</div>
+          <div class="legend">${platData.map(d=>`<div class="leg-item"><div class="leg-dot" style="background:${d.c}"></div><span class="leg-label">${d.l}</span><span class="leg-val">${d.v}</span><span class="leg-pct">${(d.v/total*100).toFixed(1)}%</span></div>`).join('')}</div>
+        </div>
       </div>
     </div>
     <div class="chart-card">
-      <div class="ch"><h3>Platform</h3><span class="ch-sub">by type</span></div>
+      <div class="ch"><h3>Device by camera type</h3><span class="ch-sub">${total} total</span></div>
       <div class="chart-body">
-        <div class="cat-list">${platData.map(d=>`<div class="cc-row"><div class="cc-name"><div class="cc-dot" style="background:${d.c}"></div>${d.l}</div><div class="cc-bar"><div class="cc-fill" style="width:${(d.v/total*100).toFixed(0)}%;background:${d.c}"></div></div><span class="cc-val">${d.v}</span></div>`).join('')}</div>
+        <div class="chart-wrap">
+          <div class="chart-svg">${donutSvg(camData.map(d=>({v:d.v,c:d.c})), total)}</div>
+          <div class="legend">${camData.map(d=>`<div class="leg-item"><div class="leg-dot" style="background:${d.c}"></div><span class="leg-label">${d.l}</span><span class="leg-val">${d.v}</span><span class="leg-pct">${(d.v/total*100).toFixed(1)}%</span></div>`).join('')}</div>
+        </div>
       </div>
     </div>
   `;
 
-  // Offline table — only 14 most recent
+  // Offline table
   document.getElementById('tableWrap').innerHTML = attention.length > 0 ? `
     <div class="tc">
       <div class="thdr">⚠ Devices needing attention <span class="sub">${attention.length} device${attention.length!==1?'s':''}</span></div>

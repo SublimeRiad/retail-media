@@ -4,179 +4,189 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1.0">
 <meta http-equiv="refresh" content="300">
-<title>IOT Dashboard — Live API</title>
+<title>IOT Dashboard</title>
 <style>
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap');
 *{margin:0;padding:0;box-sizing:border-box}
-body{font-family:Inter,-apple-system,BlinkMacSystemFont,sans-serif;background:#0d1117;color:#e2e8f0;min-height:100vh;padding:0;font-size:14px}
-.hdr{padding:16px 24px;border-bottom:1px solid #1e293b;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:8px}
-.hdr h1{font-size:18px;font-weight:600;color:#e2e8f0}
-.hdr .ts{color:#52525b;font-size:11px;font-family:monospace}
-.summary{display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:12px;padding:16px 24px}
-.sc{background:#161b22;border-radius:10px;border:1px solid #1e293b;padding:14px 16px;text-align:center}
-.sc .sv{font-size:28px;font-weight:800;line-height:1.2}
-.sc .sl{font-size:10px;color:#64748b;margin-top:4px;text-transform:uppercase;letter-spacing:.5px}
-.sc.b .sv{color:#60a5fa}.sc.g .sv{color:#4ade80}.sc.r .sv{color:#f87171}
-.content{display:grid;grid-template-columns:1fr 1fr;gap:16px;padding:0 24px 24px}@media(max-width:900px){.content{grid-template-columns:1fr}}
-.card{background:#161b22;border-radius:12px;border:1px solid #1e293b;overflow:hidden}
-.card .ch{display:flex;align-items:center;justify-content:space-between;padding:14px 18px;border-bottom:1px solid #1e293b}
-.card .ch h3{font-size:13px;font-weight:600;color:#e2e8f0}
-.card .ch .ch-sub{font-size:10px;color:#64748b}
-.card-body{padding:16px}
-.state-list{display:flex;flex-direction:column;gap:10px}
-.sr{display:flex;align-items:center;gap:10px}
-.sr .dot{width:12px;height:12px;border-radius:3px;flex-shrink:0}
-.sr .nm{flex:1;color:#94a3b8;font-size:13px}
-.sr .vl{font-weight:700;font-size:15px;color:#e2e8f0;min-width:30px;text-align:right}
-.sr .br{flex:1;height:8px;background:#1e293b;border-radius:4px;overflow:hidden;max-width:200px}
-.sr .bf{height:100%;border-radius:4px;transition:width .5s}
-.v-list{display:flex;flex-direction:column;gap:6px;max-height:450px;overflow-y:auto}
-.vr{padding:8px 12px;border-radius:6px;border:1px solid #1e293b;display:flex;justify-content:space-between;align-items:center;font-size:12px}
-.vr .vn{color:#e2e8f0;font-weight:500}
-.vr .vc{color:#64748b}
-.table-wrap{grid-column:1/-1}
-.tbl{width:100%;border-collapse:collapse;font-size:12px}
-.tbl th{padding:10px 16px;text-align:left;color:#64748b;font-weight:600;font-size:10px;text-transform:uppercase;letter-spacing:.5px;border-bottom:1px solid #1e293b}
-.tbl td{padding:10px 16px;border-bottom:1px solid #1e293b;color:#94a3b8}
-.tbl tr:hover td{background:#1e293b40}
-.st-o{color:#f87171;font-weight:700}.st-r{color:#4ade80}.st-t{color:#3b82f6}.st-i{color:#facc15}
-.flash{position:fixed;bottom:20px;right:20px;background:#161b22;border:1px solid #1e293b;border-radius:8px;padding:10px 16px;font-size:12px;color:#64748b;opacity:0;transition:opacity .3s;z-index:999}
-.flash.show{opacity:1}
+body{font-family:Inter,sans-serif;background:#0b1219;color:#e2e8f0;min-height:100vh;overflow-x:hidden}
+.header{display:flex;align-items:center;justify-content:space-between;padding:16px 32px;border-bottom:1px solid #1e2d3d;background:#0f1923}
+.header h1{font-size:20px;font-weight:700;color:#e2e8f0;letter-spacing:-.3px}
+.header .brand{font-size:18px;font-weight:800;color:#2dd4bf;letter-spacing:1px}
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:20px;padding:24px 32px;max-width:1800px;margin:0 auto}
+.card{background:#0f1923;border-radius:16px;border:1px solid #1e2d3d;overflow:hidden}
+.card-header{display:flex;align-items:center;justify-content:space-between;padding:16px 20px;border-bottom:1px solid #1e2d3d}
+.card-header h2{font-size:13px;font-weight:600;color:#94a3b8;text-transform:uppercase;letter-spacing:.6px}
+.card-header .val{font-size:28px;font-weight:800;color:#e2e8f0;line-height:1}
+.card-body{padding:20px}
+
+/* Top bar */
+.top-strip{grid-column:1/-1;background:#0f1923;border-radius:16px;border:1px solid #1e2d3d;padding:16px 24px;display:flex;align-items:center;gap:32px}
+.top-strip .item{display:flex;align-items:center;gap:6px}
+.top-strip .item .lbl{color:#64748b;font-size:11px;text-transform:uppercase;letter-spacing:.5px}
+.top-strip .item .num{font-size:18px;font-weight:700}
+
+/* Donut */
+.donut-wrap{display:flex;align-items:center;gap:24px;justify-content:center;flex-wrap:wrap}
+.donut-svg-wrap{width:150px;height:150px;flex-shrink:0}
+.donut-legend{display:flex;flex-direction:column;gap:8px}
+.leg-item{display:flex;align-items:center;gap:8px;font-size:12px}
+.leg-dot{width:10px;height:10px;border-radius:3px;flex-shrink:0}
+.leg-label{color:#94a3b8;flex:1;white-space:nowrap}
+.leg-val{font-weight:600;color:#e2e8f0;min-width:28px;text-align:right}
+.leg-pct{font-size:10px;color:#52525b;min-width:32px;text-align:right}
+
+/* Bar chart */
+.bar-chart{display:flex;flex-direction:column;gap:12px}
+.bar-row{display:flex;align-items:center;gap:10px}
+.bar-label{min-width:100px;font-size:12px;color:#94a3b8}
+.bar-track{flex:1;height:12px;background:#1e2d3d;border-radius:6px;overflow:hidden}
+.bar-fill{height:100%;border-radius:6px;transition:width .5s}
+.bar-val{min-width:24px;font-size:12px;font-weight:600;color:#e2e8f0;text-align:right}
+
+/* Stats cards row */
+.stats-row{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;max-width:900px;margin:0 auto}
+.sc{background:#13212e;border-radius:10px;text-align:center;padding:12px 8px;border:1px solid #1e2d3d}
+.sc .num{font-size:22px;font-weight:800}
+.sc .lbl{font-size:10px;color:#64748b;margin-top:2px;text-transform:uppercase;letter-spacing:.4px}
+
+/* Platform donut */
+.plat-wrap{display:flex;flex-direction:column;align-items:center;gap:16px}
+.plat-row{display:flex;align-items:center;gap:12px;width:100%}
+.plat-label{min-width:60px;font-size:12px;color:#94a3b8}
+.plat-bar-wrap{flex:1;height:10px;background:#1e2d3d;border-radius:5px;overflow:hidden}
+.plat-fill{height:100%;border-radius:5px}
+.plat-val{min-width:24px;font-size:12px;font-weight:600;color:#e2e8f0;text-align:right}
+
+/* Offline table */
+.table-card{grid-column:1/-1}
+.tbl-wrap{max-height:500px;overflow-y:auto}
+.tbl-wrap::-webkit-scrollbar{width:5px}
+.tbl-wrap::-webkit-scrollbar-track{background:#0f1923}
+.tbl-wrap::-webkit-scrollbar-thumb{background:#1e2d3d;border-radius:3px}
+table{width:100%;border-collapse:collapse;font-size:12px}
+th{padding:10px 16px;text-align:left;color:#64748b;font-weight:600;font-size:10px;text-transform:uppercase;letter-spacing:.5px;border-bottom:1px solid #1e2d3d;position:sticky;top:0;background:#0f1923}
+td{padding:8px 16px;border-bottom:1px solid #1e2d3d;color:#94a3b8}
+tr:hover td{background:#13212e}
+.st-offline{color:#f87171;font-weight:600}
+.st-ready{color:#4ade80}
+.st-tracking{color:#3b82f6}
+.st-idle{color:#facc15}
+.ts{color:#52525b;font-size:11px;font-family:monospace;margin-left:12px}
+
+/* Total device big number */
+.big-card{grid-column:1/-1;display:grid;grid-template-columns:1fr 1fr;gap:20px}
+@media(max-width:1200px){.grid{grid-template-columns:1fr;gap:16px;padding:16px}.big-card{grid-template-columns:1fr}}
 </style>
 </head>
 <body>
-<div class="hdr"><h1>⏺ IoT Wall — Live API</h1><span class="ts" id="ts">Loading...</span></div>
-<div class="summary" id="summary"></div>
-<div class="content" id="content"></div>
-<div class="flash" id="flash"></div>
+<div class="header"><h1>IOT Dashboard</h1><div class="brand">aioo</div></div>
+<div class="grid" id="app">
+  <div class="top-strip" id="topStrip"></div>
+  <div class="card" id="stateCard"><div class="card-header"><h2>Devices by state</h2></div><div class="card-body"><div class="donut-wrap" id="donutWrap"></div></div></div>
+  <div class="card" id="platformCard"><div class="card-header"><h2>Devices by platform</h2></div><div class="card-body"><div class="plat-wrap" id="platWrap"></div></div></div>
+  <div class="big-card" id="bigCard"><div class="card" id="totalCard"><div class="card-header"><h2>Total device</h2></div><div class="card-body"><div class="stats-row" id="statsRow"></div></div></div></div>
+  <div class="card table-card" id="offlineCard"><div class="card-header"><h2>❏ Devices needing attention</h2><span class="ts" id="offlineCount"></span></div><div class="tbl-wrap" id="tblWrap"><table><thead><tr><th>Venue</th><th>Asset</th><th>Device</th><th>State</th><th>Last seen</th></tr></thead><tbody id="tblBody"></tbody></table></div></div>
+</div>
 
 <script>
 const CLIENT_ID = 'b13b77ae-3d68-4560-9bf0-5de9780218b2';
-const CLIENT_SECRET = 'hsdf2sdFE5g75ze2%sgD5s4dg';
+const CLIENT_SECRET = '***';
 const API_URL = 'https://apim-eu-1.aiootech.com/v1/iot/status/current';
-const REFRESH_MS = 300000; // 5 min
 
-function $(id) { return document.getElementById(id); }
+function esc(s){return s?String(s).replace(/[&<>]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;'})[c]):''}
 
-function flash(msg) {
-  const f = $('flash');
-  f.textContent = msg;
-  f.classList.add('show');
-  setTimeout(() => f.classList.remove('show'), 3000);
-}
-
-function stateClass(s) {
-  const map = { 'Offline':'st-o', 'Ready':'st-r', 'Tracking':'st-t', 'Idle':'st-i', 'Unknown':'' };
-  return map[s] || '';
+function donutSVG(data, total) {
+  if (!total) return '<svg width="150" height="150" viewBox="0 0 150 150"><circle cx="75" cy="75" r="60" fill="none" stroke="#1e2d3d" stroke-width="20"/></svg>';
+  let current = 0;
+  const R = 60, cx = 75, cy = 75, circ = 2 * Math.PI * R;
+  let paths = [];
+  for (const item of data) {
+    const pct = item.val / total;
+    const len = circ * pct;
+    const start = current / total * circ;
+    current += pct;
+    paths.push(`<circle cx="${cx}" cy="${cy}" r="${R}" fill="none" stroke="${item.color}" stroke-width="20" stroke-dasharray="${len} ${circ-len}" stroke-dashoffset="${-start}" transform="rotate(-90 ${cx} ${cy})"/>`);
+  }
+  return `<svg width="150" height="150" viewBox="0 0 150 150">${paths.join('')}<circle cx="${cx}" cy="${cy}" r="42" fill="#0f1923"/><text x="${cx}" y="${cy+5}" text-anchor="middle" fill="#e2e8f0" font-size="22" font-weight="700">${total}</text></svg>`;
 }
 
 function render(devices) {
-  const now = new Date().toLocaleString('en-GB', { timeZone:'Asia/Dubai', day:'2-digit', month:'2-digit', year:'numeric', hour:'2-digit', minute:'2-digit', second:'2-digit', hour12:false }) + ' GST';
-  $('ts').textContent = 'Updated: ' + now;
+  const now = new Date().toLocaleString('en-GB',{timeZone:'Asia/Dubai',day:'2-digit',month:'2-digit',year:'numeric',hour:'2-digit',minute:'2-digit',second:'2-digit',hour12:false})+' GST';
 
   // Count states
   const states = {};
-  const venueMap = {};
+  const platforms = {};
   let attention = [];
   for (const d of devices) {
     const s = d.state || 'Unknown';
-    states[s] = (states[s] || 0) + 1;
-    const v = (d.venue || '').split('|')[0].trim() || 'Unknown';
-    if (!venueMap[v]) venueMap[v] = { total:0, offline:0 };
-    venueMap[v].total++;
-    const sk = s.toLowerCase();
-    if (sk === 'offline') {
-      venueMap[v].offline++;
-      attention.push(d);
-    }
+    states[s] = (states[s]||0) + 1;
+    const p = (d.platform || 'unknown').toLowerCase();
+    platforms[p] = (platforms[p]||0) + 1;
+    if (s === 'Offline') attention.push(d);
   }
-
-  // Sort offline by last_seen descending
-  attention.sort((a,b) => {
-    const parse = s => {
-      if (!s) return 0;
-      const m = s.match(/(\d+)\/(\d+)\/(\d+)\s+(\d+):(\d+):(\d+)/);
-      return m ? new Date(m[3],m[2]-1,m[1],m[4],m[5],m[6]).getTime() : 0;
-    };
-    return parse(b.last_seen) - parse(a.last_seen);
-  });
 
   const total = devices.length;
-  const offline = states['Offline'] || 0;
+  const offline = states['Offline']||0;
   const online = total - offline;
-  const venueCount = Object.keys(venueMap).length;
 
-  // Summary cards
-  const cards = [
-    { val:total, lbl:'Total devices', cls:'b' },
-    { val:online, lbl:'Online', cls:'g' },
-    { val:offline, lbl:'Offline', cls:'r' },
-    { val:venueCount, lbl:'Venues', cls:'b' },
-    { val:attention.length, lbl:'Attention', cls:'r' },
-  ];
-  $('summary').innerHTML = cards.map(c => `<div class="sc ${c.cls}"><div class="sv">${c.val}</div><div class="sl">${c.lbl}</div></div>`).join('');
+  // Top strip — summary stats
+  document.getElementById('topStrip').innerHTML = [
+    {lbl:'Total devices', num:total, c:'#4ade80'},
+    {lbl:'Online', num:online, c:'#4ade80'},
+    {lbl:'Offline', num:offline, c:'#f87171'},
+    {lbl:'Venues', num:Object.keys(devices.reduce((a,d)=>{const v=(d.venue||'').split('|')[0].trim()||'?';a[v]=1;return a},{})).length, c:'#60a5fa'},
+    {lbl:'Platforms', num:Object.keys(platforms).length, c:'#a78bfa'},
+  ].map(i=>`<div class="item"><span class="num" style="color:${i.c}">${i.num}</span><span class="lbl">${i.lbl}</span></div>`).join('');
 
-  // State breakdown + Venue list
-  const stateColors = { 'Offline':'#f87171', 'Ready':'#4ade80', 'Tracking':'#3b82f6', 'Idle':'#facc15', 'Unknown':'#52525b' };
+  // STATE DONUT
+  const stateColors = {'Ready':'#4ade80','Tracking':'#3b82f6','Idle':'#facc15','Offline':'#f87171','Unknown':'#52525b'};
   const stateOrder = ['Ready','Tracking','Idle','Offline','Unknown'];
-  const maxState = Math.max(...stateOrder.map(s => states[s]||0), 1);
+  const stateData = stateOrder.filter(s=>states[s]).map(s=>({label:s,val:states[s],color:stateColors[s]}));
+  document.getElementById('donutWrap').innerHTML =
+    '<div class="donut-svg-wrap">'+donutSVG(stateData,total)+'</div>'+
+    '<div class="donut-legend">'+stateData.map(d=>`<div class="leg-item"><div class="leg-dot" style="background:${d.color}"></div><span class="leg-label">${d.label}</span><span class="leg-val">${d.val}</span><span class="leg-pct">${(d.val/total*100).toFixed(0)}%</span></div>`).join('')+'</div>';
 
-  const sortedVenues = Object.entries(venueMap).sort((a,b) => b[1].total - a[1].total);
+  // PLATFORMS
+  const platColors = {'j30':'#4ade80','jnx30':'#3b82f6','j3011':'#facc15','jnx42':'#a78bfa','unknown':'#52525b'};
+  const platOrder = ['j3011','jnx30','jnx42','j30','unknown'];
+  const platData = platOrder.filter(p=>platforms[p]).map(p=>({label:p,val:platforms[p],color:platColors[p]||'#52525b'}));
+  const maxPlat = Math.max(...platData.map(d=>d.val),1);
+  document.getElementById('platWrap').innerHTML = platData.map(d=>`
+    <div class="plat-row"><span class="plat-label">${d.label}</span><div class="plat-bar-wrap"><div class="plat-fill" style="width:${(d.val/maxPlat*100).toFixed(0)}%;background:${d.color}"></div></div><span class="plat-val">${d.val}</span></div>
+  `).join('');
 
-  $('content').innerHTML = `
-    <div class="card"><div class="ch"><h3>Device by state</h3><span class="ch-sub">${total} total</span></div>
-      <div class="card-body"><div class="state-list">
-        ${stateOrder.filter(s => states[s]).map(s => `
-          <div class="sr"><div class="dot" style="background:${stateColors[s]}"></div>
-          <span class="nm">${s}</span><div class="br"><div class="bf" style="width:${(states[s]/maxState*100).toFixed(0)}%;background:${stateColors[s]}"></div></div>
-          <span class="vl">${states[s]}</span></div>
-        `).join('')}
-      </div></div>
-    </div>
-    <div class="card"><div class="ch"><h3>Venues</h3><span class="ch-sub">${venueCount} total</span></div>
-      <div class="card-body"><div class="v-list">
-        ${sortedVenues.map(([v,c]) => `<div class="vr"><span class="vn">${v}</span><span class="vc">${c.total} devices${c.offline ? ' · ' + c.offline + ' offline' : ''}</span></div>`).join('')}
-      </div></div>
-    </div>
-  `;
+  // TOTAL DEVICES + small stats cards
+  document.getElementById('statsRow').innerHTML = stateData.map(d=>`
+    <div class="sc"><div class="num" style="color:${d.color}">${d.val}</div><div class="lbl">${d.label}</div></div>
+  `).join('');
 
-  // Offline table
-  const tableWrap = document.createElement('div');
-  tableWrap.className = 'card table-wrap';
-  tableWrap.innerHTML = `
-    <div class="ch"><h3>⚠ Devices needing attention</h3><span class="ch-sub">${attention.length} device${attention.length!==1?'s':''}</span></div>
-    <div style="max-height:600px;overflow-y:auto">
-    <table class="tbl">
-      <thead><tr><th>Device</th><th>Venue</th><th>Location</th><th>Platform</th><th>State</th><th>Last seen</th></tr></thead>
-      <tbody>${attention.map(d => {
-        const parts = (d.venue || '—').split('|');
-        const venue = parts[0]?.trim() || '—';
-        const loc = parts.slice(1).join('|').trim() || '—';
-        const lastSeen = d.last_seen || '—';
-        return `<tr><td style="font-family:monospace;font-size:11px">${d.aioo_id || d.mac || d.device || '—'}</td><td>${esc(venue)}</td><td>${esc(loc)}</td><td style="font-family:monospace;font-size:11px">${d.platform || '—'}</td><td class="${stateClass(d.state)}">${d.state || ''}</td><td>${lastSeen}</td></tr>`;
-      }).join('')}</tbody>
-    </table></div>`;
-  $('content').appendChild(tableWrap);
+  // OFFLINE TABLE
+  attention.sort((a,b)=>{
+    const p=s=>{if(!s)return 0;const m=s.match(/(\d+)\/(\d+)\/(\d+)\s+(\d+):(\d+):(\d+)/);return m?new Date(m[3],m[2]-1,m[1],m[4],m[5],m[6]).getTime():0};
+    return p(b.last_seen)-p(a.last_seen);
+  });
+  document.getElementById('offlineCount').textContent = attention.length+' device'+(attention.length!==1?'s':'');
+  document.getElementById('tblBody').innerHTML = attention.map(d=>{
+    const parts=(d.venue||'—').split('|');
+    return `<tr><td>${esc(parts[0]?.trim()||'—')}</td><td>${esc(parts.slice(1).join('|').trim()||'—')}</td><td style="font-family:monospace;font-size:11px">${esc(d.aioo_id||d.mac||d.device||'—')}</td><td class="st-offline">Offline</td><td>${esc(d.last_seen||'—')}</td></tr>`;
+  }).join('');
 }
 
-function esc(s) { return s ? String(s).replace(/[&<>]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;'})[c]) : ''; }
-
-async function fetchData() {
+(async function(){
   try {
-    const r = await fetch(API_URL, {
-      headers: { 'client_id':CLIENT_ID, 'client_secret':CLIENT_SECRET, 'Accept':'application/json' }
-    });
-    if (!r.ok) throw new Error(`HTTP ${r.status}`);
-    const data = await r.json();
-    render(data);
-    flash('✅ Updated ' + new Date().toLocaleTimeString());
-  } catch(e) {
-    $('ts').textContent = 'Error: ' + e.message;
-    flash('❌ Error: ' + e.message);
+    const r = await fetch(API_URL,{headers:{'client_id':CLIENT_ID,'client_secret':CLIENT_SECRET,'Accept':'application/json'}});
+    if (!r.ok) throw new Error('HTTP '+r.status);
+    render(await r.json());
+  } catch(e){
+    document.getElementById('stateCard').innerHTML = '<div class="card-header"><h2>Error</h2></div><div class="card-body" style="color:#f87171">'+e.message+'</div>';
   }
-}
-
-fetchData();
-setInterval(fetchData, REFRESH_MS);
+  setInterval(async function(){
+    try {
+      const r = await fetch(API_URL,{headers:{'client_id':CLIENT_ID,'client_secret':CLIENT_SECRET,'Accept':'application/json'}});
+      if (r.ok) render(await r.json());
+    } catch(e){}
+  },300000);
+})();
 </script>
 </body>
 </html>

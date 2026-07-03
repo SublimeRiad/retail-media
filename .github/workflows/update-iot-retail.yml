@@ -3,7 +3,10 @@ name: Update All Dashboards
 on:
   workflow_dispatch:
   schedule:
-    - cron: '*/15 * * * *'
+    - cron: '*/10 * * * *'
+  push:
+    branches:
+      - 'ignore-me'  # disable push trigger — Pages Build only via workflow push
 
 jobs:
   build-all-dashboards:
@@ -43,23 +46,6 @@ jobs:
       - name: Build cron-status.html
         run: python3 iot-camera/scripts/build-cron-status.py
 
-      - name: Push IoT dashboards
-        run: |
-          cp /tmp/rmstatus-light/rmstatus.html $GITHUB_WORKSPACE/retailmedia.html
-          cp /tmp/rmstatus-light/retailer.html $GITHUB_WORKSPACE/retailer.html
-          cp /tmp/rmstatus-light/wall-dashboard.html $GITHUB_WORKSPACE/wall-dashboard.html
-          cd $GITHUB_WORKSPACE
-          git config user.name "iot-retail-bot"
-          git config user.email "iot-retail-bot@aiootech.com"
-          git add retailmedia.html retailer.html wall-dashboard.html cron-status.html
-          if ! git diff --staged --quiet; then
-            git commit -m "Auto-update IoT dashboards $(date '+%Y-%m-%d %H:%M UTC')"
-            git push --force
-            echo "✅ IoT dashboards pushed (--force)"
-          else
-            echo "ℹ️ No IoT changes to push"
-          fi
-
       - name: Build NSOC dashboards
         continue-on-error: true
         env:
@@ -72,32 +58,28 @@ jobs:
           python3 iot-camera/scripts/build-nsoc-status.py
           python3 iot-camera/scripts/build-nsoc-black-screen.py
 
-      - name: Check if NSOC files exist
-        id: check_nsoc
-        run: |
-          if [ -f /tmp/rmstatus-light/Retail-Media-Nsoc-Players.html ] || [ -f /tmp/rmstatus-light/nsoc-status.html ] || [ -f /tmp/rmstatus-light/nsoc-black-screen.html ]; then
-            echo "exists=true" >> $GITHUB_OUTPUT
-          else
-            echo "exists=false" >> $GITHUB_OUTPUT
-          fi
-
-      - name: Push NSOC dashboards
-        if: steps.check_nsoc.outputs.exists == 'true'
-        continue-on-error: true
+      - name: Push all dashboards (single commit)
         run: |
           cd $GITHUB_WORKSPACE
+          # Copy IoT dashboards
+          cp /tmp/rmstatus-light/rmstatus.html retailmedia.html
+          cp /tmp/rmstatus-light/retailer.html retailer.html
+          cp /tmp/rmstatus-light/wall-dashboard.html wall-dashboard.html
+          # Copy NSOC dashboards (if they exist)
           ls /tmp/rmstatus-light/nsoc-status.html 2>/dev/null && cp /tmp/rmstatus-light/nsoc-status.html . || true
           ls /tmp/rmstatus-light/Retail-Media-Nsoc-Players.html 2>/dev/null && cp /tmp/rmstatus-light/Retail-Media-Nsoc-Players.html . || true
           ls /tmp/rmstatus-light/nsoc-black-screen.html 2>/dev/null && cp /tmp/rmstatus-light/nsoc-black-screen.html ./grafana-dashboards/ 2>/dev/null || true
-          git add nsoc-status.html Retail-Media-Nsoc-Players.html grafana-dashboards/nsoc-black-screen.html 2>/dev/null || true
           touch -m grafana-dashboards/nsoc-operations-dashboard.html 2>/dev/null
-          git add grafana-dashboards/nsoc-operations-dashboard.html 2>/dev/null || true
+          # Stage all changes
+          git config user.name "iot-retail-bot"
+          git config user.email "iot-retail-bot@aiootech.com"
+          git add -A
           if ! git diff --staged --quiet; then
-            git commit -m "Auto-update NSOC dashboards $(date '+%Y-%m-%d %H:%M UTC')"
+            git commit -m "Auto-update all dashboards $(date '+%Y-%m-%d %H:%M UTC')"
             git push --force
-            echo "✅ NSOC dashboards pushed (--force)"
+            echo "✅ All dashboards pushed in single commit"
           else
-            echo "ℹ️ No NSOC changes"
+            echo "ℹ️ No changes to push"
           fi
 
 

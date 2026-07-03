@@ -75,7 +75,7 @@ async function main() {
       };
       return parseDate(b.last_seen) - parseDate(a.last_seen);
     })
-    .slice(0, 12)
+    .slice(0, 200)
     .map(d => ({
       device: d.aioo_id,
       state: d.state || '',

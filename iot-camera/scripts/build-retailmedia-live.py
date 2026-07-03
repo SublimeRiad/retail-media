@@ -1,0 +1,184 @@
+#!/usr/bin/env python3
+"""Build retailmedia-live.html — static, same retailmedia design"""
+import json, os
+
+DATA_FILE = '/tmp/rmstatus-light/iot-admin-data.json'
+OUTPUT = '/tmp/rmstatus-light/retailmedia-live.html'
+
+with open(DATA_FILE) as f:
+    data = json.load(f)
+
+devices = data.get('devices', data)
+if isinstance(devices, dict):
+    devices = data.get('devices', [])
+
+# Filter Union Coop + Lulu
+retail = [d for d in devices if 'union coop' in (d.get('venue','') or '').lower() or 'lulu' in (d.get('venue','') or '').lower()]
+
+total = len(retail)
+tracking = 0
+offline = []
+errors_count = 0
+venue_map = {}
+
+for d in retail:
+    s = d.get('state','')
+    if s in ('Tracking','Ready','Idle'): tracking += 1
+    if (d.get('monitoring_status','') or '').lower() == 'error' or (d.get('logger_status','') or '').lower() == 'error':
+        errors_count += 1
+    if s == 'Offline': offline.append(d)
+    
+    v = (d.get('venue','') or '').split('|')[0].strip()
+    venue_map.setdefault(v, {'total':0,'tracking':0,'errors':0,'offline':0})
+    venue_map[v]['total'] += 1
+    if s in ('Tracking','Ready','Idle'): venue_map[v]['tracking'] += 1
+    if (d.get('monitoring_status','') or '').lower() == 'error' or (d.get('logger_status','') or '').lower() == 'error':
+        venue_map[v]['errors'] += 1
+    if s == 'Offline': venue_map[v]['offline'] += 1
+
+offline.sort(key=lambda d: (d.get('last_seen') or ''), reverse=True)
+attention = offline[:50]
+
+# Brand grouping
+union_v = {k:v for k,v in venue_map.items() if 'lulu' not in k.lower()}
+lulu_v = {k:v for k,v in venue_map.items() if 'lulu' in k.lower()}
+
+union_total = sum(c['total'] for c in union_v.values())
+union_ok = sum(c['total']-c['offline'] for c in union_v.values())
+union_off = sum(c['offline'] for c in union_v.values())
+lulu_total = sum(c['total'] for c in lulu_v.values())
+lulu_ok = sum(c['total']-c['offline'] for c in lulu_v.values())
+lulu_off = sum(c['offline'] for c in lulu_v.values())
+
+plat_set = set((d.get('platform','j30') or 'j30').upper() for d in retail)
+plat_str = '/'.join(sorted(plat_set))
+
+uptime = round((total-len(offline))/total*100) if total else 0
+
+def esc(s):
+    if not s: return ''
+    return str(s).replace('&','&amp;').replace('<','&lt;').replace('>','&gt;')
+
+def venue_card(name, c):
+    has_off = c['offline'] > 0
+    sv_class = 're' if has_off else 'gr'
+    short = name.replace('In-Store - ','').replace('Malls - ','')
+    return f'''<div class="sv {sv_class}">
+<div class="svh"><span class="sn">{esc(short)}</span><span class="sc">{c["total"]}</span></div>
+<div class="sg">
+<div class="si"><div class="il">Tracking</div><div class="iv gr">{c["tracking"]}</div></div>
+<div class="si"><div class="il">Errors</div><div class="iv {"re" if c["errors"]>0 else "gr"}">{c["errors"]}</div></div>
+<div class="si"><div class="il">Offline</div><div class="iv {"re" if has_off else "gr"}">{c["offline"]}</div></div>
+</div>
+</div>'''
+
+def brand_card(title, letter, color_class, vdata, t, ok, off):
+    sorted_v = sorted(vdata.items(), key=lambda x:-x[1]['total'])
+    off_text = f' · <b class="re">{off} offline</b>' if off > 0 else ''
+    venues_html = ''.join(venue_card(n,c) for n,c in sorted_v)
+    return f'''<div class="bc">
+<div class="bh"><div class="bl {color_class}">{letter}</div><h2>{title}</h2><div class="bs"><b>{t}</b> devices · <b class="gr">{ok}</b> ok{off_text}</div></div>
+<div class="bb">{venues_html}</div>
+</div>'''
+
+now = __import__('datetime').datetime.now()
+ts = now.strftime('%d/%m/%Y, %H:%M:%S') + ' GST'
+
+attention_rows = ''.join(f'''<tr>
+<td><div style="font-weight:500;color:#e2e8f0;font-size:clamp(9px,0.7vw,11px)">{esc((d.get("venue") or "").split("|")[0].strip())}</div></td>
+<td style="font-family:'SF Mono',Consolas,monospace;color:#94a3b8;font-size:clamp(8px,0.65vw,10px)">{esc(d.get("aioo_id") or d.get("mac") or d.get("device") or "—")}</td>
+<td><span class="st">Offline</span></td>
+<td style="color:#64748b">{esc(d.get("last_seen") or "—")}</td>
+</tr>''' for d in attention)
+
+html = f'''<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>Retail Media · IoT Status</title>
+<meta http-equiv="refresh" content="300">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+*{{margin:0;padding:0;box-sizing:border-box}}
+html,body{{height:100%;overflow:hidden}}
+body{{font-family:'Inter',-apple-system,sans-serif;background:#08080e;color:#f1f5f9;display:flex;flex-direction:column;font-size:clamp(12px,1.1vw,16px)}}
+.d{{display:flex;flex-direction:column;padding:clamp(10px,1.2vh,20px) clamp(16px,2vw,32px);gap:clamp(6px,0.8vh,14px);max-width:1920px;margin:0 auto;width:100%;height:100vh}}
+.hd{{display:flex;align-items:center;justify-content:space-between;flex-shrink:0}}
+.hd h1{{font-size:clamp(16px,1.8vw,26px);font-weight:700;color:#e2e8f0;letter-spacing:-.3px}}
+.hd h1 span{{color:#52525b;font-weight:400}}
+.hd .ts{{font-size:clamp(9px,0.8vw,12px);color:#52525b;font-family:monospace}}
+.mr{{display:grid;grid-template-columns:repeat(6,1fr);gap:clamp(4px,0.5vw,10px);flex-shrink:0}}
+.mi{{background:#111827;border:1px solid #1e293b;border-radius:8px;padding:clamp(8px,1vh,16px) clamp(10px,1vw,18px)}}
+.mi .mv{{font-size:clamp(20px,2.5vw,36px);font-weight:800;line-height:1}}
+.mi .ml{{font-size:clamp(8px,0.7vw,10px);color:#64748b;text-transform:uppercase;letter-spacing:.5px;margin-top:4px;font-weight:500}}
+.mi:nth-child(1) .mv{{color:#60a5fa}}
+.mi:nth-child(2) .mv{{color:#4ade80}}
+.mi:nth-child(3) .mv{{color:#facc15}}
+.mi:nth-child(4) .mv{{color:#f87171}}
+.mi:nth-child(5) .mv{{color:#a78bfa}}
+.mi:nth-child(6) .mv{{color:#f472b6}}
+.br{{display:grid;grid-template-columns:1fr 1fr;gap:clamp(4px,0.5vw,10px);flex:1;min-height:0}}
+.bc{{border-radius:10px;overflow:hidden;border:1px solid #1e293b;display:flex;flex-direction:column}}
+.bc .bh{{display:flex;align-items:center;padding:clamp(8px,0.8vh,14px) clamp(12px,1.2vw,18px);background:#111827;gap:8px;flex-shrink:0}}
+.bc .bh .bl{{width:clamp(22px,1.8vw,30px);height:clamp(22px,1.8vw,30px);border-radius:5px;display:flex;align-items:center;justify-content:center;font-weight:800;font-size:clamp(11px,0.9vw,14px);color:#fff;flex-shrink:0}}
+.bc .bh .uc{{background:#2563eb}}.bc .bh .lm{{background:#dc2626}}
+.bc .bh h2{{font-size:clamp(12px,1vw,16px);font-weight:700;color:#e2e8f0}}
+.bc .bh .bs{{margin-left:auto;font-size:clamp(9px,0.7vw,11px);color:#64748b}}
+.bc .bh .bs b{{color:#e2e8f0;font-weight:700}}
+.bc .bh .bs .gr{{color:#4ade80}}
+.bc .bh .bs .re{{color:#f87171}}
+.bc .bb{{flex:1;overflow-y:auto;padding:clamp(8px,0.6vh,12px) clamp(12px,1.2vw,18px);background:#0f1117;display:flex;flex-direction:column;gap:clamp(6px,0.5vh,10px)}}
+.sv{{border-radius:8px;padding:clamp(8px,0.6vh,12px) clamp(10px,0.8vw,14px);border:1px solid #1e293b}}
+.sv.re{{border-color:#7f1d1d;background:linear-gradient(135deg,#2a0a0a 0%,#1a0808 100%)}}
+.sv.gr{{border-color:#166534;background:linear-gradient(135deg,#0a2e1a 0%,#0a1f12 100%)}}
+.sv .svh{{display:flex;align-items:center;justify-content:space-between;margin-bottom:clamp(4px,0.3vh,6px)}}
+.sv .svh .sn{{font-size:clamp(11px,0.9vw,14px);font-weight:600;color:#e2e8f0}}
+.sv .svh .sn .loc{{display:block;font-size:clamp(8px,0.6vw,10px);color:#64748b;font-weight:400;margin-top:1px}}
+.sv .svh .sc{{font-size:clamp(11px,0.9vw,14px);font-weight:700;color:#94a3b8}}
+.sv .sg{{display:grid;grid-template-columns:1fr 1fr 1fr;gap:4px}}
+.sv .si{{background:rgba(15,17,23,.5);border-radius:6px;padding:clamp(5px,0.4vh,8px) 0;text-align:center;border:1px solid rgba(45,55,72,.4)}}
+.sv .si .il{{font-size:clamp(7px,0.55vw,9px);text-transform:uppercase;color:#64748b;letter-spacing:.5px}}
+.sv .si .iv{{font-size:clamp(16px,1.4vw,22px);font-weight:800;margin-top:1px;line-height:1}}
+.sv .si .iv.gr{{color:#4ade80}}.sv .si .iv.re{{color:#f87171}}
+.al{{flex-shrink:0;border-top:1px solid #1e293b;padding:clamp(6px,0.5vh,10px) 0 0}}
+.al .ah{{display:flex;align-items:center;gap:6px;font-size:clamp(10px,0.8vw,12px);font-weight:600;color:#f87171;margin-bottom:clamp(4px,0.3vh,6px)}}
+.al .ah .ac{{margin-left:auto;background:#1a0a0a;color:#f87171;padding:0 10px;border-radius:10px;font-size:clamp(8px,0.65vw,10px)}}
+.al table{{width:100%;border-collapse:collapse;font-size:clamp(9px,0.7vw,11px)}}
+.al th{{padding:clamp(3px,0.2vh,5px) clamp(6px,0.5vw,10px);color:#52525b;font-weight:500;text-align:left;font-size:clamp(7px,0.55vw,9px);text-transform:uppercase;letter-spacing:.3px;border-bottom:1px solid #1e293b}}
+.al td{{padding:clamp(3px,0.2vh,5px) clamp(6px,0.5vw,10px);border-bottom:1px solid rgba(255,255,255,.03);color:#94a3b8}}
+.al .st{{color:#f87171;font-weight:600}}
+@media(max-width:900px){{.mr{{grid-template-columns:repeat(3,1fr)}}.br{{grid-template-columns:1fr}}}}
+@media(min-width:1800px){{.br{{grid-template-columns:1fr 1fr}}}}
+</style>
+</head>
+<body>
+<div class="d">
+<div class="hd"><h1>Retail Media <span>· IoT Status</span></h1><div style="display:flex;align-items:center;gap:12px"><div class="ts">{ts}</div></div></div>
+<div class="mr">
+<div class="mi"><div class="mv">{total}</div><div class="ml">Total Devices · {len(venue_map)} venues</div></div>
+<div class="mi"><div class="mv">{tracking}</div><div class="ml">Tracking OK</div></div>
+<div class="mi"><div class="mv">{errors_count}</div><div class="ml">Errors</div></div>
+<div class="mi"><div class="mv">{len(offline)}</div><div class="ml">Offline</div></div>
+<div class="mi"><div class="mv">~{uptime}%</div><div class="ml">Avg Uptime</div></div>
+<div class="mi"><div class="mv">{plat_str}</div><div class="ml">Platform</div></div>
+</div>
+<div class="br">
+{brand_card('Union Coop','U','uc',union_v,union_total,union_ok,union_off)}
+{brand_card('Lulu Market','L','lm',lulu_v,lulu_total,lulu_ok,lulu_off)}
+</div>
+<div class="al">
+<div class="ah">⚠ Devices needing attention <span class="ac">{len(attention)}</span></div>
+<table><tr><th>Venue / Asset</th><th>Device</th><th>State</th><th>Last seen</th></tr>{attention_rows}</table>
+</div>
+</div>
+<script>setTimeout(function(){{location.reload()}},300000)</script>
+</body>
+</html>'''
+
+os.makedirs(os.path.dirname(OUTPUT) or '.', exist_ok=True)
+with open(OUTPUT, 'w') as f:
+    f.write(html)
+
+kb = len(html) / 1024
+print(f'OK - {kb:.0f} KB — {total} retail devices, {len(offline)} offline')

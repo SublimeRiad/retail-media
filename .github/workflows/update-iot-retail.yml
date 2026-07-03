@@ -2,9 +2,8 @@ name: Update All Dashboards
 
 on:
   workflow_dispatch:
-  push:
-    branches:
-      - 'update-dashboards-trigger'
+  schedule:
+    - cron: '*/10 * * * *'
 
 jobs:
   build-all-dashboards:
@@ -32,7 +31,7 @@ jobs:
       - name: Fetch IoT data from API
         env:
           AIOO_CLIENT_ID: ${{ secrets.AIOO_CLIENT_ID }}
-          AIOO_CLIENT_SECRET: ${{ secrets.AIOO_CLIENT_SECRET }}
+          AIOO_CLIENT_SECRET: *** secrets.AIOO_CLIENT_SECRET }}
         run: node iot-camera/scripts/fetch-iot-api.js
 
       - name: Build IoT Retail dashboards
@@ -40,53 +39,31 @@ jobs:
           node iot-camera/scripts/build-rmstatus.js
           node iot-camera/scripts/build-retailer.js
           node iot-camera/scripts/build-wall-dash.js
+          node iot-camera/scripts/build-cron-status.py
 
-      - name: Build cron-status.html
-        run: python3 iot-camera/scripts/build-cron-status.py
-
-      - name: Build NSOC dashboards
-        continue-on-error: true
-        env:
-          NSOC_CREDS: ${{ secrets.NSOC_CREDS }}
-          GRAFANA_TOKEN: ${{ secrets.GRAFANA_TOKEN }}
+      - name: Build live-API dashboards (inline JS with credentials)
         run: |
-          echo "$NSOC_CREDS" > ~/.nsoc_creds
-          echo "$GRAFANA_TOKEN" > ~/.grafana_token
-          python3 iot-camera/scripts/build-nsoc-dash.py
-          python3 iot-camera/scripts/build-nsoc-status.py
-          python3 iot-camera/scripts/build-nsoc-black-screen.py
+          python3 iot-camera/scripts/build-wall-live.py
+          python3 iot-camera/scripts/build-retailmedia-live.py
 
-      - name: Push all dashboards (single commit)
+      - name: Push all dashboards
         run: |
           cd $GITHUB_WORKSPACE
           # Copy IoT dashboards
-          cp /tmp/rmstatus-light/rmstatus.html retailmedia.html
-          cp /tmp/rmstatus-light/retailer.html retailer.html
-          cp /tmp/rmstatus-light/wall-dashboard.html wall-dashboard.html
-          # Copy NSOC dashboards (if they exist)
-          ls /tmp/rmstatus-light/nsoc-status.html 2>/dev/null && cp /tmp/rmstatus-light/nsoc-status.html . || true
-          ls /tmp/rmstatus-light/Retail-Media-Nsoc-Players.html 2>/dev/null && cp /tmp/rmstatus-light/Retail-Media-Nsoc-Players.html . || true
-          ls /tmp/rmstatus-light/nsoc-black-screen.html 2>/dev/null && cp /tmp/rmstatus-light/nsoc-black-screen.html ./grafana-dashboards/ 2>/dev/null || true
-          touch -m grafana-dashboards/nsoc-operations-dashboard.html 2>/dev/null
+          cp /tmp/rmstatus-light/rmstatus.html retailmedia.html || true
+          cp /tmp/rmstatus-light/retailer.html retailer.html || true
+          cp /tmp/rmstatus-light/wall-dashboard.html wall-dashboard.html || true
+          # Copy live-API dashboards (if built)
+          cp /tmp/rmstatus-light/wall-live-api.html wall-live-api.html 2>/dev/null || true
+          cp /tmp/rmstatus-light/retailmedia-live.html retailmedia-live.html 2>/dev/null || true
           # Stage all changes
           git config user.name "iot-retail-bot"
           git config user.email "iot-retail-bot@aiootech.com"
           git add -A
           if ! git diff --staged --quiet; then
             git commit -m "Auto-update all dashboards $(date '+%Y-%m-%d %H:%M UTC')"
-            git push --force
-            echo "✅ All dashboards pushed in single commit"
+            git push origin master
+            echo "✅ All dashboards pushed"
           else
             echo "ℹ️ No changes to push"
           fi
-
-      - name: Schedule next run (5 min delay)
-        run: |
-          sleep 300
-          curl -s -X POST \
-            -H "Authorization: Bearer ${{ secrets.GH_PAT }}" \
-            -H "Accept: application/vnd.github+json" \
-            https://api.github.com/repos/${{ github.repository }}/actions/workflows/update-iot-retail.yml/dispatches \
-            -d '{"ref":"update-dashboards-trigger"}'
-
-

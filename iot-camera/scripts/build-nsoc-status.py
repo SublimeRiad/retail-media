@@ -233,8 +233,8 @@ function renderGauge(items) {
 }
 renderGauge(CONS);
 function initMaps(){
-  window.dMap = L.map('dMap',{center:[25.2,55.3],zoom:9,layers:[L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png',{subdomains:'abcd',maxZoom:19})],zoomControl:false,attributionControl:false});
-  window.aMap = L.map('aMap',{center:[24.45,54.35],zoom:9,layers:[L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png',{subdomains:'abcd',maxZoom:19})],zoomControl:false,attributionControl:false});
+  window.dMap = L.map('dMap',{center:[25.1878,55.3323],zoom:11,layers:[L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png',{subdomains:'abcd',maxZoom:19})],zoomControl:false,attributionControl:false,dragging:false,scrollWheelZoom:false});
+  window.aMap = L.map('aMap',{center:[24.4275,54.5489],zoom:11,layers:[L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png',{subdomains:'abcd',maxZoom:19})],zoomControl:false,attributionControl:false,dragging:false,scrollWheelZoom:false});
 }
 const PCS = ''' + json.dumps([{'n':p['name'],'lat':p['lat'],'lng':p['lng'],'sn':p['sn'],'loc':p['loc']} for p in all_pcs if not p['online'] and p['lat'] and p['lng']]) + ''';
 function loadMaps(){
